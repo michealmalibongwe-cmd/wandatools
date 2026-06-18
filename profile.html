@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account – WandaTools</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* ── Auth page layout ── */
+    .auth-page {
+      min-height: calc(100vh - 68px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    /* ── Left side (branding) ── */
+    .auth-brand {
+      background: var(--gradient);
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-brand::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .auth-brand-content { position: relative; z-index: 1; }
+    .auth-brand-content i { font-size: 4rem; margin-bottom: 20px; }
+    .auth-brand-content h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+    .auth-brand-content p { font-size: 1rem; opacity: 0.85; max-width: 300px; line-height: 1.7; }
+
+    /* ── Right side (form) ── */
+    .auth-form-side {
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-form-wrap {
+      max-width: 380px;
+    }
+
+    .auth-form-header {
+      margin-bottom: 32px;
+    }
+    .auth-form-header h1 { font-size: 1.6rem; margin-bottom: 8px; }
+    .auth-form-header p { color: var(--mid); font-size: 0.95rem; }
+
+    /* ── Form toggle ── */
+    .form-toggle {
+      display: flex;
+      background: var(--grey-bg);
+      border-radius: 10px;
+      padding: 3px;
+      margin-bottom: 28px;
+      gap: 3px;
+    }
+    .form-toggle-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--mid);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .form-toggle-btn.active {
+      background: var(--white);
+      color: var(--dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── Form panels ── */
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+
+    .form-group { margin-bottom: 18px; }
+
+    /* ── Password strength ── */
+    .password-strength {
+      margin-top: 8px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .strength-bar {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s, background-color 0.3s;
+    }
+    .strength-bar.weak { width: 33%; background: var(--red); }
+    .strength-bar.fair { width: 66%; background: #F9A825; }
+    .strength-bar.strong { width: 100%; background: var(--green); }
+
+    /* ── Remember me ── */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 18px; height: 18px; cursor: pointer;
+    }
+    .checkbox-group label { cursor: pointer; font-size: 0.9rem; color: var(--mid); }
+
+    /* ── Forgot password ── */
+    .forgot-link {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .forgot-link a {
+      font-size: 0.85rem;
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .forgot-link a:hover { color: var(--green); }
+
+    /* ── Social login ── */
+    .social-login {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 28px 0;
+    }
+    .social-btn {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+    .social-btn:hover { border-color: var(--blue); background: var(--grey-bg); }
+    .social-btn i { font-size: 1.1rem; }
+
+    /* ── Divider ── */
+    .form-divider {
+      position: relative;
+      margin: 24px 0;
+      text-align: center;
+      color: var(--light);
+      font-size: 0.8rem;
+    }
+    .form-divider::before {
+      content: '';
+      position: absolute;
+      inset: 50% 0 auto;
+      height: 1px;
+      background: var(--border);
+    }
+    .form-divider span { position: relative; background: var(--white); padding: 0 8px; }
+
+    /* ── Switch auth type ── */
+    .switch-auth {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.9rem;
+      color: var(--mid);
+    }
+    .switch-auth a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .switch-auth a:hover { color: var(--green); }
+
+    /* ── Profile Dashboard (logged in) ── */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 32px;
+      min-height: calc(100vh - 68px);
+      padding: 40px;
+      background: var(--grey-bg);
+    }
+
+    .profile-sidebar {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-sm);
+      height: fit-content;
+      position: sticky;
+      top: 88px;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 2rem;
+      margin: 0 auto 16px;
+    }
+    .profile-header h2 { font-size: 1.2rem; margin-bottom: 4px; }
+    .profile-header p { font-size: 0.85rem; color: var(--mid); }
+
+    .profile-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .profile-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--mid);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+      width: 100%;
+    }
+    .profile-menu-item:hover { background: var(--grey-bg); color: var(--dark); }
+    .profile-menu-item.active { background: var(--gradient); color: var(--white); }
+    .profile-menu-item i { font-size: 1.1rem; }
+
+    /* ── Profile panels ── */
+    .profile-main {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .profile-panel { display: none; }
+    .profile-panel.active { display: block; }
+
+    .profile-panel h2 { font-size: 1.4rem; margin-bottom: 24px; }
+
+    .profile-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-info-row:last-child { border-bottom: none; }
+    .profile-info-label { color: var(--mid); font-size: 0.9rem; font-weight: 600; }
+    .profile-info-value { font-size: 0.95rem; color: var(--dark); }
+
+    .profile-section {
+      margin-bottom: 32px;
+    }
+    .profile-section h3 { font-size: 1.05rem; margin-bottom: 16px; }
+
+    /* ── Danger zone ── */
+    .danger-zone {
+      background: #FFEBEE;
+      border: 1.5px solid #EF5350;
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 32px;
+    }
+    .danger-zone h4 { color: #C62828; margin-bottom: 12px; font-size: 0.95rem; }
+    .danger-zone p { color: #E53935; font-size: 0.85rem; margin-bottom: 16px; }
+    .danger-zone .btn { width: fit-content; }
+
+    @media (max-width: 1024px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-brand { padding: 40px 24px; min-height: 300px; }
+      .auth-form-side { padding: 40px 24px; }
+      .profile-layout { grid-template-columns: 1fr; }
+      .profile-sidebar { position: static; }
+    }
+
+    @media (max-width: 600px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-form-wrap { max-width: 100%; }
+      .social-login { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
+      <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
+      <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
+      <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
+      <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
+      <a href="tools.html" class="btn btn-primary nav-cta">Dashboard</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile">
+    <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
+    <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
+    <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
+    <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
+    <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
+  </div>
+</nav>
+
+<div class="page-content">
+
+<!-- ══════════════════ AUTH PAGE (NOT LOGGED IN) ══════════════════ -->
+<div id="authPage" class="auth-page" style="display:none;">
+  <div class="auth-brand">
+    <div class="auth-brand-content">
+      <i class="material-icons">lock_open</i>
+      <h2>Welcome to WandaTools</h2>
+      <p>Take control of your finances with AI-powered insights and real-time tracking.</p>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-wrap">
+      <!-- Form Toggle -->
+      <div class="form-toggle">
+        <button class="form-toggle-btn active" onclick="switchAuthForm('login')">Sign In</button>
+        <button class="form-toggle-btn" onclick="switchAuthForm('register')">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <div class="auth-panel active" id="loginPanel">
+        <div class="auth-form-header">
+          <h1>Welcome back</h1>
+          <p>Sign in to your WandaTools account</p>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" id="loginEmail" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" id="loginPassword" placeholder="••••••••" required />
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="rememberMe" />
+            <label for="rememberMe">Remember me</label>
+          </div>
+          <div class="forgot-link">
+            <a href="#" onclick="alert('Password reset coming soon!')">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="handleLogin(event)">
+            <i class="material-icons">login</i> Sign In
+          </button>
+        </form>
+
+        <div class="form-divider"><span>or</span></div>
+
+        <div class="social-login">
+          <button class="social-btn" onclick="alert('Google Sign-In coming soon!')">
+            <i class="material-icons">account_balance</i> Google
+          </button>
+          <button class="social-btn" onclick="alert('Microsoft Sign-In coming soon!')">
+            <i class="material-icons">business</i> Microsoft
+          </button>
+        </div>
+
+        <div class="switch-auth">
+          Don't have an account? <a href="#" onclick="switchAuthForm('register'); return false;">Create one</a>
+        </div>
+      </div>
+
+      <!-- Register Form -->
+      <div class="auth-panel" id="registerPanel">
+        <div class="auth-form-header">
+          <h1>Create your account</h1>
+          <p>Join thousands of South African businesses</p>
+        </div>
+
+        <form id="registerForm">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-control" type="text" id="regName" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" id="regEmail" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" id="regPassword" placeholder="••••••••" oninput="checkPasswordStrength(this.value)" required />
+            <div class="password-strength"><div class="strength-bar" id="strengthBar"></div></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Type (optional)</label>
+            <select class="form-control" id="businessType">
+              <option value="">Select or skip</option>
+              <option value="Sole Trader">Sole Trader</option>
+              <option value="Small Business">Small Business (SME)</option>
+              <option value="Freelancer">Freelancer</option>
+              <option value="Non-Profit">Non-Profit</option>
+              <option value="Large Enterprise">Large Enterprise</option>
+            </select>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="agreeTerms" required />
+            <label for="agreeTerms">I agree to the Terms of Service and Privacy Policy</label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="handleRegister(event)">
+            <i class="material-icons">person_add</i> Create Account
+          </button>
+        </form>
+
+        <div class="form-divider"><span>or</span></div>
+
+        <div class="social-login">
+          <button class="social-btn" onclick="alert('Google Sign-Up coming soon!')">
+            <i class="material-icons">account_balance</i> Google
+          </button>
+          <button class="social-btn" onclick="alert('Microsoft Sign-Up coming soon!')">
+            <i class="material-icons">business</i> Microsoft
+          </button>
+        </div>
+
+        <div class="switch-auth">
+          Already have an account? <a href="#" onclick="switchAuthForm('login'); return false;">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PROFILE PAGE (LOGGED IN) ══════════════════ -->
+<div id="profilePage" style="display:none;">
+  <div class="profile-layout">
+    <!-- Sidebar -->
+    <aside class="profile-sidebar">
+      <div class="profile-header">
+        <div class="profile-avatar"><i class="material-icons">account_circle</i></div>
+        <h2 id="profileName">User Name</h2>
+        <p id="profileEmail">user@example.com</p>
+      </div>
+      <div class="profile-menu">
+        <button class="profile-menu-item active" onclick="switchProfilePanel('overview', this)">
+          <i class="material-icons">dashboard</i> Overview
+        </button>
+        <button class="profile-menu-item" onclick="switchProfilePanel('settings', this)">
+          <i class="material-icons">settings</i> Settings
+        </button>
+        <button class="profile-menu-item" onclick="switchProfilePanel('billing', this)">
+          <i class="material-icons">credit_card</i> Billing
+        </button>
+        <button class="profile-menu-item" onclick="switchProfilePanel('security', this)">
+          <i class="material-icons">security</i> Security
+        </button>
+        <button class="profile-menu-item" onclick="switchProfilePanel('data', this)">
+          <i class="material-icons">cloud_download</i> Data & Privacy
+        </button>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:28px;justify-content:center;" onclick="handleLogout()">
+        <i class="material-icons">logout</i> Log Out
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="profile-main">
+
+      <!-- Overview Panel -->
+      <div class="profile-panel active" id="panel-overview">
+        <h2>Account Overview</h2>
+        <div class="profile-section">
+          <h3>Account Information</h3>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Name</span>
+            <span class="profile-info-value" id="ovName">User Name</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Email</span>
+            <span class="profile-info-value" id="ovEmail">user@example.com</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Account Status</span>
+            <span class="profile-info-value"><span class="badge badge-green">Active</span></span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Member Since</span>
+            <span class="profile-info-value" id="ovMemberDate">June 18, 2025</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Plan</span>
+            <span class="profile-info-value"><span class="badge badge-blue">Free</span></span>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Usage Statistics</h3>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Transactions Logged</span>
+            <span class="profile-info-value" id="ovTransactions">47</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Reports Generated</span>
+            <span class="profile-info-value" id="ovReports">3</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">AI Conversations</span>
+            <span class="profile-info-value" id="ovAIChats">12</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Data Storage Used</span>
+            <span class="profile-info-value">1.2 MB of 100 MB</span>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <a href="tools.html" class="btn btn-primary"><i class="material-icons">dashboard</i> Go to Dashboard</a>
+          <a href="wandaAI.html" class="btn btn-outline" style="margin-left:8px;"><i class="material-icons">smart_toy</i> Chat with WandaAI</a>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="profile-panel" id="panel-settings">
+        <h2>Settings</h2>
+        <div class="profile-section">
+          <h3>Profile Settings</h3>
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-control" type="text" id="settingName" placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" id="settingEmail" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Timezone</label>
+            <select class="form-control" id="settingTz">
+              <option>Africa/Johannesburg (SAST)</option>
+              <option>Africa/Cape_Town</option>
+              <option>Africa/Durban</option>
+              <option>Africa/Blantyre</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()"><i class="material-icons">save</i> Save Changes</button>
+        </div>
+
+        <div class="profile-section">
+          <h3>Notifications</h3>
+          <div class="checkbox-group">
+            <input type="checkbox" id="emailNotif" checked />
+            <label for="emailNotif">Email notifications for cash flow alerts</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="smsNotif" />
+            <label for="smsNotif">SMS alerts for major transactions</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="weeklyReport" checked />
+            <label for="weeklyReport">Weekly financial summary email</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Billing Panel -->
+      <div class="profile-panel" id="panel-billing">
+        <h2>Billing</h2>
+        <div class="profile-section">
+          <h3>Current Plan</h3>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Plan Name</span>
+            <span class="profile-info-value">Free Plan</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Monthly Cost</span>
+            <span class="profile-info-value" style="color:var(--green);font-weight:700;">R 0</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Next Billing Date</span>
+            <span class="profile-info-value">N/A (No charges)</span>
+          </div>
+        </div>
+        <div class="profile-section">
+          <p style="color:var(--mid);font-size:0.9rem;margin-bottom:16px;">Premium features and paid plans coming soon. Early access to new features available upon request.</p>
+          <button class="btn btn-outline" onclick="alert('Premium plans launching Q3 2025!')">
+            <i class="material-icons">trending_up</i> Explore Premium
+          </button>
+        </div>
+      </div>
+
+      <!-- Security Panel -->
+      <div class="profile-panel" id="panel-security">
+        <h2>Security</h2>
+        <div class="profile-section">
+          <h3>Password</h3>
+          <button class="btn btn-outline" onclick="alert('Password change feature coming soon!')">
+            <i class="material-icons">lock_reset</i> Change Password
+          </button>
+        </div>
+
+        <div class="profile-section">
+          <h3>Two-Factor Authentication</h3>
+          <p style="color:var(--mid);font-size:0.9rem;margin-bottom:16px;">Add an extra layer of security to your account.</p>
+          <button class="btn btn-outline" onclick="alert('2FA setup coming soon!')">
+            <i class="material-icons">verified_user</i> Enable 2FA
+          </button>
+        </div>
+
+        <div class="profile-section">
+          <h3>Active Sessions</h3>
+          <div class="profile-info-row" style="border-bottom:1px solid var(--border);">
+            <div>
+              <div style="font-weight:700;margin-bottom:4px;">This Browser</div>
+              <div style="font-size:0.85rem;color:var(--mid);">Chrome on Windows</div>
+            </div>
+            <div style="font-size:0.85rem;color:var(--green);font-weight:700;">Active</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data & Privacy Panel -->
+      <div class="profile-panel" id="panel-data">
+        <h2>Data & Privacy</h2>
+        <div class="profile-section">
+          <h3>Data Export</h3>
+          <p style="color:var(--mid);font-size:0.9rem;margin-bottom:16px;">Download a copy of all your data in a standard format.</p>
+          <button class="btn btn-outline" onclick="alert('Data export initiated. You\'ll receive a download link via email within 24 hours.')">
+            <i class="material-icons">file_download</i> Request Data Export
+          </button>
+        </div>
+
+        <div class="profile-section">
+          <h3>Privacy Settings</h3>
+          <div class="checkbox-group">
+            <input type="checkbox" id="analytics" checked />
+            <label for="analytics">Allow anonymised usage analytics (helps us improve WandaTools)</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" />
+            <label>Allow contact for product feedback surveys</label>
+          </div>
+        </div>
+
+        <div class="danger-zone">
+          <h4><i class="material-icons" style="font-size:1rem;vertical-align:middle;">warning</i> Delete Account</h4>
+          <p>Once you delete your account, there is no going back. Please be certain.</p>
+          <button class="btn btn-outline" style="border-color:var(--red);color:var(--red);" onclick="if(confirm('Are you sure? This will permanently delete your account and all data.')) { handleLogout(); alert('Account deletion initiated. Your data will be removed within 30 days.'); }">
+            <i class="material-icons">delete_forever</i> Delete Account
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">WandaTools</div>
+        <p>AI-powered financial insights for businesses and individuals across South Africa.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon"><i class="material-icons">facebook</i></a>
+          <a href="#" class="social-icon"><i class="material-icons">tag</i></a>
+          <a href="#" class="social-icon"><i class="material-icons">work</i></a>
+          <a href="#" class="social-icon"><i class="material-icons">photo_camera</i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Product</h4>
+        <a href="tools.html">Transactions</a><a href="tools.html">Dashboard</a>
+        <a href="tools.html">Documents</a><a href="wandaAI.html">WandaAI</a>
+      </div>
+      <div class="footer-col"><h4>Company</h4>
+        <a href="index.html">About Us</a><a href="contact.html">Contact</a>
+        <a href="#">Careers</a><a href="#">Blog</a>
+      </div>
+      <div class="footer-col"><h4>Legal</h4>
+        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a><a href="#">POPIA Compliance</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 WandaTools. All rights reserved.</span>
+      <span>Made with <span style="color:#E53935;">♥</span> in South Africa</span>
+      <div style="display:flex;gap:16px;"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+  /* ── Initialize page ── */
+  window.addEventListener('load', initProfilePage);
+
+  function initProfilePage() {
+    if (WandaAuth.isLoggedIn()) {
+      showProfilePage();
+    } else {
+      showAuthPage();
+    }
+  }
+
+  function showAuthPage() {
+    document.getElementById('authPage').style.display = 'grid';
+    document.getElementById('profilePage').style.display = 'none';
+  }
+
+  function showProfilePage() {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('profilePage').style.display = 'block';
+    const name = WandaAuth.getName();
+    const email = WandaAuth.getEmail();
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmail').textContent = email;
+    document.getElementById('ovName').textContent = name;
+    document.getElementById('ovEmail').textContent = email;
+    document.getElementById('settingName').value = name;
+    document.getElementById('settingEmail').value = email;
+    document.getElementById('ovMemberDate').textContent = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
+    const txnCount = JSON.parse(localStorage.getItem('wt_transactions') || '[]').length;
+    document.getElementById('ovTransactions').textContent = txnCount || '0';
+  }
+
+  /* ── Auth forms ── */
+  function switchAuthForm(form) {
+    document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.form-toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(form + 'Panel').classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    if (!email || !password) { showToast('Please fill in all fields.', 'error'); return; }
+    const name = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+    WandaAuth.login(name, email);
+    showToast('Signed in successfully!');
+    setTimeout(() => showProfilePage(), 600);
+  }
+
+  function handleRegister(e) {
+    e.preventDefault();
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    if (!name || !email || !password) { showToast('Please fill in all fields.', 'error'); return; }
+    if (!document.getElementById('agreeTerms').checked) { showToast('Please agree to the terms.', 'error'); return; }
+    WandaAuth.login(name, email);
+    showToast('Account created successfully!');
+    setTimeout(() => showProfilePage(), 600);
+  }
+
+  function handleLogout() {
+    if (confirm('Are you sure you want to sign out?')) {
+      WandaAuth.logout();
+    }
+  }
+
+  function checkPasswordStrength(pwd) {
+    const bar = document.getElementById('strengthBar');
+    if (pwd.length < 6) bar.className = 'strength-bar weak';
+    else if (pwd.length < 10 || !/[0-9]/.test(pwd)) bar.className = 'strength-bar fair';
+    else bar.className = 'strength-bar strong';
+  }
+
+  /* ── Profile panels ── */
+  function switchProfilePanel(panel, btn) {
+    document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.profile-menu-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + panel).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function saveSettings() {
+    const name = document.getElementById('settingName').value.trim();
+    const email = document.getElementById('settingEmail').value.trim();
+    if (name && email) {
+      localStorage.setItem('wt_user_name', name);
+      localStorage.setItem('wt_user_email', email);
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = email;
+      showToast('Settings saved successfully!');
+    }
+  }
+</script>
+</body>
+</html>
