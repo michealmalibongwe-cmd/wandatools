@@ -515,22 +515,41 @@
     const fallback = aiResponses.default[Math.floor(Math.random() * aiResponses.default.length)];
     return { reply: fallback, insight: null };
   }
-
-  async function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-    chatInput.value = '';
-    autoResize(chatInput);
-    sendBtn.disabled = true;
-    addMessage('user', text);
-    showTyping();
-    await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  
+  chatInput.value = "";
+  autoResize(chatInput);
+  sendBtn.disabled = true;
+  addMessage("user", text);
+  showTyping();
+  
+  try {
+    const response = await apiCall("/wandaai/query", {
+      method: "POST",
+      body: JSON.stringify({
+        question: text,
+        mode: currentMode,
+      }),
+    });
+    
     hideTyping();
-    const { reply, insight } = getAIReply(text);
-    addMessage('ai', reply, insight);
+    addMessage("ai", response.response);
+    
+    if (response.recommendations && response.recommendations.length > 0) {
+      showToast(`💡 ${response.recommendations[0]}`, "info");
+    }
+  } catch (error) {
+    hideTyping();
+    console.error("Error:", error);
+    addMessage("ai", "Sorry, I encountered an error. Please try again.");
+  } finally {
     sendBtn.disabled = false;
     chatInput.focus();
   }
+}
+
 
   function sendPrompt(text) {
     chatInput.value = text;

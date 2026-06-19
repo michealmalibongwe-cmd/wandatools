@@ -100,6 +100,35 @@
     setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.4s'; setTimeout(() => toast.remove(), 400); }, 3000);
   };
 
+  // ═══ API CONFIGURATION ═══
+const API_BASE = "https://wandatools-production.up.railway.app/api/v1";
+
+// Helper for API calls
+async function apiCall(endpoint, options = {}) {
+  const token = localStorage.getItem("access_token");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    ...options.headers,
+  };
+  
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  
+  const response = await fetch(`${API_BASE}${endpoint}`, {
+    ...options,
+    headers,
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "API request failed");
+  }
+  
+  return await response.json();
+}
+
   /* ── Persist auth state (demo) ── */
   window.WandaAuth = {
     isLoggedIn: () => localStorage.getItem('wt_logged_in') === 'true',

@@ -483,19 +483,37 @@
 
 <script src="nav.js"></script>
 <script>
-  function handleContactSubmit(e) {
-    e.preventDefault();
-    const form = document.getElementById('contactForm');
-    if (!validateForm(form)) return;
+ 
+ async function handleContactSubmit(e) {
+  e.preventDefault();
+  const form = document.getElementById("contactForm");
+  
+  if (!validateForm(form)) return;
+  
+  const formData = new FormData(form);
+  
+  try {
+    const response = await fetch(`${API_BASE}/support/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        subject: formData.get("subject"),
+        message: formData.get("message")
+      }),
+    });
     
-    // Simulate submission
-    const data = new FormData(form);
-    console.log('Form data:', Object.fromEntries(data));
+    if (!response.ok) throw new Error("Failed to submit");
     
-    form.style.display = 'none';
-    document.getElementById('successMessage').style.display = 'block';
-    showToast('Message sent successfully! We\'ll be in touch soon.');
+    form.style.display = "none";
+    document.getElementById("successMessage").style.display = "block";
+    showToast("Message sent successfully!");
+  } catch (error) {
+    showToast(error.message, "error");
   }
+}
 </script>
 </body>
 </html>

@@ -765,28 +765,74 @@
     event.currentTarget.classList.add('active');
   }
 
-  function handleLogin(e) {
-    e.preventDefault();
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
-    if (!email || !password) { showToast('Please fill in all fields.', 'error'); return; }
-    const name = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
-    WandaAuth.login(name, email);
-    showToast('Signed in successfully!');
-    setTimeout(() => showProfilePage(), 600);
+  async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+  
+  try {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Login failed");
+    }
+    
+    const data = await response.json();
+    localStorage.setItem("access_token", data.access_token);
+    localStorage.setItem("refresh_token", data.refresh_token);
+    localStorage.setItem("wt_user_name", email.split("@")[0]);
+    localStorage.setItem("wt_user_email", email);
+    localStorage.setItem("wt_logged_in", "true");
+    
+    showToast("Signed in successfully!");
+    setTimeout(() => location.reload(), 600);
+  } catch (error) {
+    showToast(error.message, "error");
   }
+}
 
-  function handleRegister(e) {
-    e.preventDefault();
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const password = document.getElementById('regPassword').value.trim();
-    if (!name || !email || !password) { showToast('Please fill in all fields.', 'error'); return; }
-    if (!document.getElementById('agreeTerms').checked) { showToast('Please agree to the terms.', 'error'); return; }
-    WandaAuth.login(name, email);
-    showToast('Account created successfully!');
-    setTimeout(() => showProfilePage(), 600);
+async function handleRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
+  
+  try {
+    const response = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        business_type: "Individual",
+        timezone: "Africa/Johannesburg"
+      }),
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Registration failed");
+    }
+    
+    const data = await response.json();
+    localStorage.setItem("access_token", data.access_token);
+    localStorage.setItem("refresh_token", data.refresh_token);
+    localStorage.setItem("wt_user_name", name);
+    localStorage.setItem("wt_user_email", email);
+    localStorage.setItem("wt_logged_in", "true");
+    
+    showToast("Account created successfully!");
+    setTimeout(() => location.reload(), 600);
+  } catch (error) {
+    showToast(error.message, "error");
   }
+}
 
   function handleLogout() {
     if (confirm('Are you sure you want to sign out?')) {

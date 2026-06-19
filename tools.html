@@ -620,12 +620,72 @@
   document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-ZA', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
   /* ── Panel switcher ── */
-  function showPanel(id) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    event.currentTarget.classList.add('active');
+  function showPanel(panelId) {
+  // Hide all panels
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  
+  // Show selected panel
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add("active");
+  
+  // Load transactions when panel opens
+  if (panelId === "txnPanel") {
+    loadTransactions();
   }
+  
+  // Load dashboard when panel opens
+  if (panelId === "dashPanel") {
+    loadDashboard();
+  }
+}
+
+async function loadTransactions() {
+  try {
+    const response = await apiCall("/tools/transactions?limit=100");
+    transactions = response.items || [];
+    renderTransactions();
+  } catch (error) {
+    console.error("Error loading transactions:", error);
+    showToast("Failed to load transactions", "error");
+  }
+}
+
+async function loadDashboard() {
+  try {
+    const summary = await apiCall("/tools/dashboard/summary");
+    const name = localStorage.getItem("wt_user_name") || "User";
+    document.getElementById("dashGreetName").textContent = name.split(" ")[0];
+    
+    // Update stat cards
+    document.querySelectorAll(".mini-stat")[0].innerHTML = `
+      <div class="mini-stat-label">Total Income</div>
+      <div class="mini-stat-value" style="color: var(--green);">
+        R ${summary.total_income.toLocaleString('en-ZA', {minimumFractionDigits: 2})}
+      </div>
+    `;
+    
+    document.querySelectorAll(".mini-stat")[1].innerHTML = `
+      <div class="mini-stat-label">Total Expenses</div>
+      <div class="mini-stat-value" style="color: var(--red);">
+        R ${summary.total_expenses.toLocaleString('en-ZA', {minimumFractionDigits: 2})}
+      </div>
+    `;
+    
+    document.querySelectorAll(".mini-stat")[2].innerHTML = `
+      <div class="mini-stat-label">Net Profit</div>
+      <div class="mini-stat-value" style="color: var(--blue);">
+        R ${summary.net_profit.toLocaleString('en-ZA', {minimumFractionDigits: 2})}
+      </div>
+    `;
+    
+    document.querySelectorAll(".mini-stat")[3].innerHTML = `
+      <div class="mini-stat-label">Transactions</div>
+      <div class="mini-stat-value">${summary.transaction_count}</div>
+    `;
+  } catch (error) {
+    console.error("Error loading dashboard:", error);
+  }
+}
 
   /* ── Transaction store ── */
   let transactions = JSON.parse(localStorage.getItem('wt_transactions') || '[]');
@@ -640,20 +700,39 @@
   // Pre-fill date
   document.getElementById('txnDate').value = new Date().toISOString().split('T')[0];
 
-  function addTransaction() {
-    const desc = document.getElementById('txnDesc').value.trim();
-    const amount = parseFloat(document.getElementById('txnAmount').value);
-    const cat = document.getElementById('txnCategory').value;
-    const date = document.getElementById('txnDate').value;
-    if (!desc || !amount || !date) { showToast('Please fill in all fields.', 'error'); return; }
-    const txn = { id: Date.now(), desc, amount, cat, date, type: txnType };
-    transactions.unshift(txn);
-    localStorage.setItem('wt_transactions', JSON.stringify(transactions));
-    renderTransactions();
-    document.getElementById('txnDesc').value = '';
-    document.getElementById('txnAmount').value = '';
-    showToast('Transaction saved successfully!');
+async function addTransaction() {
+  const desc = document.getElementById("txnDesc").value.trim();
+  const amount = parseFloat(document.getElementById("txnAmount").value);
+  const cat = document.getElementById("txnCategory").value;
+  const date = document.getElementById("txnDate").value;
+  
+  if (!desc || !amount || !date) {
+    showToast("Please fill in all fields.", "error");
+    return;
   }
+  
+  try {
+    const newTxn = await apiCall("/tools/transactions", {
+      method: "POST",
+      body: JSON.stringify({
+        type: txnType,
+        amount,
+        category: cat,
+        description: desc,
+        transaction_date: new Date(date).toISOString(),
+      }),
+    });
+    
+    transactions.unshift(newTxn);
+    renderTransactions();
+    document.getElementById("txnDesc").value = "";
+    document.getElementById("txnAmount").value = "";
+    document.getElementById("txnDate").value = "";
+    showToast("Transaction saved successfully!");
+  } catch (error) {
+    showToast(error.message, "error");
+  }
+}
 
   function deleteTxn(id) {
     transactions = transactions.filter(t => t.id !== id);
