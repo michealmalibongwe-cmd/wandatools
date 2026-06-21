@@ -5,8 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Features - WandaTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333333;
+            background: #FFFFFF;
+        }
+        
+        /* NAV */
+        nav {
+            background: #FFFFFF;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-links a:hover {
+            color: #007BFF;
+        }
+        
+        .nav-auth {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn-nav-signin {
+            color: #007BFF;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid #007BFF;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-nav-signin:hover {
+            background: #007BFF;
+            color: white;
+        }
+        
+        .btn-nav-signup {
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-nav-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+        }
+        
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 101;
+            border: 1px solid #E0E0E0;
+        }
+        
+        .dropdown.active {
+            display: block;
+        }
+        
+        .dropdown a, .dropdown button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #333333;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .dropdown a:hover, .dropdown button:hover {
+            background: #F5F5F5;
+            color: #007BFF;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #E0E0E0;
+            margin: 0;
+        }
+        
+        /* CONTENT */
         .feature-section {
             background: #FFFFFF;
             padding: 80px 20px;
@@ -129,6 +295,49 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         
+        footer {
+            background: #333333;
+            color: white;
+            padding: 40px 20px;
+            font-size: 12px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h4 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        
+        .footer-column a {
+            color: #CCCCCC;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: #007BFF;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #555555;
+            padding-top: 20px;
+            text-align: center;
+            color: #999999;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
         @media (max-width: 768px) {
             .feature-content {
                 grid-template-columns: 1fr;
@@ -155,7 +364,7 @@
         </div>
     </nav>
     
-    <!-- PAGE CONTENT -->
+    <!-- FEATURES -->
     <section class="feature-section">
         <div class="feature-content">
             <div class="feature-text">
@@ -168,7 +377,6 @@
                     <li>Custom category creation</li>
                     <li>Search and filter capabilities</li>
                 </ul>
-                <p style="color: #999999; font-size: 12px;">Available after sign up - Start tracking in seconds</p>
             </div>
             <div class="feature-image">💰</div>
         </div>
@@ -186,7 +394,6 @@
                     <li>Compliance documentation</li>
                     <li>Tax-ready reports</li>
                 </ul>
-                <p style="color: #999999; font-size: 12px;">Save hours on document preparation</p>
             </div>
             <div class="feature-image">📋</div>
         </div>
@@ -204,7 +411,6 @@
                     <li>Expense optimization suggestions</li>
                     <li>Business strategy insights</li>
                 </ul>
-                <p style="color: #999999; font-size: 12px;">Available 24/7 - Your personal AI financial advisor</p>
             </div>
             <div class="feature-image">🤖</div>
         </div>
@@ -222,7 +428,6 @@
                     <li>Performance trends & analytics</li>
                     <li>Customizable widgets</li>
                 </ul>
-                <p style="color: #999999; font-size: 12px;">Beautiful charts updated automatically</p>
             </div>
             <div class="feature-image">📊</div>
         </div>
@@ -240,7 +445,6 @@
                     <li>Workflow templates</li>
                     <li>Integration capabilities</li>
                 </ul>
-                <p style="color: #999999; font-size: 12px;">Built for efficiency - Work smarter, not harder</p>
             </div>
             <div class="feature-image">⚙️</div>
         </div>
@@ -258,19 +462,16 @@
                     <li>Networking opportunities</li>
                     <li>Resource library</li>
                 </ul>
-                <p style="color: #999999; font-size: 12px;">Join conversations with your peers</p>
             </div>
             <div class="feature-image">👥</div>
         </div>
     </section>
     
-    <!-- CTA SECTION -->
+    <!-- CTA -->
     <section class="cta-section">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h2>Ready to Transform Your Finances?</h2>
-            <p>Start your free trial today. No credit card required. Get full access to all features for 30 days.</p>
-            <button class="btn-cta" onclick="location.href='/signup.html'">Start Free Trial</button>
-        </div>
+        <h2>Ready to Transform Your Finances?</h2>
+        <p>Start your free trial today. No credit card required. Get full access to all features for 30 days.</p>
+        <button class="btn-cta" onclick="location.href='/signup.html'">Start Free Trial</button>
     </section>
     
     <!-- FOOTER -->
@@ -280,29 +481,25 @@
                 <h4>About WandaTools</h4>
                 <p style="color: #CCCCCC; margin-bottom: 0;">AI-powered financial management platform designed for South African businesses.</p>
             </div>
-            
             <div class="footer-column">
                 <h4>Product</h4>
                 <a href="/features.html">Features</a>
                 <a href="/community.html">Community</a>
                 <a href="/api/docs">API Docs</a>
             </div>
-            
             <div class="footer-column">
                 <h4>Company</h4>
-                <a href="#contact">Contact</a>
+                <a href="#">Contact</a>
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
             </div>
-            
             <div class="footer-column">
                 <h4>Support</h4>
                 <a href="#">Help Center</a>
-                <a href="mailto:support@wandatools.com">Email Support</a>
+                <a href="mailto:admin@wandatools.com">Email Support</a>
                 <a href="#">Status Page</a>
             </div>
         </div>
-        
         <div class="footer-bottom">
             <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
         </div>
@@ -310,5 +507,8 @@
     
     <!-- SCRIPTS -->
     <script src="nav.js"></script>
+    <script>
+        console.log('✅ features.html loaded');
+    </script>
 </body>
 </html>

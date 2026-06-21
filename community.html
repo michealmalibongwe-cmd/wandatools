@@ -5,8 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community - WandaTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333333;
+            background: #F9F9F9;
+        }
+        
+        /* NAV */
+        nav {
+            background: #FFFFFF;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-links a:hover {
+            color: #007BFF;
+        }
+        
+        .nav-auth {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn-nav-signin {
+            color: #007BFF;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid #007BFF;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-nav-signin:hover {
+            background: #007BFF;
+            color: white;
+        }
+        
+        .btn-nav-signup {
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-nav-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+        }
+        
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 101;
+            border: 1px solid #E0E0E0;
+        }
+        
+        .dropdown.active {
+            display: block;
+        }
+        
+        .dropdown a, .dropdown button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #333333;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .dropdown a:hover, .dropdown button:hover {
+            background: #F5F5F5;
+            color: #007BFF;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #E0E0E0;
+            margin: 0;
+        }
+        
+        /* CONTENT */
         .community-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -23,10 +189,11 @@
         }
         
         .sidebar-section {
-            background: #F5F5F5;
+            background: #FFFFFF;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid #E0E0E0;
         }
         
         .sidebar-section h3 {
@@ -152,7 +319,6 @@
             color: #007BFF;
             margin-bottom: 10px;
             cursor: pointer;
-            transition: all 0.3s;
         }
         
         .post-title:hover {
@@ -174,9 +340,6 @@
         }
         
         .post-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -195,7 +358,6 @@
             font-weight: 600;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
         }
         
         .demo-notice {
@@ -208,6 +370,50 @@
             color: #1565C0;
         }
         
+        footer {
+            background: #333333;
+            color: white;
+            padding: 40px 20px;
+            font-size: 12px;
+            margin-top: 60px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h4 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        
+        .footer-column a {
+            color: #CCCCCC;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: #007BFF;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #555555;
+            padding-top: 20px;
+            text-align: center;
+            color: #999999;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
         @media (max-width: 768px) {
             .community-container {
                 grid-template-columns: 1fr;
@@ -215,18 +421,6 @@
             
             .sidebar {
                 position: static;
-            }
-            
-            .sidebar-section {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .sidebar-section a {
-                padding: 8px;
-                border: 1px solid #E0E0E0;
-                border-radius: 4px;
             }
         }
     </style>
@@ -241,7 +435,7 @@
         </div>
     </nav>
     
-    <!-- COMMUNITY CONTENT -->
+    <!-- COMMUNITY -->
     <div class="community-container">
         <!-- SIDEBAR -->
         <aside class="sidebar">
@@ -262,22 +456,13 @@
                 <a href="#">#tax</a>
                 <a href="#">#finance</a>
                 <a href="#">#eswatini</a>
-                <a href="#">#exportready</a>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Getting Started</h3>
-                <a href="#">Welcome Guide</a>
-                <a href="#">FAQ</a>
-                <a href="#">Community Rules</a>
-                <a href="#">Contact Support</a>
             </div>
         </aside>
         
         <!-- MAIN CONTENT -->
         <div class="main-content">
             <div class="demo-notice">
-                💬 <strong>Demo Community Forum</strong> - This is a preview of the WandaTools Community. Log in to post and engage with the community!
+                💬 <strong>WandaTools Community</strong> - Connect, share, and learn from other users
             </div>
             
             <div class="header-bar">
@@ -297,7 +482,7 @@
                 </div>
                 <div class="post-title">How to use WandaAI for better financial planning?</div>
                 <div class="post-content">
-                    I'm new to WandaTools and I'm impressed with the WandaAI feature. Can someone walk me through how to best use it for my freelance business? Any tips would be appreciated!
+                    I'm new to WandaTools and I'm impressed with the WandaAI feature. Can someone walk me through how to best use it for my freelance business?
                 </div>
                 <div class="post-meta">
                     <span>👍 12</span>
@@ -318,7 +503,7 @@
                 </div>
                 <div class="post-title">5 ways to save time with WandaTools export features</div>
                 <div class="post-content">
-                    I've been using WandaTools for 3 months and I'm amazed at how quickly I can generate audit reports now. Here's my workflow that saves me 5 hours per month...
+                    I've been using WandaTools for 3 months and I'm amazed at how quickly I can generate audit reports now...
                 </div>
                 <div class="post-meta">
                     <span>👍 28</span>
@@ -329,48 +514,6 @@
             
             <!-- POST 3 -->
             <div class="post">
-                <div class="category-badge">Business Growth</div>
-                <div class="post-header">
-                    <div class="post-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">LM</div>
-                    <div class="post-info">
-                        <div class="post-author">Lerato Modise</div>
-                        <div class="post-time">1 day ago</div>
-                    </div>
-                </div>
-                <div class="post-title">Scaling my business from R50k to R500k monthly revenue - financial planning guide</div>
-                <div class="post-content">
-                    After scaling my business significantly, I learned the importance of good financial management. Let me share what worked for me and how WandaTools helped...
-                </div>
-                <div class="post-meta">
-                    <span>👍 45</span>
-                    <span>💬 22 comments</span>
-                    <span>📤 Share</span>
-                </div>
-            </div>
-            
-            <!-- POST 4 -->
-            <div class="post">
-                <div class="category-badge">Compliance</div>
-                <div class="post-header">
-                    <div class="post-avatar" style="background: linear-gradient(135deg, #34C759 0%, #00D084 100%);">NK</div>
-                    <div class="post-info">
-                        <div class="post-author">Nomsa Khubone</div>
-                        <div class="post-time">2 days ago</div>
-                    </div>
-                </div>
-                <div class="post-title">Tax deadline coming - has anyone used the compliance dashboard?</div>
-                <div class="post-content">
-                    With SARS deadline approaching, I'm looking to get my finances in order. Has anyone used WandaTools' compliance features? Would love to hear your experience!
-                </div>
-                <div class="post-meta">
-                    <span>👍 18</span>
-                    <span>💬 12 comments</span>
-                    <span>📤 Share</span>
-                </div>
-            </div>
-            
-            <!-- POST 5 -->
-            <div class="post">
                 <div class="category-badge">Success Stories</div>
                 <div class="post-header">
                     <div class="post-avatar" style="background: linear-gradient(135deg, #FF6B9D 0%, #C06C84 100%);">DZ</div>
@@ -379,9 +522,9 @@
                         <div class="post-time">3 days ago</div>
                     </div>
                 </div>
-                <div class="post-title">Got my business loan approved! Thanks WandaTools for the audit reports! 🎉</div>
+                <div class="post-title">Got my business loan approved! Thanks WandaTools! 🎉</div>
                 <div class="post-content">
-                    I never thought I'd get approved for a loan, but with WandaTools' professional audit reports and financial summaries, the bank approved my application within 2 weeks!
+                    With WandaTools' professional audit reports, the bank approved my loan application in 2 weeks!
                 </div>
                 <div class="post-meta">
                     <span>👍 120</span>
@@ -393,35 +536,31 @@
     </div>
     
     <!-- FOOTER -->
-    <footer style="margin-top: 60px;">
+    <footer>
         <div class="footer-container">
             <div class="footer-column">
                 <h4>About WandaTools</h4>
-                <p style="color: #CCCCCC; margin-bottom: 0;">AI-powered financial management platform designed for South African businesses.</p>
+                <p style="color: #CCCCCC; margin-bottom: 0;">AI-powered financial management for South Africa</p>
             </div>
-            
             <div class="footer-column">
                 <h4>Product</h4>
                 <a href="/features.html">Features</a>
                 <a href="/community.html">Community</a>
-                <a href="/api/docs">API Docs</a>
+                <a href="/api/docs">API</a>
             </div>
-            
             <div class="footer-column">
                 <h4>Company</h4>
-                <a href="#contact">Contact</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
             </div>
-            
             <div class="footer-column">
                 <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="mailto:support@wandatools.com">Email Support</a>
-                <a href="#">Status Page</a>
+                <a href="#">Help</a>
+                <a href="mailto:admin@wandatools.com">Email</a>
+                <a href="#">Status</a>
             </div>
         </div>
-        
         <div class="footer-bottom">
             <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
         </div>
@@ -430,18 +569,17 @@
     <!-- SCRIPTS -->
     <script src="nav.js"></script>
     <script>
+        console.log('✅ community.html loaded');
+        
         function handleNewPost() {
-            const auth = window.WandaAuth.auth;
-            
-            if (!auth.isLoggedIn) {
+            if (!window.WandaAuth.auth.isLoggedIn) {
                 WandaAuth.showAlert('⚠️ Please sign in to create a post', 'error');
                 setTimeout(() => {
                     location.href = '/signup.html';
                 }, 1500);
                 return;
             }
-            
-            WandaAuth.showAlert('✨ New post feature coming soon! (Logged-in users will see this)', 'success');
+            WandaAuth.showAlert('✨ New post feature coming soon!', 'success');
         }
     </script>
 </body>
