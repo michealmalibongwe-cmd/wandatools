@@ -302,13 +302,15 @@
 </head>
 <body>
 
+
 <script src="nav.js"></script>
-<script>
-    // Require login to access tools
-    if (WandaAuth.protectPage() === false) {
-        // User not logged in, redirected
-    }
-</script>
+    <script>
+        if (!WandaAuth.protectPage()) {
+            // Not logged in, redirected
+        }
+    </script>
+    
+    <!-- Rest of tools.html content below -->
 
 <!-- ══════════════════ NAVBAR ══════════════════ -->
 <nav class="navbar">

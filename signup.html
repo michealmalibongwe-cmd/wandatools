@@ -241,12 +241,14 @@
 <body>
 
     <script src="nav.js"></script>
-<script>
-    // Prevent logged-in users from accessing signup
-    if (WandaAuth.protectFromAuth() === false) {
-        // User is already logged in, redirected
-    }
-</script>
+    <script>
+        if (!WandaAuth.protectFromAuth()) {
+            // User already logged in, redirected
+        }
+    </script>
+    
+    <!-- Rest of signup.html content below -->
+    
 
     <div class="container">
         <div class="card">

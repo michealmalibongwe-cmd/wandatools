@@ -3,7 +3,8 @@
  * Handles conditional nav visibility based on login status
  */
 
-const API_BASE = "https://your-railway-url/api/v1";
+// ⚠️ REPLACE THIS WITH YOUR ACTUAL RAILWAY URL
+const API_BASE = "https://wandatools.up.railway.app/api/v1";
 
 // ═══════════════════════════════════════════════════════════
 // AUTH STATE
@@ -15,6 +16,12 @@ class AuthState {
         this.refreshToken = localStorage.getItem('refresh_token');
         this.email = localStorage.getItem('user_email');
         this.isLoggedIn = !!(this.token && this.email);
+        
+        console.log('🔐 Auth State:', {
+            isLoggedIn: this.isLoggedIn,
+            email: this.email,
+            hasToken: !!this.token
+        });
     }
     
     logout() {
@@ -22,6 +29,8 @@ class AuthState {
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user_email');
         this.isLoggedIn = false;
+        this.token = null;
+        this.email = null;
     }
     
     login(token, refreshToken, email) {
@@ -50,22 +59,32 @@ const auth = new AuthState();
 // ═══════════════════════════════════════════════════════════
 
 function renderNavigation() {
+    console.log('📍 renderNavigation called, isLoggedIn:', auth.isLoggedIn);
+    
+    // Find nav elements
     const navLinks = document.querySelector('.nav-links');
     const navAuth = document.getElementById('navAuth');
     
-    if (!navLinks || !navAuth) return;
+    if (!navLinks) {
+        console.error('❌ .nav-links not found in DOM');
+        return;
+    }
+    
+    if (!navAuth) {
+        console.error('❌ #navAuth not found in DOM');
+        return;
+    }
     
     if (auth.isLoggedIn) {
-        // LOGGED IN - Show private nav
         renderPrivateNav(navLinks, navAuth);
     } else {
-        // LOGGED OUT - Show public nav
         renderPublicNav(navLinks, navAuth);
     }
 }
 
 function renderPublicNav(navLinks, navAuth) {
-    // Public navigation (logged out)
+    console.log('📋 Rendering PUBLIC nav (logged out)');
+    
     navLinks.innerHTML = `
         <li><a href="/">Home</a></li>
         <li><a href="/features.html">Features</a></li>
@@ -81,7 +100,8 @@ function renderPublicNav(navLinks, navAuth) {
 }
 
 function renderPrivateNav(navLinks, navAuth) {
-    // Private navigation (logged in)
+    console.log('🔒 Rendering PRIVATE nav (logged in)');
+    
     navLinks.innerHTML = `
         <li><a href="/tools.html">Dashboard</a></li>
         <li><a href="/wandaAI.html">WandaAI</a></li>
@@ -104,7 +124,7 @@ function renderPrivateNav(navLinks, navAuth) {
                 <a href="/tools.html">📊 Dashboard</a>
                 <a href="/wandaAI.html">🤖 WandaAI</a>
                 <div class="dropdown-divider"></div>
-                <button onclick="handleLogout()" style="color: #F44336;">🚪 Logout</button>
+                <button onclick="handleLogout()" style="color: #F44336; padding: 12px 16px; text-align: left; width: 100%;">🚪 Logout</button>
             </div>
         </div>
     `;
@@ -126,12 +146,14 @@ document.addEventListener('click', function(event) {
     const dropdown = document.getElementById('dropdown');
     const userMenu = document.querySelector('.user-menu');
     
-    if (dropdown && !userMenu?.contains(event.target)) {
+    if (dropdown && userMenu && !userMenu.contains(event.target)) {
         dropdown.classList.remove('active');
     }
 });
 
 async function handleLogout() {
+    console.log('🚪 Logout initiated');
+    
     try {
         if (auth.token) {
             await fetch(`${API_BASE}/auth/logout`, {
@@ -143,12 +165,14 @@ async function handleLogout() {
             });
         }
     } catch (error) {
-        console.error('Logout error:', error);
+        console.error('Logout API error:', error);
     }
     
     auth.logout();
     showAlert('✅ Logged out successfully', 'success');
+    
     setTimeout(() => {
+        renderNavigation();
         location.href = '/';
     }, 1000);
 }
@@ -157,11 +181,9 @@ async function handleLogout() {
 // ACCESS PROTECTION
 // ═══════════════════════════════════════════════════════════
 
-/**
- * Protect page - redirect to login if not authenticated
- * Call this in pages that require authentication
- */
 function protectPage() {
+    console.log('🔐 Checking page protection, isLoggedIn:', auth.isLoggedIn);
+    
     if (!auth.isLoggedIn) {
         showAlert('⚠️ Please sign in to access this page', 'error');
         setTimeout(() => {
@@ -172,12 +194,11 @@ function protectPage() {
     return true;
 }
 
-/**
- * Protect from logged-in users
- * Call this on login/signup pages
- */
 function protectFromAuth() {
+    console.log('🔒 Checking auth redirect, isLoggedIn:', auth.isLoggedIn);
+    
     if (auth.isLoggedIn) {
+        console.log('✅ User already logged in, redirecting to dashboard');
         location.href = '/tools.html';
         return false;
     }
@@ -189,29 +210,50 @@ function protectFromAuth() {
 // ═══════════════════════════════════════════════════════════
 
 function showAlert(message, type = 'success') {
-    const container = document.getElementById('alertContainer') || createAlertContainer();
+    let container = document.getElementById('alertContainer');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'alertContainer';
+        container.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+        `;
+        document.body.appendChild(container);
+    }
+    
     const alert = document.createElement('div');
     alert.className = `alert alert-${type}`;
+    alert.style.cssText = `
+        padding: 16px 24px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        animation: slideIn 0.3s ease-out;
+        ${type === 'success' ? 'background: #E8F5E9; color: #2E7D32; border-left: 4px solid #28A745;' : 'background: #FFEBEE; color: #C62828; border-left: 4px solid #F44336;'}
+    `;
     alert.textContent = message;
     container.appendChild(alert);
     
     setTimeout(() => alert.remove(), 4000);
 }
 
-function createAlertContainer() {
-    const container = document.createElement('div');
-    container.id = 'alertContainer';
-    document.body.appendChild(container);
-    return container;
-}
-
 // ═══════════════════════════════════════════════════════════
 // INITIALIZATION
 // ═══════════════════════════════════════════════════════════
 
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('✅ DOM Content Loaded - Initializing Navigation');
+        renderNavigation();
+    });
+} else {
+    console.log('✅ DOM Already Loaded - Initializing Navigation');
     renderNavigation();
-});
+}
 
 // Export for use in other files
 window.WandaAuth = {
@@ -220,5 +262,8 @@ window.WandaAuth = {
     protectFromAuth,
     showAlert,
     handleLogout,
-    renderNavigation
+    renderNavigation,
+    API_BASE
 };
+
+console.log('✅ nav.js loaded successfully');
