@@ -3,22 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WandaTools - Sign Up</title>
+    <meta name="description" content="Create your WandaTools account - AI-powered financial management">
+    <meta name="theme-color" content="#007BFF">
+    <title>Create Account - WandaTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
             font-family: 'Open Sans', sans-serif;
             background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            flex-direction: column;
         }
         
-        .container { max-width: 500px; width: 100%; }
+        /* ═══════════════════════════════════════════════════════════
+           NAVIGATION
+           ═══════════════════════════════════════════════════════════ */
+        
+        nav {
+            background: #FFFFFF;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-links a:hover {
+            color: #007BFF;
+        }
+        
+        #navAuth {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn-nav-signin {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid #007BFF;
+            border-radius: 6px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-nav-signin:hover {
+            background: #007BFF;
+            color: white;
+        }
+        
+        .btn-nav-signup {
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-nav-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+        }
+        
+        .user-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 101;
+            border: 1px solid #E0E0E0;
+        }
+        
+        .dropdown.active {
+            display: block;
+        }
+        
+        .dropdown a, .dropdown button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #333333;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .dropdown a:hover, .dropdown button:hover {
+            background: #F5F5F5;
+            color: #007BFF;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #E0E0E0;
+            margin: 0;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════
+           MAIN CONTENT
+           ═══════════════════════════════════════════════════════════ */
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
         
         .card {
             background: #FFFFFF;
@@ -42,6 +232,86 @@
             font-family: 'Open Sans', sans-serif;
         }
         
+        /* ALERTS */
+        #alertContainer {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .alert-error {
+            background: #FFEBEE;
+            color: #C62828;
+            border-left-color: #F44336;
+        }
+        
+        .alert-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-left-color: #28A745;
+        }
+        
+        /* FORM TABS */
+        .form-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #F5F5F5;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            background: transparent;
+            color: #999999;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tab-btn.active {
+            color: #007BFF;
+            border-bottom-color: #007BFF;
+        }
+        
+        .tab-btn:hover {
+            color: #333333;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        /* FORM GROUPS */
         .form-group {
             margin-bottom: 18px;
         }
@@ -73,14 +343,18 @@
             outline: none;
             border-color: #007BFF;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-            background: #FFFFFF;
         }
         
         input::placeholder {
             color: #999999;
         }
         
-        /* Password Strength Indicator */
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        /* PASSWORD STRENGTH */
         .password-strength {
             margin-top: 6px;
             height: 3px;
@@ -119,8 +393,10 @@
             color: #999999;
             margin-top: 4px;
             font-family: 'Open Sans', sans-serif;
+            line-height: 1.4;
         }
         
+        /* BUTTONS */
         .btn {
             width: 100%;
             padding: 12px;
@@ -146,6 +422,12 @@
             box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
         }
         
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
         .btn-secondary {
             background: #F5F5F5;
             color: #333333;
@@ -156,63 +438,7 @@
             background: #EEEEEE;
         }
         
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .form-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #F5F5F5;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 12px 0;
-            border: none;
-            background: transparent;
-            color: #999999;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .tab-btn.active {
-            color: #007BFF;
-            border-bottom-color: #007BFF;
-        }
-        
-        .form-section { display: none; }
-        .form-section.active { display: block; }
-        
-        .alert {
-            padding: 12px 14px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            border-left: 4px solid;
-        }
-        
-        .alert-error {
-            background: #FFEBEE;
-            color: #C62828;
-            border-left-color: #F44336;
-        }
-        
-        .alert-success {
-            background: #E8F5E9;
-            color: #2E7D32;
-            border-left-color: #28A745;
-        }
-        
+        /* TOGGLE FORM */
         .toggle-form {
             text-align: center;
             margin-top: 20px;
@@ -227,7 +453,9 @@
             cursor: pointer;
         }
         
-        .toggle-form a:hover { text-decoration: underline; }
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
         
         h3 {
             font-family: 'Poppins', sans-serif;
@@ -236,214 +464,446 @@
             margin-bottom: 15px;
             font-weight: 600;
         }
+        
+        /* FOOTER */
+        footer {
+            background: rgba(0, 0, 0, 0.1);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 11px;
+        }
+        
+        @media (max-width: 768px) {
+            .card {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .form-tabs {
+                gap: 5px;
+            }
+            
+            .tab-btn {
+                font-size: 11px;
+                padding: 10px 0;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <script src="nav.js"></script>
-    <script>
-        if (!WandaAuth.protectFromAuth()) {
-            // User already logged in, redirected
-        }
-    </script>
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">WandaTools</a>
+            <ul class="nav-links"></ul>
+            <div id="navAuth"></div>
+        </div>
+    </nav>
     
-    <!-- Rest of signup.html content below -->
-    
-
-    <div class="container">
-        <div class="card">
-            <h1>WandaTools</h1>
-            <p class="subtitle">Secure Financial Management Platform</p>
-            
-            <div id="alertContainer"></div>
-            
-            <!-- Tabs -->
-            <div class="form-tabs">
-                <button class="tab-btn active" onclick="switchForm('individual')">Individual</button>
-                <button class="tab-btn" onclick="switchForm('business')">Business</button>
-                <button class="tab-btn" onclick="switchForm('login')">Sign In</button>
-            </div>
-            
-            <!-- INDIVIDUAL SIGNUP -->
-            <div id="individual" class="form-section active">
-                <form id="individualForm" onsubmit="handleIndividualSignup(event)">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="indName" placeholder="John Doe" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="indEmail" placeholder="you@example.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="indPassword" placeholder="••••••••••••" required onchange="checkPasswordStrength('indPassword')">
-                        <div class="password-strength">
-                            <div id="indStrengthBar" class="strength-bar"></div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container">
+            <div class="card">
+                <h1>WandaTools</h1>
+                <p class="subtitle">Secure Financial Management Platform</p>
+                
+                <!-- ALERTS -->
+                <div id="alertContainer"></div>
+                
+                <!-- TABS -->
+                <div class="form-tabs">
+                    <button class="tab-btn active" onclick="switchForm('individual')">Individual</button>
+                    <button class="tab-btn" onclick="switchForm('business')">Business</button>
+                    <button class="tab-btn" onclick="switchForm('login')">Sign In</button>
+                </div>
+                
+                <!-- ═════════════════════════════════════════════════
+                     INDIVIDUAL SIGNUP
+                     ═════════════════════════════════════════════════ -->
+                
+                <div id="individual" class="form-section active">
+                    <form id="individualForm" onsubmit="handleIndividualSignup(event)" novalidate>
+                        <div class="form-group">
+                            <label for="indName">Full Name</label>
+                            <input 
+                                type="text" 
+                                id="indName" 
+                                name="name"
+                                placeholder="John Doe" 
+                                required
+                                minlength="2"
+                                maxlength="100"
+                            >
                         </div>
-                        <div id="indStrengthText" class="strength-text"></div>
-                        <div id="indFeedback" class="feedback"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" id="indPasswordConfirm" placeholder="••••••••••••" required>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Create Account</button>
-                </form>
-            </div>
-            
-            <!-- BUSINESS SIGNUP -->
-            <div id="business" class="form-section">
-                <form id="businessForm" onsubmit="handleBusinessSignup(event)">
-                    <h3>Personal Information</h3>
-                    
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="bizName" placeholder="John Doe" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="bizEmail" placeholder="john@example.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" id="bizPhone" placeholder="+27 XX XXX XXXX" required>
-                    </div>
-                    
-                    <h3 style="margin-top: 25px;">Business Information</h3>
-                    
-                    <div class="form-group">
-                        <label>Business Name</label>
-                        <input type="text" id="bizBusinessName" placeholder="Your Business Ltd" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Business Type / Industry</label>
-                        <select id="bizBusinessType" required>
-                            <option value="">Select industry...</option>
-                            <option value="Retail">Retail & E-Commerce</option>
-                            <option value="Services">Professional Services</option>
-                            <option value="Technology">Technology & Software</option>
-                            <option value="Manufacturing">Manufacturing</option>
-                            <option value="Healthcare">Healthcare & Wellness</option>
-                            <option value="Finance">Finance & Insurance</option>
-                            <option value="Hospitality">Hospitality & Tourism</option>
-                            <option value="Education">Education & Training</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Business Email</label>
-                        <input type="email" id="bizBusinessEmail" placeholder="business@company.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Business Registration Number</label>
-                        <input type="text" id="bizRegistration" placeholder="Registration ID or Tax Number" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Country</label>
-                        <input type="text" id="bizCountry" placeholder="South Africa" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="bizPassword" placeholder="••••••••••••" required onchange="checkPasswordStrength('bizPassword')">
-                        <div class="password-strength">
-                            <div id="bizStrengthBar" class="strength-bar"></div>
+                        
+                        <div class="form-group">
+                            <label for="indEmail">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="indEmail" 
+                                name="email"
+                                placeholder="you@example.com" 
+                                required
+                                maxlength="255"
+                            >
                         </div>
-                        <div id="bizStrengthText" class="strength-text"></div>
-                        <div id="bizFeedback" class="feedback"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" id="bizPasswordConfirm" placeholder="••••••••••••" required>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Create Business Account</button>
-                </form>
-            </div>
-            
-            <!-- LOGIN -->
-            <div id="login" class="form-section">
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="loginPassword" placeholder="••••••••••••" required>
-                    </div>
-                    
-                    <div class="form-group" style="display: flex; align-items: center;">
-                        <input type="checkbox" id="rememberMe" style="width: auto; margin: 0; margin-right: 8px;">
-                        <label for="rememberMe" style="display: inline; margin: 0; text-transform: none; letter-spacing: normal;">Remember me</label>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Sign In</button>
-                    <button type="button" class="btn btn-secondary" onclick="location.href='/forgot-password.html'">Forgot Password?</button>
-                    <button type="button" class="btn btn-secondary" onclick="switchForm('individual')">Create Account</button>
-                </form>
+                        
+                        <div class="form-group">
+                            <label for="indPassword">Password</label>
+                            <input 
+                                type="password" 
+                                id="indPassword" 
+                                name="password"
+                                placeholder="••••••••••••" 
+                                required
+                                minlength="12"
+                                onchange="checkPasswordStrength('indPassword')"
+                            >
+                            <div class="password-strength">
+                                <div id="indStrengthBar" class="strength-bar"></div>
+                            </div>
+                            <div id="indStrengthText" class="strength-text"></div>
+                            <div id="indFeedback" class="feedback"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="indPasswordConfirm">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                id="indPasswordConfirm" 
+                                name="passwordConfirm"
+                                placeholder="••••••••••••" 
+                                required
+                                minlength="12"
+                            >
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="indSubmitBtn">Create Account</button>
+                    </form>
+                </div>
+                
+                <!-- ═════════════════════════════════════════════════
+                     BUSINESS SIGNUP
+                     ═════════════════════════════════════════════════ -->
+                
+                <div id="business" class="form-section">
+                    <form id="businessForm" onsubmit="handleBusinessSignup(event)" novalidate>
+                        <h3>Personal Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="bizName">Full Name</label>
+                            <input 
+                                type="text" 
+                                id="bizName" 
+                                name="name"
+                                placeholder="John Doe" 
+                                required
+                                minlength="2"
+                                maxlength="100"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizEmail">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="bizEmail" 
+                                name="email"
+                                placeholder="john@example.com" 
+                                required
+                                maxlength="255"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizPhone">Phone Number</label>
+                            <input 
+                                type="tel" 
+                                id="bizPhone" 
+                                name="phone"
+                                placeholder="+27 XX XXX XXXX" 
+                                required
+                                pattern="[0-9+\s\-]+"
+                            >
+                        </div>
+                        
+                        <h3 style="margin-top: 25px;">Business Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="bizBusinessName">Business Name</label>
+                            <input 
+                                type="text" 
+                                id="bizBusinessName" 
+                                name="businessName"
+                                placeholder="Your Business Ltd" 
+                                required
+                                minlength="2"
+                                maxlength="255"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizBusinessType">Business Type / Industry</label>
+                            <select id="bizBusinessType" name="businessType" required>
+                                <option value="">Select industry...</option>
+                                <option value="Retail">Retail & E-Commerce</option>
+                                <option value="Services">Professional Services</option>
+                                <option value="Technology">Technology & Software</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Healthcare">Healthcare & Wellness</option>
+                                <option value="Finance">Finance & Insurance</option>
+                                <option value="Hospitality">Hospitality & Tourism</option>
+                                <option value="Education">Education & Training</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizBusinessEmail">Business Email</label>
+                            <input 
+                                type="email" 
+                                id="bizBusinessEmail" 
+                                name="businessEmail"
+                                placeholder="business@company.com" 
+                                required
+                                maxlength="255"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizRegistration">Business Registration Number</label>
+                            <input 
+                                type="text" 
+                                id="bizRegistration" 
+                                name="businessRegistration"
+                                placeholder="Registration ID or Tax Number" 
+                                required
+                                minlength="3"
+                                maxlength="100"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizCountry">Country</label>
+                            <input 
+                                type="text" 
+                                id="bizCountry" 
+                                name="country"
+                                placeholder="South Africa" 
+                                required
+                                maxlength="100"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizPassword">Password</label>
+                            <input 
+                                type="password" 
+                                id="bizPassword" 
+                                name="password"
+                                placeholder="••••••••••••" 
+                                required
+                                minlength="12"
+                                onchange="checkPasswordStrength('bizPassword')"
+                            >
+                            <div class="password-strength">
+                                <div id="bizStrengthBar" class="strength-bar"></div>
+                            </div>
+                            <div id="bizStrengthText" class="strength-text"></div>
+                            <div id="bizFeedback" class="feedback"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bizPasswordConfirm">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                id="bizPasswordConfirm" 
+                                name="passwordConfirm"
+                                placeholder="••••••••••••" 
+                                required
+                                minlength="12"
+                            >
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="bizSubmitBtn">Create Business Account</button>
+                    </form>
+                </div>
+                
+                <!-- ═════════════════════════════════════════════════
+                     LOGIN
+                     ═════════════════════════════════════════════════ -->
+                
+                <div id="login" class="form-section">
+                    <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="loginEmail" 
+                                name="email"
+                                placeholder="you@example.com" 
+                                required
+                                maxlength="255"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input 
+                                type="password" 
+                                id="loginPassword" 
+                                name="password"
+                                placeholder="••••••••••••" 
+                                required
+                                minlength="8"
+                            >
+                        </div>
+                        
+                        <div class="form-group" style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <input 
+                                type="checkbox" 
+                                id="rememberMe" 
+                                name="rememberMe"
+                                style="width: auto; margin: 0; margin-right: 8px;"
+                            >
+                            <label for="rememberMe" style="display: inline; margin: 0; text-transform: none; letter-spacing: normal; font-weight: 400; font-size: 12px;">Remember me</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="loginSubmitBtn">Sign In</button>
+                        <button type="button" class="btn btn-secondary" onclick="location.href='/forgot-password.html'">Forgot Password?</button>
+                    </form>
+                </div>
+                
+                <div class="toggle-form">
+                    Don't have an account? <a onclick="switchForm('individual')">Create one</a>
+                </div>
             </div>
         </div>
     </div>
     
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
+    </footer>
+    
+    <!-- ═══════════════════════════════════════════════════════════
+         SCRIPTS - Load nav.js FIRST, then signup logic
+         ═══════════════════════════════════════════════════════════ -->
+    
+    <script src="nav.js"></script>
+    
     <script>
-        const API_BASE = "https://wandatools.up.railway.app/api/v1";
+        // ═════════════════════════════════════════════════════════════
+        // SECURITY: Wait for nav.js to load before initializing
+        // ═════════════════════════════════════════════════════════════
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Protect from logged-in users
+            if (window.WandaAuth && window.WandaAuth.protectFromAuth() === false) {
+                return; // User already logged in
+            }
+            
+            console.log('✅ Signup page loaded and ready');
+        });
+        
+        // ═════════════════════════════════════════════════════════════
+        // FORM TAB SWITCHING
+        // ═════════════════════════════════════════════════════════════
         
         function switchForm(formName) {
+            // Hide all form sections
             document.querySelectorAll('.form-section').forEach(el => {
                 el.classList.remove('active');
             });
-            document.getElementById(formName).classList.add('active');
             
+            // Show selected section
+            const selectedForm = document.getElementById(formName);
+            if (selectedForm) {
+                selectedForm.classList.add('active');
+            }
+            
+            // Update active tab button
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            // Mark clicked button as active
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            // Scroll to form
+            document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        
+        // ═════════════════════════════════════════════════════════════
+        // ALERTS
+        // ═════════════════════════════════════════════════════════════
         
         function showAlert(message, type = 'error') {
             const container = document.getElementById('alertContainer');
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
+            alert.setAttribute('role', 'alert');
+            
             container.innerHTML = '';
             container.appendChild(alert);
             
-            setTimeout(() => alert.remove(), 5000);
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
         }
+        
+        // ═════════════════════════════════════════════════════════════
+        // PASSWORD STRENGTH CHECKER
+        // ═════════════════════════════════════════════════════════════
         
         async function checkPasswordStrength(fieldId) {
             const password = document.getElementById(fieldId).value;
             
+            if (!password) {
+                return;
+            }
+            
             try {
+                // Get API_BASE from nav.js
+                const API_BASE = window.WandaAuth?.API_BASE;
+                
+                if (!API_BASE) {
+                    console.error('❌ API_BASE not available');
+                    return;
+                }
+                
                 const response = await fetch(`${API_BASE}/auth/check-password`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ password })
                 });
                 
                 const data = await response.json();
                 
-                const barId = `${fieldId.split('Password')[0]}StrengthBar`;
-                const textId = `${fieldId.split('Password')[0]}StrengthText`;
-                const feedbackId = `${fieldId.split('Password')[0]}Feedback`;
+                // Get prefix for this form (ind, biz, reset, etc)
+                const prefix = fieldId.split('Password')[0];
+                
+                const barId = `${prefix}StrengthBar`;
+                const textId = `${prefix}StrengthText`;
+                const feedbackId = `${prefix}Feedback`;
                 
                 const bar = document.getElementById(barId);
                 const text = document.getElementById(textId);
                 const feedback = document.getElementById(feedbackId);
+                
+                if (!bar || !text) return;
                 
                 bar.className = `strength-bar strength-${data.score}`;
                 
@@ -453,134 +913,343 @@
                 text.className = `strength-text ${strengthClasses[data.score]}`;
                 text.textContent = strengthLabels[data.score];
                 
-                feedback.textContent = data.feedback.join(', ');
+                if (feedback) {
+                    feedback.textContent = data.feedback.join(' • ');
+                }
                 
             } catch (error) {
-                console.error('Error checking password:', error);
+                console.error('Password strength check error:', error);
             }
         }
+        
+        // ═════════════════════════════════════════════════════════════
+        // FORM VALIDATION
+        // ═════════════════════════════════════════════════════════════
+        
+        function validateIndividualForm() {
+            const name = document.getElementById('indName').value.trim();
+            const email = document.getElementById('indEmail').value.trim();
+            const password = document.getElementById('indPassword').value;
+            const passwordConfirm = document.getElementById('indPasswordConfirm').value;
+            
+            // Validate name
+            if (name.length < 2) {
+                showAlert('Name must be at least 2 characters');
+                return false;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('Please enter a valid email address');
+                return false;
+            }
+            
+            // Validate password length
+            if (password.length < 12) {
+                showAlert('Password must be at least 12 characters');
+                return false;
+            }
+            
+            // Validate password match
+            if (password !== passwordConfirm) {
+                showAlert('Passwords do not match');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function validateBusinessForm() {
+            const name = document.getElementById('bizName').value.trim();
+            const email = document.getElementById('bizEmail').value.trim();
+            const businessName = document.getElementById('bizBusinessName').value.trim();
+            const businessType = document.getElementById('bizBusinessType').value;
+            const businessEmail = document.getElementById('bizBusinessEmail').value.trim();
+            const registration = document.getElementById('bizRegistration').value.trim();
+            const password = document.getElementById('bizPassword').value;
+            const passwordConfirm = document.getElementById('bizPasswordConfirm').value;
+            
+            if (name.length < 2) {
+                showAlert('Name must be at least 2 characters');
+                return false;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('Please enter a valid personal email');
+                return false;
+            }
+            
+            if (businessName.length < 2) {
+                showAlert('Business name must be at least 2 characters');
+                return false;
+            }
+            
+            if (!businessType) {
+                showAlert('Please select a business type');
+                return false;
+            }
+            
+            if (!emailRegex.test(businessEmail)) {
+                showAlert('Please enter a valid business email');
+                return false;
+            }
+            
+            if (registration.length < 3) {
+                showAlert('Please enter a valid registration number');
+                return false;
+            }
+            
+            if (password.length < 12) {
+                showAlert('Password must be at least 12 characters');
+                return false;
+            }
+            
+            if (password !== passwordConfirm) {
+                showAlert('Passwords do not match');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // ═════════════════════════════════════════════════════════════
+        // SIGNUP HANDLERS
+        // ═════════════════════════════════════════════════════════════
         
         async function handleIndividualSignup(event) {
             event.preventDefault();
             
-            const name = document.getElementById('indName').value;
-            const email = document.getElementById('indEmail').value;
-            const password = document.getElementById('indPassword').value;
-            const passwordConfirm = document.getElementById('indPasswordConfirm').value;
-            
-            if (password !== passwordConfirm) {
-                showAlert('Passwords do not match');
+            // Validate form
+            if (!validateIndividualForm()) {
                 return;
             }
             
+            const btn = document.getElementById('indSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+            
             try {
-                const response = await fetch(`${API_BASE}/auth/signup/individual`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, password_confirm: passwordConfirm })
-                });
+                const API_BASE = window.WandaAuth?.API_BASE;
                 
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    showAlert(data.detail || 'Signup failed');
+                if (!API_BASE) {
+                    showAlert('❌ API configuration error. Please refresh the page.');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Account';
                     return;
                 }
                 
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('refresh_token', data.refresh_token);
-                localStorage.setItem('user_email', data.user.email);
+                const formData = {
+                    name: document.getElementById('indName').value.trim(),
+                    email: document.getElementById('indEmail').value.trim(),
+                    password: document.getElementById('indPassword').value,
+                    password_confirm: document.getElementById('indPasswordConfirm').value
+                };
                 
-                showAlert('✅ Account created! Check email to verify. Redirecting...', 'success');
-                setTimeout(() => location.href = '/verify-email.html', 2000);
+                console.log('📤 Sending signup request to:', `${API_BASE}/auth/signup/individual`);
+                
+                const response = await fetch(`${API_BASE}/auth/signup/individual`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('📬 Response:', response.status);
+                const data = await response.json();
+                console.log('📦 Data:', data);
+                
+                if (!response.ok) {
+                    showAlert(data.detail || 'Signup failed. Please try again.');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Account';
+                    return;
+                }
+                
+                // ✅ SUCCESS - Save tokens
+                if (data.access_token && data.refresh_token && data.user) {
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('refresh_token', data.refresh_token);
+                    localStorage.setItem('user_email', data.user.email);
+                    
+                    console.log('✅ Tokens saved, redirecting...');
+                    
+                    showAlert('✅ Account created! Redirecting to verification...', 'success');
+                    
+                    setTimeout(() => {
+                        location.href = '/verify-email.html';
+                    }, 2000);
+                } else {
+                    showAlert('Invalid response from server');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Account';
+                }
                 
             } catch (error) {
-                showAlert('Network error: ' + error.message);
+                console.error('❌ Signup error:', error);
+                showAlert(`Network error: ${error.message}`);
+                btn.disabled = false;
+                btn.textContent = 'Create Account';
             }
         }
         
         async function handleBusinessSignup(event) {
             event.preventDefault();
             
-            const formData = {
-                name: document.getElementById('bizName').value,
-                email: document.getElementById('bizEmail').value,
-                password: document.getElementById('bizPassword').value,
-                password_confirm: document.getElementById('bizPasswordConfirm').value,
-                phone: document.getElementById('bizPhone').value,
-                business_name: document.getElementById('bizBusinessName').value,
-                business_type: document.getElementById('bizBusinessType').value,
-                business_email: document.getElementById('bizBusinessEmail').value,
-                business_registration: document.getElementById('bizRegistration').value,
-                country: document.getElementById('bizCountry').value
-            };
-            
-            if (formData.password !== formData.password_confirm) {
-                showAlert('Passwords do not match');
+            // Validate form
+            if (!validateBusinessForm()) {
                 return;
             }
             
+            const btn = document.getElementById('bizSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+            
             try {
-                const response = await fetch(`${API_BASE}/auth/signup/business`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
+                const API_BASE = window.WandaAuth?.API_BASE;
                 
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    showAlert(data.detail || 'Signup failed');
+                if (!API_BASE) {
+                    showAlert('❌ API configuration error. Please refresh the page.');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Business Account';
                     return;
                 }
                 
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('refresh_token', data.refresh_token);
-                localStorage.setItem('user_email', data.user.email);
+                const formData = {
+                    name: document.getElementById('bizName').value.trim(),
+                    email: document.getElementById('bizEmail').value.trim(),
+                    password: document.getElementById('bizPassword').value,
+                    password_confirm: document.getElementById('bizPasswordConfirm').value,
+                    phone: document.getElementById('bizPhone').value.trim(),
+                    business_name: document.getElementById('bizBusinessName').value.trim(),
+                    business_type: document.getElementById('bizBusinessType').value,
+                    business_email: document.getElementById('bizBusinessEmail').value.trim(),
+                    business_registration: document.getElementById('bizRegistration').value.trim(),
+                    country: document.getElementById('bizCountry').value.trim()
+                };
                 
-                showAlert('✅ Business account created! Check email to verify. Redirecting...', 'success');
-                setTimeout(() => location.href = '/verify-email.html', 2000);
+                console.log('📤 Sending business signup request...');
+                
+                const response = await fetch(`${API_BASE}/auth/signup/business`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('📬 Response:', response.status);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showAlert(data.detail || 'Signup failed. Please try again.');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Business Account';
+                    return;
+                }
+                
+                // ✅ SUCCESS - Save tokens
+                if (data.access_token && data.refresh_token && data.user) {
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('refresh_token', data.refresh_token);
+                    localStorage.setItem('user_email', data.user.email);
+                    
+                    showAlert('✅ Business account created! Redirecting to verification...', 'success');
+                    
+                    setTimeout(() => {
+                        location.href = '/verify-email.html';
+                    }, 2000);
+                } else {
+                    showAlert('Invalid response from server');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Business Account';
+                }
                 
             } catch (error) {
-                showAlert('Network error: ' + error.message);
+                console.error('❌ Business signup error:', error);
+                showAlert(`Network error: ${error.message}`);
+                btn.disabled = false;
+                btn.textContent = 'Create Business Account';
             }
         }
         
         async function handleLogin(event) {
             event.preventDefault();
             
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             
+            if (!email || !password) {
+                showAlert('Please fill in all fields');
+                return;
+            }
+            
+            const btn = document.getElementById('loginSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+            
             try {
+                const API_BASE = window.WandaAuth?.API_BASE;
+                
+                if (!API_BASE) {
+                    showAlert('❌ API configuration error. Please refresh the page.');
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
+                    return;
+                }
+                
                 const response = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ email, password })
                 });
                 
                 const data = await response.json();
                 
                 if (!response.ok) {
-                    showAlert('Invalid credentials');
+                    showAlert(data.detail || 'Invalid email or password');
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
                     return;
                 }
                 
+                // Check if MFA is required
                 if (data.mfa_required) {
                     sessionStorage.setItem('mfa_email', email);
-                    showAlert('MFA verification required. Check your email.');
+                    showAlert('MFA verification required. Check your email.', 'success');
                     return;
                 }
                 
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('refresh_token', data.refresh_token);
-                localStorage.setItem('user_email', data.user.email);
-                
-                showAlert('✅ Login successful! Redirecting...', 'success');
-                setTimeout(() => location.href = '/tools.html', 1500);
+                // ✅ SUCCESS - Save tokens
+                if (data.access_token && data.refresh_token && data.user) {
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('refresh_token', data.refresh_token);
+                    localStorage.setItem('user_email', data.user.email);
+                    
+                    showAlert('✅ Login successful! Redirecting to dashboard...', 'success');
+                    
+                    setTimeout(() => {
+                        // Refresh nav and redirect
+                        if (window.WandaAuth) {
+                            window.WandaAuth.renderNavigation();
+                        }
+                        location.href = '/tools.html';
+                    }, 1500);
+                } else {
+                    showAlert('Invalid response from server');
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
+                }
                 
             } catch (error) {
-                showAlert('Network error: ' + error.message);
+                console.error('❌ Login error:', error);
+                showAlert(`Network error: ${error.message}`);
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
             }
         }
     </script>
