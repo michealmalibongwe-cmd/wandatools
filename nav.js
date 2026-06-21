@@ -1,150 +1,224 @@
-/* ============================================================
-   WandaTools – Shared Navigation & Utility Script
-   ============================================================ */
+/**
+ * WandaTools Navigation & Auth Control
+ * Handles conditional nav visibility based on login status
+ */
 
-(function () {
-  'use strict';
+const API_BASE = "https://your-railway-url/api/v1";
 
-  /* ── Scroll shadow on navbar ── */
-  const navbar = document.querySelector('.navbar');
-  if (navbar) {
-    const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
+// ═══════════════════════════════════════════════════════════
+// AUTH STATE
+// ═══════════════════════════════════════════════════════════
 
-  /* ── Hamburger menu ── */
-  const hamburger = document.querySelector('.nav-hamburger');
-  const mobileNav = document.querySelector('.nav-mobile');
-  if (hamburger && mobileNav) {
-    hamburger.addEventListener('click', () => {
-      const open = hamburger.classList.toggle('open');
-      mobileNav.classList.toggle('open', open);
-      hamburger.setAttribute('aria-expanded', open);
-    });
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
-        hamburger.classList.remove('open');
-        mobileNav.classList.remove('open');
-      }
-    });
-  }
-
-  /* ── Active nav link highlighting ── */
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-link[data-page]').forEach(link => {
-    if (link.dataset.page === currentPage) link.classList.add('active');
-  });
-
-  /* ── Intersection Observer: fade-up animations ── */
-  const fadeEls = document.querySelectorAll('.fade-up');
-  if (fadeEls.length) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    fadeEls.forEach(el => observer.observe(el));
-  }
-
-  /* ── FAQ accordion ── */
-  document.querySelectorAll('.faq-item').forEach(item => {
-    const header = item.querySelector('.faq-header');
-    if (header) {
-      header.addEventListener('click', () => {
-        const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item.open').forEach(o => o.classList.remove('open'));
-        if (!isOpen) item.classList.add('open');
-      });
+class AuthState {
+    constructor() {
+        this.token = localStorage.getItem('access_token');
+        this.refreshToken = localStorage.getItem('refresh_token');
+        this.email = localStorage.getItem('user_email');
+        this.isLoggedIn = !!(this.token && this.email);
     }
-  });
-
-  /* ── Simple form validation helper ── */
-  window.validateForm = function (formEl) {
-    let valid = true;
-    formEl.querySelectorAll('[required]').forEach(field => {
-      field.classList.remove('error');
-      if (!field.value.trim()) {
-        field.classList.add('error');
-        field.style.borderColor = 'var(--red)';
-        valid = false;
-      } else {
-        field.style.borderColor = '';
-      }
-    });
-    return valid;
-  };
-
-  /* ── Toast notification ── */
-  window.showToast = function (message, type = 'success') {
-    const existing = document.querySelector('.wt-toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = `wt-toast wt-toast-${type}`;
-    toast.innerHTML = `<i class="material-icons">${type === 'success' ? 'check_circle' : 'info'}</i><span>${message}</span>`;
-    Object.assign(toast.style, {
-      position: 'fixed', bottom: '24px', right: '24px',
-      background: type === 'success' ? '#1B5E20' : '#0D47A1',
-      color: '#fff', padding: '14px 20px', borderRadius: '10px',
-      display: 'flex', alignItems: 'center', gap: '10px',
-      fontFamily: "'Open Sans', sans-serif", fontSize: '0.9rem',
-      boxShadow: '0 8px 30px rgba(0,0,0,0.2)', zIndex: '9999',
-      animation: 'fadeIn 0.3s ease'
-    });
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.4s'; setTimeout(() => toast.remove(), 400); }, 3000);
-  };
-
-  // ═══ API CONFIGURATION ═══
-const API_BASE = "https://wandatools-production.up.railway.app/api/v1";
-
-// Helper for API calls
-async function apiCall(endpoint, options = {}) {
-  const token = localStorage.getItem("access_token");
-  
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
-  
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-  
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    ...options,
-    headers,
-  });
-  
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || "API request failed");
-  }
-  
-  return await response.json();
+    
+    logout() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user_email');
+        this.isLoggedIn = false;
+    }
+    
+    login(token, refreshToken, email) {
+        localStorage.setItem('access_token', token);
+        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('user_email', email);
+        this.token = token;
+        this.refreshToken = refreshToken;
+        this.email = email;
+        this.isLoggedIn = true;
+    }
+    
+    getUserName() {
+        return this.email ? this.email.split('@')[0] : '';
+    }
+    
+    getUserInitials() {
+        return this.email ? this.email.charAt(0).toUpperCase() : '?';
+    }
 }
 
-  /* ── Persist auth state (demo) ── */
-  window.WandaAuth = {
-    isLoggedIn: () => localStorage.getItem('wt_logged_in') === 'true',
-    login: (name, email) => {
-      localStorage.setItem('wt_logged_in', 'true');
-      localStorage.setItem('wt_user_name', name);
-      localStorage.setItem('wt_user_email', email);
-    },
-    logout: () => {
-      localStorage.removeItem('wt_logged_in');
-      localStorage.removeItem('wt_user_name');
-      localStorage.removeItem('wt_user_email');
-      window.location.href = 'profile.html';
-    },
-    getName: () => localStorage.getItem('wt_user_name') || 'User',
-    getEmail: () => localStorage.getItem('wt_user_email') || ''
-  };
+const auth = new AuthState();
 
-})();
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION RENDERING
+// ═══════════════════════════════════════════════════════════
+
+function renderNavigation() {
+    const navLinks = document.querySelector('.nav-links');
+    const navAuth = document.getElementById('navAuth');
+    
+    if (!navLinks || !navAuth) return;
+    
+    if (auth.isLoggedIn) {
+        // LOGGED IN - Show private nav
+        renderPrivateNav(navLinks, navAuth);
+    } else {
+        // LOGGED OUT - Show public nav
+        renderPublicNav(navLinks, navAuth);
+    }
+}
+
+function renderPublicNav(navLinks, navAuth) {
+    // Public navigation (logged out)
+    navLinks.innerHTML = `
+        <li><a href="/">Home</a></li>
+        <li><a href="/features.html">Features</a></li>
+        <li><a href="/community.html">Community</a></li>
+    `;
+    
+    navAuth.innerHTML = `
+        <div class="nav-auth">
+            <button class="btn-nav-signin" onclick="location.href='/signup.html'">Sign In</button>
+            <button class="btn-nav-signup" onclick="location.href='/signup.html'">Sign Up</button>
+        </div>
+    `;
+}
+
+function renderPrivateNav(navLinks, navAuth) {
+    // Private navigation (logged in)
+    navLinks.innerHTML = `
+        <li><a href="/tools.html">Dashboard</a></li>
+        <li><a href="/wandaAI.html">WandaAI</a></li>
+        <li><a href="/tools.html">Tools</a></li>
+    `;
+    
+    const userName = auth.getUserName();
+    const initials = auth.getUserInitials();
+    
+    navAuth.innerHTML = `
+        <div class="user-menu">
+            <div class="user-avatar" onclick="toggleDropdown()" title="${auth.email}">
+                ${initials}
+            </div>
+            <div class="dropdown" id="dropdown">
+                <div style="padding: 12px 16px; border-bottom: 1px solid #E0E0E0; font-weight: 600; font-size: 12px;">
+                    ${userName}
+                </div>
+                <a href="/profile.html">⚙️ Settings</a>
+                <a href="/tools.html">📊 Dashboard</a>
+                <a href="/wandaAI.html">🤖 WandaAI</a>
+                <div class="dropdown-divider"></div>
+                <button onclick="handleLogout()" style="color: #F44336;">🚪 Logout</button>
+            </div>
+        </div>
+    `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// AUTH HANDLERS
+// ═══════════════════════════════════════════════════════════
+
+function toggleDropdown() {
+    const dropdown = document.getElementById('dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+    }
+}
+
+// Close dropdown when clicking elsewhere
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdown');
+    const userMenu = document.querySelector('.user-menu');
+    
+    if (dropdown && !userMenu?.contains(event.target)) {
+        dropdown.classList.remove('active');
+    }
+});
+
+async function handleLogout() {
+    try {
+        if (auth.token) {
+            await fetch(`${API_BASE}/auth/logout`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${auth.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+    
+    auth.logout();
+    showAlert('✅ Logged out successfully', 'success');
+    setTimeout(() => {
+        location.href = '/';
+    }, 1000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACCESS PROTECTION
+// ═══════════════════════════════════════════════════════════
+
+/**
+ * Protect page - redirect to login if not authenticated
+ * Call this in pages that require authentication
+ */
+function protectPage() {
+    if (!auth.isLoggedIn) {
+        showAlert('⚠️ Please sign in to access this page', 'error');
+        setTimeout(() => {
+            location.href = '/signup.html?redirect=' + window.location.pathname;
+        }, 1500);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Protect from logged-in users
+ * Call this on login/signup pages
+ */
+function protectFromAuth() {
+    if (auth.isLoggedIn) {
+        location.href = '/tools.html';
+        return false;
+    }
+    return true;
+}
+
+// ═══════════════════════════════════════════════════════════
+// ALERTS
+// ═══════════════════════════════════════════════════════════
+
+function showAlert(message, type = 'success') {
+    const container = document.getElementById('alertContainer') || createAlertContainer();
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.textContent = message;
+    container.appendChild(alert);
+    
+    setTimeout(() => alert.remove(), 4000);
+}
+
+function createAlertContainer() {
+    const container = document.createElement('div');
+    container.id = 'alertContainer';
+    document.body.appendChild(container);
+    return container;
+}
+
+// ═══════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderNavigation();
+});
+
+// Export for use in other files
+window.WandaAuth = {
+    auth,
+    protectPage,
+    protectFromAuth,
+    showAlert,
+    handleLogout,
+    renderNavigation
+};

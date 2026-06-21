@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - WandaTools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .feature-section {
+            background: #FFFFFF;
+            padding: 80px 20px;
+            border-bottom: 1px solid #F5F5F5;
+        }
+        
+        .feature-section:nth-child(even) {
+            background: #F9F9F9;
+        }
+        
+        .feature-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .feature-content.reverse {
+            direction: rtl;
+        }
+        
+        .feature-content.reverse > * {
+            direction: ltr;
+        }
+        
+        .feature-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .feature-text p {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .feature-list li {
+            font-size: 13px;
+            color: #333333;
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28A745;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .feature-image {
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            font-size: 80px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-cta {
+            display: inline-block;
+            background: white;
+            color: #007BFF;
+            padding: 12px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 13px;
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .feature-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .feature-content.reverse {
+                direction: ltr;
+            }
+            
+            .feature-text h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">WandaTools</a>
+            <ul class="nav-links"></ul>
+            <div id="navAuth"></div>
+        </div>
+    </nav>
+    
+    <!-- PAGE CONTENT -->
+    <section class="feature-section">
+        <div class="feature-content">
+            <div class="feature-text">
+                <h2>📊 Transactions Management</h2>
+                <p>Take complete control of your financial data. Automatically track, categorize, and analyze every income and expense with intelligent categorization powered by machine learning.</p>
+                <ul class="feature-list">
+                    <li>Automatic transaction categorization</li>
+                    <li>Real-time income and expense tracking</li>
+                    <li>Profit and loss calculations</li>
+                    <li>Custom category creation</li>
+                    <li>Search and filter capabilities</li>
+                </ul>
+                <p style="color: #999999; font-size: 12px;">Available after sign up - Start tracking in seconds</p>
+            </div>
+            <div class="feature-image">💰</div>
+        </div>
+    </section>
+    
+    <section class="feature-section">
+        <div class="feature-content reverse">
+            <div class="feature-text">
+                <h2>📄 Export-Ready Documents</h2>
+                <p>Generate professional financial documents instantly. Create audit reports, loan applications, investment summaries, and compliance documents with a single click.</p>
+                <ul class="feature-list">
+                    <li>Professional audit reports (PDF)</li>
+                    <li>Loan application packages</li>
+                    <li>Investment dossiers</li>
+                    <li>Compliance documentation</li>
+                    <li>Tax-ready reports</li>
+                </ul>
+                <p style="color: #999999; font-size: 12px;">Save hours on document preparation</p>
+            </div>
+            <div class="feature-image">📋</div>
+        </div>
+    </section>
+    
+    <section class="feature-section">
+        <div class="feature-content">
+            <div class="feature-text">
+                <h2>🤖 WandaAI Insights</h2>
+                <p>Meet your AI financial advisor. Get intelligent analysis of your financial data with predictive insights, personalized recommendations, and strategic business advice powered by advanced AI.</p>
+                <ul class="feature-list">
+                    <li>AI-powered financial analysis</li>
+                    <li>Predictive cash flow forecasting</li>
+                    <li>Personalized recommendations</li>
+                    <li>Expense optimization suggestions</li>
+                    <li>Business strategy insights</li>
+                </ul>
+                <p style="color: #999999; font-size: 12px;">Available 24/7 - Your personal AI financial advisor</p>
+            </div>
+            <div class="feature-image">🤖</div>
+        </div>
+    </section>
+    
+    <section class="feature-section">
+        <div class="feature-content reverse">
+            <div class="feature-text">
+                <h2>📈 Dashboard Summaries</h2>
+                <p>Visualize your financial health at a glance. Real-time dashboards display your cash flow, account balances, performance trends, and key financial metrics in beautiful, interactive charts.</p>
+                <ul class="feature-list">
+                    <li>Real-time KPI dashboard</li>
+                    <li>Cash flow visualization</li>
+                    <li>Balance summaries by category</li>
+                    <li>Performance trends & analytics</li>
+                    <li>Customizable widgets</li>
+                </ul>
+                <p style="color: #999999; font-size: 12px;">Beautiful charts updated automatically</p>
+            </div>
+            <div class="feature-image">📊</div>
+        </div>
+    </section>
+    
+    <section class="feature-section">
+        <div class="feature-content">
+            <div class="feature-text">
+                <h2>⚙️ Smart Tools</h2>
+                <p>Automate your financial workflows. Budget planning, expense automation, compliance checking, and workflow optimization tools designed to save you time and reduce errors.</p>
+                <ul class="feature-list">
+                    <li>Automated budget planning</li>
+                    <li>Expense automation rules</li>
+                    <li>Compliance checklist builder</li>
+                    <li>Workflow templates</li>
+                    <li>Integration capabilities</li>
+                </ul>
+                <p style="color: #999999; font-size: 12px;">Built for efficiency - Work smarter, not harder</p>
+            </div>
+            <div class="feature-image">⚙️</div>
+        </div>
+    </section>
+    
+    <section class="feature-section">
+        <div class="feature-content reverse">
+            <div class="feature-text">
+                <h2>👥 Community Forum</h2>
+                <p>Connect with thousands of South African business owners and individuals. Share financial strategies, ask questions, learn from peers, and grow your network in our vibrant community.</p>
+                <ul class="feature-list">
+                    <li>Discussion boards by topic</li>
+                    <li>Expert-moderated channels</li>
+                    <li>Success story sharing</li>
+                    <li>Networking opportunities</li>
+                    <li>Resource library</li>
+                </ul>
+                <p style="color: #999999; font-size: 12px;">Join conversations with your peers</p>
+            </div>
+            <div class="feature-image">👥</div>
+        </div>
+    </section>
+    
+    <!-- CTA SECTION -->
+    <section class="cta-section">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2>Ready to Transform Your Finances?</h2>
+            <p>Start your free trial today. No credit card required. Get full access to all features for 30 days.</p>
+            <button class="btn-cta" onclick="location.href='/signup.html'">Start Free Trial</button>
+        </div>
+    </section>
+    
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>About WandaTools</h4>
+                <p style="color: #CCCCCC; margin-bottom: 0;">AI-powered financial management platform designed for South African businesses.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Product</h4>
+                <a href="/features.html">Features</a>
+                <a href="/community.html">Community</a>
+                <a href="/api/docs">API Docs</a>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <a href="#contact">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="mailto:support@wandatools.com">Email Support</a>
+                <a href="#">Status Page</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
+        </div>
+    </footer>
+    
+    <!-- SCRIPTS -->
+    <script src="nav.js"></script>
+</body>
+</html>

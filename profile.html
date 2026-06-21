@@ -315,6 +315,14 @@
 </head>
 <body>
 
+  <script src="nav.js"></script>
+<script>
+    // Require login to access profile
+    if (WandaAuth.protectPage() === false) {
+        // User not logged in, redirected
+    }
+</script>
+
 <!-- ══════════════════ NAVBAR ══════════════════ -->
 <nav class="navbar">
   <div class="nav-inner">
