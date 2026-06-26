@@ -304,502 +304,206 @@
 
 
 <script src="nav.js"></script>
-    <script>
-        if (!WandaAuth.protectPage()) {
-            // Not logged in, redirected
-        }
-    </script>
-    
-    <!-- Rest of tools.html content below -->
-
-<!-- ══════════════════ NAVBAR ══════════════════ -->
-<nav class="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-      <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-      <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-      <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-      <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-      <a href="tools.html" class="btn btn-primary nav-cta">Dashboard</a>
-    </div>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="nav-mobile">
-    <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-    <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-    <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-    <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-    <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-  </div>
-</nav>
-
-<!-- ══════════════════ LOCKED OVERLAY ══════════════════ -->
-<div class="locked-overlay" id="lockedOverlay">
-  <div class="locked-box">
-    <i class="material-icons">lock</i>
-    <h2>Sign in to access Tools</h2>
-    <p>Your financial dashboard, transactions, and reports are waiting. Log in or create a free account to continue.</p>
-    <a href="profile.html" class="btn btn-primary btn-pulse"><i class="material-icons">login</i> Sign In</a>
-    <a href="profile.html" class="btn btn-outline"><i class="material-icons">person_add</i> Create Free Account</a>
-  </div>
-</div>
-
-<!-- ══════════════════ TOOLS LAYOUT ══════════════════ -->
-<div class="page-content">
-<div class="tools-layout">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">Main</div>
-      <button class="sidebar-item active" onclick="showPanel('dashboard')">
-        <i class="material-icons">dashboard</i> Dashboard
-      </button>
-      <button class="sidebar-item" onclick="showPanel('transactions')">
-        <i class="material-icons">swap_horiz</i> Transactions
-        <span class="badge-count">12</span>
-      </button>
-      <button class="sidebar-item" onclick="showPanel('documents')">
-        <i class="material-icons">description</i> Documents
-      </button>
-      <button class="sidebar-item" onclick="showPanel('notifications')">
-        <i class="material-icons">notifications</i> Notifications
-        <span class="badge-count">3</span>
-      </button>
-    </div>
-    <div class="sidebar-section" style="margin-top:16px;">
-      <div class="sidebar-label">AI</div>
-      <a href="wandaAI.html" class="sidebar-item">
-        <i class="material-icons">smart_toy</i> WandaAI
-      </a>
-    </div>
-    <div class="sidebar-section" style="margin-top:16px;">
-      <div class="sidebar-label">Account</div>
-      <a href="profile.html" class="sidebar-item">
-        <i class="material-icons">account_circle</i> Profile
-      </a>
-      <button class="sidebar-item" onclick="WandaAuth.logout()">
-        <i class="material-icons">logout</i> Log Out
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="tools-main">
-
-    <!-- ── DASHBOARD PANEL ── -->
-    <div class="panel active" id="panel-dashboard">
-      <div class="page-header">
-        <div>
-          <h1>Good morning, <span id="dashGreetName" class="grad-text">User</span> 👋</h1>
-          <p>Here's your financial snapshot for <span id="dashDate"></span></p>
-        </div>
-        <a href="wandaAI.html" class="btn btn-primary"><i class="material-icons">smart_toy</i> Ask WandaAI</a>
-      </div>
-
-      <div class="stats-row">
-        <div class="mini-stat">
-          <div class="ms-label">Total Income</div>
-          <div class="ms-value grad-text">R 42 500</div>
-          <div class="ms-change ms-up"><i class="material-icons" style="font-size:0.9rem;">arrow_upward</i> +8.3% vs last month</div>
-        </div>
-        <div class="mini-stat">
-          <div class="ms-label">Total Expenses</div>
-          <div class="ms-value" style="color:var(--red);">R 18 240</div>
-          <div class="ms-change ms-down"><i class="material-icons" style="font-size:0.9rem;">arrow_upward</i> +2.1% vs last month</div>
-        </div>
-        <div class="mini-stat">
-          <div class="ms-label">Net Profit</div>
-          <div class="ms-value" style="color:var(--green);">R 24 260</div>
-          <div class="ms-change ms-up"><i class="material-icons" style="font-size:0.9rem;">arrow_upward</i> +14.7% vs last month</div>
-        </div>
-        <div class="mini-stat">
-          <div class="ms-label">Transactions</div>
-          <div class="ms-value">47</div>
-          <div class="ms-change" style="color:var(--mid);">This month</div>
-        </div>
-      </div>
-
-      <!-- Monthly Bar Chart (CSS) -->
-      <div class="white-card">
-        <h3><i class="material-icons">bar_chart</i> Monthly Income vs Expenses</h3>
-        <div class="bar-chart-wrap" id="barChart"></div>
-        <div class="chart-legend">
-          <div class="legend-dot income">Income</div>
-          <div class="legend-dot expense">Expenses</div>
-        </div>
-      </div>
-
-      <!-- Recent Transactions table -->
-      <div class="white-card">
-        <h3><i class="material-icons">receipt_long</i> Recent Transactions</h3>
-        <table class="data-table">
-          <thead>
-            <tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th>Amount</th></tr>
-          </thead>
-          <tbody id="recentTxnBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── TRANSACTIONS PANEL ── -->
-    <div class="panel" id="panel-transactions">
-      <div class="page-header">
-        <div><h1>Transactions</h1><p>Log income and expenses, track every rand.</p></div>
-        <button class="btn btn-primary" onclick="document.getElementById('txnFormWrap').scrollIntoView({behavior:'smooth'})">
-          <i class="material-icons">add</i> Add Transaction
-        </button>
-      </div>
-
-      <!-- Add transaction form -->
-      <div class="white-card" id="txnFormWrap">
-        <h3><i class="material-icons">add_circle</i> New Transaction</h3>
-        <div class="txn-type-toggle">
-          <button class="type-btn buy active" id="btnBuy" onclick="setTxnType('buy')">
-            <i class="material-icons">arrow_downward</i> Income / Buy
-          </button>
-          <button class="type-btn sell" id="btnSell" onclick="setTxnType('sell')">
-            <i class="material-icons">arrow_upward</i> Expense / Sell
-          </button>
-        </div>
-        <div class="txn-form-row">
-          <div class="form-group">
-            <label class="form-label">Description</label>
-            <input class="form-control" id="txnDesc" type="text" placeholder="e.g. Client payment" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Amount (R)</label>
-            <input class="form-control" id="txnAmount" type="number" placeholder="0.00" min="0" step="0.01" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Category</label>
-            <select class="form-control" id="txnCategory">
-              <option>Sales</option><option>Services</option><option>Rent</option>
-              <option>Salaries</option><option>Stock</option><option>Marketing</option>
-              <option>Utilities</option><option>Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Date</label>
-            <input class="form-control" id="txnDate" type="date" />
-          </div>
-        </div>
-        <button class="btn btn-primary" onclick="addTransaction()"><i class="material-icons">save</i> Save Transaction</button>
-      </div>
-
-      <!-- Transaction list -->
-      <div class="white-card">
-        <h3><i class="material-icons">list_alt</i> All Transactions</h3>
-        <table class="data-table">
-          <thead>
-            <tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th>Amount</th><th></th></tr>
-          </thead>
-          <tbody id="txnTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── DOCUMENTS PANEL ── -->
-    <div class="panel" id="panel-documents">
-      <div class="page-header">
-        <div><h1>Documents</h1><p>Generate professional, ready-to-share financial reports.</p></div>
-      </div>
-      <div class="doc-grid">
-        <div class="doc-card fade-up">
-          <div class="doc-icon"><i class="material-icons">gavel</i></div>
-          <h4>Audit Report</h4>
-          <p>A complete income and expense breakdown, formatted for SARS and external auditors.</p>
-          <button class="btn btn-primary" onclick="generateDoc('Audit')"><i class="material-icons">download</i> Export Audit Report</button>
-        </div>
-        <div class="doc-card fade-up">
-          <div class="doc-icon"><i class="material-icons">account_balance</i></div>
-          <h4>Loan Application Pack</h4>
-          <p>Bank-ready financial summary with cash flow history and profitability projections.</p>
-          <button class="btn btn-primary" onclick="generateDoc('Loan')"><i class="material-icons">download</i> Export Loan Pack</button>
-        </div>
-        <div class="doc-card fade-up">
-          <div class="doc-icon"><i class="material-icons">trending_up</i></div>
-          <h4>Investment Report</h4>
-          <p>Showcase your business performance to investors with a polished growth summary.</p>
-          <button class="btn btn-primary" onclick="generateDoc('Investment')"><i class="material-icons">download</i> Export Investor Report</button>
-        </div>
-        <div class="doc-card fade-up">
-          <div class="doc-icon"><i class="material-icons">summarize</i></div>
-          <h4>Monthly Summary</h4>
-          <p>A concise PDF of your income, expenses, and profit for any selected month.</p>
-          <button class="btn btn-outline" onclick="generateDoc('Monthly Summary')"><i class="material-icons">calendar_month</i> Export This Month</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── NOTIFICATIONS PANEL ── -->
-    <div class="panel" id="panel-notifications">
-      <div class="page-header">
-        <div><h1>Notifications</h1><p>Alerts, reminders, and AI-driven financial signals.</p></div>
-        <button class="btn btn-outline" onclick="clearNotifs()"><i class="material-icons">done_all</i> Mark all read</button>
-      </div>
-      <div class="notif-list" id="notifList">
-        <div class="notif-item">
-          <div class="notif-icon green"><i class="material-icons">trending_up</i></div>
-          <div class="notif-body">
-            <div class="notif-title">Income up 8.3% this month</div>
-            <div class="notif-msg">Your income has grown compared to last month. WandaAI has recommendations to sustain this.</div>
-          </div>
-          <span class="notif-time">2h ago</span>
-        </div>
-        <div class="notif-item">
-          <div class="notif-icon red"><i class="material-icons">warning</i></div>
-          <div class="notif-body">
-            <div class="notif-title">Cash flow alert</div>
-            <div class="notif-msg">Your projected cash balance for next week is lower than your average. Consider deferring discretionary spending.</div>
-          </div>
-          <span class="notif-time">Yesterday</span>
-        </div>
-        <div class="notif-item">
-          <div class="notif-icon warn"><i class="material-icons">event</i></div>
-          <div class="notif-body">
-            <div class="notif-title">VAT return due in 14 days</div>
-            <div class="notif-msg">Your VAT201 submission deadline is approaching. Your Audit Report is ready to help you prepare.</div>
-          </div>
-          <span class="notif-time">2 days ago</span>
-        </div>
-        <div class="notif-item">
-          <div class="notif-icon blue"><i class="material-icons">smart_toy</i></div>
-          <div class="notif-body">
-            <div class="notif-title">WandaAI insight ready</div>
-            <div class="notif-msg">Based on your last 3 months, WandaAI suggests reducing your stock holding period by 7 days to free up R4 200.</div>
-          </div>
-          <span class="notif-time">3 days ago</span>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</div>
-</div>
-
-<!-- ══════════════════ FOOTER ══════════════════ -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo">WandaTools</div>
-        <p>AI-powered financial insights for businesses and individuals across South Africa.</p>
-        <div class="footer-socials">
-          <a href="#" class="social-icon" aria-label="Facebook"><i class="material-icons">facebook</i></a>
-          <a href="#" class="social-icon" aria-label="Twitter"><i class="material-icons">tag</i></a>
-          <a href="#" class="social-icon" aria-label="LinkedIn"><i class="material-icons">work</i></a>
-          <a href="#" class="social-icon" aria-label="Instagram"><i class="material-icons">photo_camera</i></a>
-        </div>
-      </div>
-      <div class="footer-col"><h4>Product</h4>
-        <a href="tools.html">Transactions</a><a href="tools.html">Dashboard</a>
-        <a href="tools.html">Documents</a><a href="wandaAI.html">WandaAI</a>
-      </div>
-      <div class="footer-col"><h4>Company</h4>
-        <a href="index.html">About Us</a><a href="contact.html">Contact</a>
-        <a href="#">Careers</a><a href="#">Blog</a>
-      </div>
-      <div class="footer-col"><h4>Legal</h4>
-        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a><a href="#">POPIA Compliance</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 WandaTools. All rights reserved.</span>
-      <span>Made with <span style="color:#E53935;">♥</span> in South Africa</span>
-      <div style="display:flex;gap:16px;"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
-    </div>
-  </div>
-</footer>
-
-<script src="nav.js"></script>
 <script>
   /* ── Auth gate ── */
-  const overlay = document.getElementById('lockedOverlay');
-  if (WandaAuth.isLoggedIn()) {
-    overlay.style.display = 'none';
-    document.getElementById('dashGreetName').textContent = WandaAuth.getName().split(' ')[0];
-  }
+  protectPage();
 
-  /* ── Date ── */
-  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-ZA', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const overlay = document.getElementById('lockedOverlay');
+  if (overlay) overlay.style.display = 'none';
+
+  /* ── Greet + date ── */
+  document.getElementById('dashGreetName').textContent = WandaAuth.getName().split(' ')[0];
+  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-ZA', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
 
   /* ── Panel switcher ── */
   function showPanel(panelId) {
-  // Hide all panels
-  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-  
-  // Show selected panel
-  const panel = document.getElementById(panelId);
-  if (panel) panel.classList.add("active");
-  
-  // Load transactions when panel opens
-  if (panelId === "txnPanel") {
-    loadTransactions();
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+    if (panelId === 'txnPanel')  loadTransactions();
+    if (panelId === 'dashPanel') loadDashboard();
   }
-  
-  // Load dashboard when panel opens
-  if (panelId === "dashPanel") {
-    loadDashboard();
-  }
-}
 
-async function loadTransactions() {
-  try {
-    const response = await apiCall("/tools/transactions?limit=100");
-    transactions = response.items || [];
-    renderTransactions();
-  } catch (error) {
-    console.error("Error loading transactions:", error);
-    showToast("Failed to load transactions", "error");
-  }
-}
-
-async function loadDashboard() {
-  try {
-    const summary = await apiCall("/tools/dashboard/summary");
-    const name = localStorage.getItem("wt_user_name") || "User";
-    document.getElementById("dashGreetName").textContent = name.split(" ")[0];
-    
-    // Update stat cards
-    document.querySelectorAll(".mini-stat")[0].innerHTML = `
-      <div class="mini-stat-label">Total Income</div>
-      <div class="mini-stat-value" style="color: var(--green);">
-        R ${summary.total_income.toLocaleString('en-ZA', {minimumFractionDigits: 2})}
-      </div>
-    `;
-    
-    document.querySelectorAll(".mini-stat")[1].innerHTML = `
-      <div class="mini-stat-label">Total Expenses</div>
-      <div class="mini-stat-value" style="color: var(--red);">
-        R ${summary.total_expenses.toLocaleString('en-ZA', {minimumFractionDigits: 2})}
-      </div>
-    `;
-    
-    document.querySelectorAll(".mini-stat")[2].innerHTML = `
-      <div class="mini-stat-label">Net Profit</div>
-      <div class="mini-stat-value" style="color: var(--blue);">
-        R ${summary.net_profit.toLocaleString('en-ZA', {minimumFractionDigits: 2})}
-      </div>
-    `;
-    
-    document.querySelectorAll(".mini-stat")[3].innerHTML = `
-      <div class="mini-stat-label">Transactions</div>
-      <div class="mini-stat-value">${summary.transaction_count}</div>
-    `;
-  } catch (error) {
-    console.error("Error loading dashboard:", error);
-  }
-}
-
-  /* ── Transaction store ── */
-  let transactions = JSON.parse(localStorage.getItem('wt_transactions') || '[]');
-  let txnType = 'buy';
+  /* ── Transaction state ── */
+  let transactions = [];
+  let txnType = 'income';
 
   function setTxnType(type) {
     txnType = type;
-    document.getElementById('btnBuy').classList.toggle('active', type === 'buy');
-    document.getElementById('btnSell').classList.toggle('active', type === 'sell');
+    document.getElementById('btnBuy').classList.toggle('active',  type === 'income');
+    document.getElementById('btnSell').classList.toggle('active', type === 'expense');
   }
 
-  // Pre-fill date
   document.getElementById('txnDate').value = new Date().toISOString().split('T')[0];
 
-async function addTransaction() {
-  const desc = document.getElementById("txnDesc").value.trim();
-  const amount = parseFloat(document.getElementById("txnAmount").value);
-  const cat = document.getElementById("txnCategory").value;
-  const date = document.getElementById("txnDate").value;
-  
-  if (!desc || !amount || !date) {
-    showToast("Please fill in all fields.", "error");
-    return;
-  }
-  
-  try {
-    const newTxn = await apiCall("/tools/transactions", {
-      method: "POST",
-      body: JSON.stringify({
-        type: txnType,
-        amount,
-        category: cat,
-        description: desc,
-        transaction_date: new Date(date).toISOString(),
-      }),
-    });
-    
-    transactions.unshift(newTxn);
-    renderTransactions();
-    document.getElementById("txnDesc").value = "";
-    document.getElementById("txnAmount").value = "";
-    document.getElementById("txnDate").value = "";
-    showToast("Transaction saved successfully!");
-  } catch (error) {
-    showToast(error.message, "error");
-  }
-}
+  /* ── Load dashboard ── */
+  async function loadDashboard() {
+    try {
+      const summary = await apiCall('/tools/dashboard/summary');
+      const currency = summary.currency || WandaAuth.getCurrency();
 
-  function deleteTxn(id) {
-    transactions = transactions.filter(t => t.id !== id);
-    localStorage.setItem('wt_transactions', JSON.stringify(transactions));
-    renderTransactions();
-    showToast('Transaction deleted.');
+      document.querySelectorAll('.mini-stat')[0].innerHTML = `
+        <div class="mini-stat-label">Total Income</div>
+        <div class="mini-stat-value" style="color:var(--green);">${formatCurrency(summary.total_income, currency)}</div>`;
+
+      document.querySelectorAll('.mini-stat')[1].innerHTML = `
+        <div class="mini-stat-label">Total Expenses</div>
+        <div class="mini-stat-value" style="color:var(--red);">${formatCurrency(summary.total_expenses, currency)}</div>`;
+
+      document.querySelectorAll('.mini-stat')[2].innerHTML = `
+        <div class="mini-stat-label">Net Profit</div>
+        <div class="mini-stat-value" style="color:var(--blue);">${formatCurrency(summary.net_profit, currency)}</div>`;
+
+      document.querySelectorAll('.mini-stat')[3].innerHTML = `
+        <div class="mini-stat-label">Transactions</div>
+        <div class="mini-stat-value">${summary.transaction_count}</div>`;
+
+      await loadChartHistory(currency);
+    } catch (error) {
+      showToast('Failed to load dashboard: ' + error.message, 'error');
+    }
   }
 
+  /* ── Load chart history ── */
+  async function loadChartHistory(currency) {
+    try {
+      const data = await apiCall('/tools/dashboard/history?months=6');
+      const summaries = data.summaries || [];
+      const months     = summaries.map(s => s.month.slice(5));
+      const incomeData  = summaries.map(s => s.total_income);
+      const expenseData = summaries.map(s => s.total_expenses);
+      const maxVal = Math.max(...incomeData, ...expenseData, 1);
+
+      const chartEl = document.getElementById('barChart');
+      if (!chartEl) return;
+      chartEl.innerHTML = months.map((m, i) => `
+        <div class="bar-group">
+          <div class="bar-pair">
+            <div class="bar income"  style="height:${(incomeData[i]/maxVal)*160}px"
+                 title="Income: ${formatCurrency(incomeData[i], currency)}"></div>
+            <div class="bar expense" style="height:${(expenseData[i]/maxVal)*160}px"
+                 title="Expenses: ${formatCurrency(expenseData[i], currency)}"></div>
+          </div>
+          <div class="bar-label">${m}</div>
+        </div>`).join('');
+    } catch { /* chart fails silently */ }
+  }
+
+  /* ── Load transactions ── */
+  async function loadTransactions() {
+    try {
+      const data = await apiCall('/tools/transactions?limit=100');
+      transactions = data.items || [];
+      renderTransactions();
+    } catch (error) {
+      showToast('Failed to load transactions: ' + error.message, 'error');
+    }
+  }
+
+  /* ── Add transaction ── */
+  async function addTransaction() {
+    const desc   = document.getElementById('txnDesc').value.trim();
+    const amount = parseFloat(document.getElementById('txnAmount').value);
+    const cat    = document.getElementById('txnCategory').value;
+    const date   = document.getElementById('txnDate').value;
+
+    if (!desc || !amount || !date) {
+      showToast('Please fill in all fields.', 'error');
+      return;
+    }
+
+    try {
+      const newTxn = await apiCall('/tools/transactions', {
+        method: 'POST',
+        body: JSON.stringify({
+          type:             txnType,
+          amount:           amount,
+          category:         cat,
+          description:      desc,
+          transaction_date: new Date(date).toISOString(),
+        }),
+      });
+
+      transactions.unshift(newTxn);
+      renderTransactions();
+
+      document.getElementById('txnDesc').value   = '';
+      document.getElementById('txnAmount').value = '';
+      document.getElementById('txnDate').value   = new Date().toISOString().split('T')[0];
+      showToast('Transaction saved!');
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
+  }
+
+  /* ── Delete transaction ── */
+  async function deleteTxn(id) {
+    if (!confirm('Delete this transaction?')) return;
+    try {
+      await apiCall(`/tools/transactions/${id}`, { method: 'DELETE' });
+      transactions = transactions.filter(t => t.id !== id);
+      renderTransactions();
+      showToast('Transaction deleted.');
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
+  }
+
+  /* ── Render transactions ── */
   function renderTransactions() {
-    const tbody = document.getElementById('txnTableBody');
-    const recent = document.getElementById('recentTxnBody');
-    const rows = (transactions.length ? transactions : demoTxns).map(t => `
-      <tr>
-        <td>${t.date}</td>
-        <td>${t.desc}</td>
-        <td><span class="badge badge-blue">${t.cat}</span></td>
-        <td><span class="badge ${t.type==='buy'?'badge-green':'badge-red'}">${t.type==='buy'?'Income':'Expense'}</span></td>
-        <td style="font-weight:700;color:${t.type==='buy'?'var(--green)':'var(--red)'}">
-          ${t.type==='buy'?'+':'-'} R ${Number(t.amount).toLocaleString('en-ZA',{minimumFractionDigits:2})}
+    const currency = WandaAuth.getCurrency();
+    const rows = (transactions.length ? transactions : demoTxns).map(t => {
+      const isIncome = t.type === 'income';
+      const date     = t.transaction_date ? t.transaction_date.split('T')[0] : (t.date || '');
+      const desc     = t.description || t.desc || '';
+      const cat      = t.category    || t.cat  || '';
+      const amt      = Number(t.amount || 0);
+      return `<tr>
+        <td>${date}</td>
+        <td>${desc}</td>
+        <td><span class="badge badge-blue">${cat}</span></td>
+        <td><span class="badge ${isIncome ? 'badge-green' : 'badge-red'}">${isIncome ? 'Income' : 'Expense'}</span></td>
+        <td style="font-weight:700;color:${isIncome ? 'var(--green)' : 'var(--red)'}">
+          ${isIncome ? '+' : '-'} ${formatCurrency(amt, t.currency || currency)}
         </td>
-        <td>${t.id?`<button onclick="deleteTxn(${t.id})" style="background:none;border:none;cursor:pointer;color:var(--red)"><i class="material-icons" style="font-size:1rem;">delete</i></button>`:''}</td>
-      </tr>`).join('');
-    tbody.innerHTML = rows;
-    recent.innerHTML = (transactions.length ? transactions : demoTxns).slice(0,5).map(t => `
-      <tr>
-        <td>${t.date}</td><td>${t.desc}</td>
-        <td><span class="badge badge-blue">${t.cat}</span></td>
-        <td><span class="badge ${t.type==='buy'?'badge-green':'badge-red'}">${t.type==='buy'?'Income':'Expense'}</span></td>
-        <td style="font-weight:700;color:${t.type==='buy'?'var(--green)':'var(--red)'}">
-          ${t.type==='buy'?'+':'-'} R ${Number(t.amount).toLocaleString('en-ZA',{minimumFractionDigits:2})}
-        </td><td></td>
-      </tr>`).join('');
+        <td>${t.id ? `<button onclick="deleteTxn(${t.id})"
+          style="background:none;border:none;cursor:pointer;color:var(--red)">
+          <i class="material-icons" style="font-size:1rem;">delete</i></button>` : ''}</td>
+      </tr>`;
+    }).join('');
+
+    const tbody  = document.getElementById('txnTableBody');
+    const recent = document.getElementById('recentTxnBody');
+    if (tbody)  tbody.innerHTML  = rows;
+    if (recent) recent.innerHTML = (transactions.length ? transactions : demoTxns)
+      .slice(0, 5).map(t => {
+        const isIncome = t.type === 'income';
+        const date     = t.transaction_date ? t.transaction_date.split('T')[0] : (t.date || '');
+        const desc     = t.description || t.desc || '';
+        const cat      = t.category    || t.cat  || '';
+        const amt      = Number(t.amount || 0);
+        return `<tr>
+          <td>${date}</td><td>${desc}</td>
+          <td><span class="badge badge-blue">${cat}</span></td>
+          <td><span class="badge ${isIncome ? 'badge-green' : 'badge-red'}">${isIncome ? 'Income' : 'Expense'}</span></td>
+          <td style="font-weight:700;color:${isIncome ? 'var(--green)' : 'var(--red)'}">
+            ${isIncome ? '+' : '-'} ${formatCurrency(amt, t.currency || currency)}
+          </td><td></td>
+        </tr>`;
+      }).join('');
   }
 
+  /* ── Demo data (shown until real transactions load) ── */
   const demoTxns = [
-    {id:0,date:'2025-06-10',desc:'Client Invoice #101',cat:'Services',type:'buy',amount:15000},
-    {id:0,date:'2025-06-09',desc:'Stock purchase',cat:'Stock',type:'sell',amount:4200},
-    {id:0,date:'2025-06-08',desc:'Monthly rent',cat:'Rent',type:'sell',amount:6500},
-    {id:0,date:'2025-06-07',desc:'Product sales',cat:'Sales',type:'buy',amount:9800},
-    {id:0,date:'2025-06-05',desc:'Marketing ads',cat:'Marketing',type:'sell',amount:1800},
+    {id:0,date:'2025-06-10',desc:'Client Invoice #101', cat:'Services', type:'income',  amount:15000},
+    {id:0,date:'2025-06-09',desc:'Stock purchase',      cat:'Stock',    type:'expense', amount:4200},
+    {id:0,date:'2025-06-08',desc:'Monthly rent',        cat:'Rent',     type:'expense', amount:6500},
+    {id:0,date:'2025-06-07',desc:'Product sales',       cat:'Sales',    type:'income',  amount:9800},
+    {id:0,date:'2025-06-05',desc:'Marketing ads',       cat:'Marketing',type:'expense', amount:1800},
   ];
   renderTransactions();
-
-  /* ── Bar chart ── */
-  const months = ['Jan','Feb','Mar','Apr','May','Jun'];
-  const incomeData  = [28000,34000,29000,38000,41000,42500];
-  const expenseData = [15000,18000,16000,20000,17500,18240];
-  const maxVal = Math.max(...incomeData, ...expenseData);
-  const chartEl = document.getElementById('barChart');
-  chartEl.innerHTML = months.map((m, i) => `
-    <div class="bar-group">
-      <div class="bar-pair">
-        <div class="bar income" style="height:${(incomeData[i]/maxVal)*160}px" title="Income: R${incomeData[i].toLocaleString()}"></div>
-        <div class="bar expense" style="height:${(expenseData[i]/maxVal)*160}px" title="Expenses: R${expenseData[i].toLocaleString()}"></div>
-      </div>
-      <div class="bar-label">${m}</div>
-    </div>`).join('');
 
   /* ── Document export ── */
   function generateDoc(type) {
@@ -811,6 +515,9 @@ async function addTransaction() {
     document.querySelectorAll('.notif-item').forEach(n => n.style.opacity = '0.4');
     showToast('All notifications marked as read.');
   }
+
+  /* ── Load dashboard on page load ── */
+  loadDashboard();
 </script>
 </body>
 </html>

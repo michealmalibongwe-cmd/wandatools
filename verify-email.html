@@ -102,57 +102,57 @@
     </div>
     
     <script>
-        const API_BASE = "https://your-railway-url/api/v1";
-        
-        async function verifyEmail() {
-            const params = new URLSearchParams(window.location.search);
-            const token = params.get('token');
-            
-            if (!token) {
-                showError('No verification token provided');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/auth/verify-email?token=${token}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    showError(data.detail || 'Verification failed');
-                    return;
-                }
-                
-                showSuccess('Email verified successfully! Redirecting to login...');
-                setTimeout(() => location.href = '/signup.html', 2000);
-                
-            } catch (error) {
-                showError('Network error: ' + error.message);
-            }
-        }
-        
-        function showSuccess(message) {
-            document.getElementById('content').innerHTML = `
-                <div class="icon success">✓</div>
-                <h1 class="success">Email Verified!</h1>
-                <p>${message}</p>
-            `;
-        }
-        
-        function showError(message) {
-            document.getElementById('content').innerHTML = `
-                <div class="icon error">✗</div>
-                <h1 class="error">Verification Failed</h1>
-                <p>${message}</p>
-                <button class="btn" onclick="location.href='/signup.html'">Back to Login</button>
-            `;
-        }
-        
-        verifyEmail();
-    </script>
+    const API_BASE = "https://wandatools.up.railway.app/api/v1";
+
+    function showSuccess(message) {
+      document.getElementById('content').innerHTML = `
+        <div class="icon success">✓</div>
+        <h1 class="success">Email Noted!</h1>
+        <p>${message}</p>
+        <a class="btn" href="/tools.html">Go to Dashboard</a>`;
+    }
+
+    function showError(message) {
+      document.getElementById('content').innerHTML = `
+        <div class="icon error">✗</div>
+        <h1 class="error">Verification Failed</h1>
+        <p>${message}</p>
+        <button class="btn" onclick="location.href='/signup.html'">Back to Login</button>`;
+    }
+
+    function verifyEmail() {
+      // Email verification is not yet implemented in the backend.
+      // When /auth/verify-email is added, uncomment the fetch below.
+      // For now — if user lands here with a token, show success and redirect.
+      const params = new URLSearchParams(window.location.search);
+      const token  = params.get('token');
+
+      if (!token) {
+        // No token — came here directly after signup, just redirect
+        showSuccess('Your account is ready. Redirecting to dashboard...');
+        setTimeout(() => { location.href = '/tools.html'; }, 2000);
+        return;
+      }
+
+      // Has token — show success (backend doesn't validate yet)
+      showSuccess('Your email has been noted. Redirecting to dashboard...');
+      setTimeout(() => { location.href = '/tools.html'; }, 2000);
+
+      // TODO: Uncomment when backend implements /auth/verify-email
+      // fetch(`${API_BASE}/auth/verify-email`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ token })
+      // })
+      // .then(r => r.json())
+      // .then(data => {
+      //   if (data.error) showError(data.detail || 'Verification failed');
+      //   else { showSuccess('Email verified!'); setTimeout(() => location.href = '/tools.html', 2000); }
+      // })
+      // .catch(err => showError('Network error: ' + err.message));
+    }
+
+    verifyEmail();
+</script>
 </body>
 </html>

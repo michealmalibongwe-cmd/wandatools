@@ -317,542 +317,49 @@
 
   <script src="nav.js"></script>
 <script>
-    // Require login to access profile
-    if (WandaAuth.protectPage() === false) {
-        // User not logged in, redirected
-    }
-</script>
-
-<!-- ══════════════════ NAVBAR ══════════════════ -->
-<nav class="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-      <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-      <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-      <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-      <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-      <a href="tools.html" class="btn btn-primary nav-cta">Dashboard</a>
-    </div>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="nav-mobile">
-    <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-    <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-    <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-    <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-    <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-  </div>
-</nav>
-
-<div class="page-content">
-
-<!-- ══════════════════ AUTH PAGE (NOT LOGGED IN) ══════════════════ -->
-<div id="authPage" class="auth-page" style="display:none;">
-  <div class="auth-brand">
-    <div class="auth-brand-content">
-      <i class="material-icons">lock_open</i>
-      <h2>Welcome to WandaTools</h2>
-      <p>Take control of your finances with AI-powered insights and real-time tracking.</p>
-    </div>
-  </div>
-
-  <div class="auth-form-side">
-    <div class="auth-form-wrap">
-      <!-- Form Toggle -->
-      <div class="form-toggle">
-        <button class="form-toggle-btn active" onclick="switchAuthForm('login')">Sign In</button>
-        <button class="form-toggle-btn" onclick="switchAuthForm('register')">Create Account</button>
-      </div>
-
-      <!-- Login Form -->
-      <div class="auth-panel active" id="loginPanel">
-        <div class="auth-form-header">
-          <h1>Welcome back</h1>
-          <p>Sign in to your WandaTools account</p>
-        </div>
-
-        <form id="loginForm">
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input class="form-control" type="email" id="loginEmail" placeholder="you@example.com" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input class="form-control" type="password" id="loginPassword" placeholder="••••••••" required />
-          </div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="rememberMe" />
-            <label for="rememberMe">Remember me</label>
-          </div>
-          <div class="forgot-link">
-            <a href="#" onclick="alert('Password reset coming soon!')">Forgot password?</a>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="handleLogin(event)">
-            <i class="material-icons">login</i> Sign In
-          </button>
-        </form>
-
-        <div class="form-divider"><span>or</span></div>
-
-        <div class="social-login">
-          <button class="social-btn" onclick="alert('Google Sign-In coming soon!')">
-            <i class="material-icons">account_balance</i> Google
-          </button>
-          <button class="social-btn" onclick="alert('Microsoft Sign-In coming soon!')">
-            <i class="material-icons">business</i> Microsoft
-          </button>
-        </div>
-
-        <div class="switch-auth">
-          Don't have an account? <a href="#" onclick="switchAuthForm('register'); return false;">Create one</a>
-        </div>
-      </div>
-
-      <!-- Register Form -->
-      <div class="auth-panel" id="registerPanel">
-        <div class="auth-form-header">
-          <h1>Create your account</h1>
-          <p>Join thousands of South African businesses</p>
-        </div>
-
-        <form id="registerForm">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input class="form-control" type="text" id="regName" placeholder="Your full name" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input class="form-control" type="email" id="regEmail" placeholder="you@example.com" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input class="form-control" type="password" id="regPassword" placeholder="••••••••" oninput="checkPasswordStrength(this.value)" required />
-            <div class="password-strength"><div class="strength-bar" id="strengthBar"></div></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Business Type (optional)</label>
-            <select class="form-control" id="businessType">
-              <option value="">Select or skip</option>
-              <option value="Sole Trader">Sole Trader</option>
-              <option value="Small Business">Small Business (SME)</option>
-              <option value="Freelancer">Freelancer</option>
-              <option value="Non-Profit">Non-Profit</option>
-              <option value="Large Enterprise">Large Enterprise</option>
-            </select>
-          </div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="agreeTerms" required />
-            <label for="agreeTerms">I agree to the Terms of Service and Privacy Policy</label>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="handleRegister(event)">
-            <i class="material-icons">person_add</i> Create Account
-          </button>
-        </form>
-
-        <div class="form-divider"><span>or</span></div>
-
-        <div class="social-login">
-          <button class="social-btn" onclick="alert('Google Sign-Up coming soon!')">
-            <i class="material-icons">account_balance</i> Google
-          </button>
-          <button class="social-btn" onclick="alert('Microsoft Sign-Up coming soon!')">
-            <i class="material-icons">business</i> Microsoft
-          </button>
-        </div>
-
-        <div class="switch-auth">
-          Already have an account? <a href="#" onclick="switchAuthForm('login'); return false;">Sign in</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════ PROFILE PAGE (LOGGED IN) ══════════════════ -->
-<div id="profilePage" style="display:none;">
-  <div class="profile-layout">
-    <!-- Sidebar -->
-    <aside class="profile-sidebar">
-      <div class="profile-header">
-        <div class="profile-avatar"><i class="material-icons">account_circle</i></div>
-        <h2 id="profileName">User Name</h2>
-        <p id="profileEmail">user@example.com</p>
-      </div>
-      <div class="profile-menu">
-        <button class="profile-menu-item active" onclick="switchProfilePanel('overview', this)">
-          <i class="material-icons">dashboard</i> Overview
-        </button>
-        <button class="profile-menu-item" onclick="switchProfilePanel('settings', this)">
-          <i class="material-icons">settings</i> Settings
-        </button>
-        <button class="profile-menu-item" onclick="switchProfilePanel('billing', this)">
-          <i class="material-icons">credit_card</i> Billing
-        </button>
-        <button class="profile-menu-item" onclick="switchProfilePanel('security', this)">
-          <i class="material-icons">security</i> Security
-        </button>
-        <button class="profile-menu-item" onclick="switchProfilePanel('data', this)">
-          <i class="material-icons">cloud_download</i> Data & Privacy
-        </button>
-      </div>
-      <button class="btn btn-outline" style="width:100%;margin-top:28px;justify-content:center;" onclick="handleLogout()">
-        <i class="material-icons">logout</i> Log Out
-      </button>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="profile-main">
-
-      <!-- Overview Panel -->
-      <div class="profile-panel active" id="panel-overview">
-        <h2>Account Overview</h2>
-        <div class="profile-section">
-          <h3>Account Information</h3>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Name</span>
-            <span class="profile-info-value" id="ovName">User Name</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Email</span>
-            <span class="profile-info-value" id="ovEmail">user@example.com</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Account Status</span>
-            <span class="profile-info-value"><span class="badge badge-green">Active</span></span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Member Since</span>
-            <span class="profile-info-value" id="ovMemberDate">June 18, 2025</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Plan</span>
-            <span class="profile-info-value"><span class="badge badge-blue">Free</span></span>
-          </div>
-        </div>
-
-        <div class="profile-section">
-          <h3>Usage Statistics</h3>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Transactions Logged</span>
-            <span class="profile-info-value" id="ovTransactions">47</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Reports Generated</span>
-            <span class="profile-info-value" id="ovReports">3</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">AI Conversations</span>
-            <span class="profile-info-value" id="ovAIChats">12</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Data Storage Used</span>
-            <span class="profile-info-value">1.2 MB of 100 MB</span>
-          </div>
-        </div>
-
-        <div class="profile-section">
-          <a href="tools.html" class="btn btn-primary"><i class="material-icons">dashboard</i> Go to Dashboard</a>
-          <a href="wandaAI.html" class="btn btn-outline" style="margin-left:8px;"><i class="material-icons">smart_toy</i> Chat with WandaAI</a>
-        </div>
-      </div>
-
-      <!-- Settings Panel -->
-      <div class="profile-panel" id="panel-settings">
-        <h2>Settings</h2>
-        <div class="profile-section">
-          <h3>Profile Settings</h3>
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input class="form-control" type="text" id="settingName" placeholder="Your name" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input class="form-control" type="email" id="settingEmail" placeholder="your@email.com" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Timezone</label>
-            <select class="form-control" id="settingTz">
-              <option>Africa/Johannesburg (SAST)</option>
-              <option>Africa/Cape_Town</option>
-              <option>Africa/Durban</option>
-              <option>Africa/Blantyre</option>
-            </select>
-          </div>
-          <button class="btn btn-primary" onclick="saveSettings()"><i class="material-icons">save</i> Save Changes</button>
-        </div>
-
-        <div class="profile-section">
-          <h3>Notifications</h3>
-          <div class="checkbox-group">
-            <input type="checkbox" id="emailNotif" checked />
-            <label for="emailNotif">Email notifications for cash flow alerts</label>
-          </div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="smsNotif" />
-            <label for="smsNotif">SMS alerts for major transactions</label>
-          </div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="weeklyReport" checked />
-            <label for="weeklyReport">Weekly financial summary email</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Billing Panel -->
-      <div class="profile-panel" id="panel-billing">
-        <h2>Billing</h2>
-        <div class="profile-section">
-          <h3>Current Plan</h3>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Plan Name</span>
-            <span class="profile-info-value">Free Plan</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Monthly Cost</span>
-            <span class="profile-info-value" style="color:var(--green);font-weight:700;">R 0</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Next Billing Date</span>
-            <span class="profile-info-value">N/A (No charges)</span>
-          </div>
-        </div>
-        <div class="profile-section">
-          <p style="color:var(--mid);font-size:0.9rem;margin-bottom:16px;">Premium features and paid plans coming soon. Early access to new features available upon request.</p>
-          <button class="btn btn-outline" onclick="alert('Premium plans launching Q3 2025!')">
-            <i class="material-icons">trending_up</i> Explore Premium
-          </button>
-        </div>
-      </div>
-
-      <!-- Security Panel -->
-      <div class="profile-panel" id="panel-security">
-        <h2>Security</h2>
-        <div class="profile-section">
-          <h3>Password</h3>
-          <button class="btn btn-outline" onclick="alert('Password change feature coming soon!')">
-            <i class="material-icons">lock_reset</i> Change Password
-          </button>
-        </div>
-
-        <div class="profile-section">
-          <h3>Two-Factor Authentication</h3>
-          <p style="color:var(--mid);font-size:0.9rem;margin-bottom:16px;">Add an extra layer of security to your account.</p>
-          <button class="btn btn-outline" onclick="alert('2FA setup coming soon!')">
-            <i class="material-icons">verified_user</i> Enable 2FA
-          </button>
-        </div>
-
-        <div class="profile-section">
-          <h3>Active Sessions</h3>
-          <div class="profile-info-row" style="border-bottom:1px solid var(--border);">
-            <div>
-              <div style="font-weight:700;margin-bottom:4px;">This Browser</div>
-              <div style="font-size:0.85rem;color:var(--mid);">Chrome on Windows</div>
-            </div>
-            <div style="font-size:0.85rem;color:var(--green);font-weight:700;">Active</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data & Privacy Panel -->
-      <div class="profile-panel" id="panel-data">
-        <h2>Data & Privacy</h2>
-        <div class="profile-section">
-          <h3>Data Export</h3>
-          <p style="color:var(--mid);font-size:0.9rem;margin-bottom:16px;">Download a copy of all your data in a standard format.</p>
-          <button class="btn btn-outline" onclick="alert('Data export initiated. You\'ll receive a download link via email within 24 hours.')">
-            <i class="material-icons">file_download</i> Request Data Export
-          </button>
-        </div>
-
-        <div class="profile-section">
-          <h3>Privacy Settings</h3>
-          <div class="checkbox-group">
-            <input type="checkbox" id="analytics" checked />
-            <label for="analytics">Allow anonymised usage analytics (helps us improve WandaTools)</label>
-          </div>
-          <div class="checkbox-group">
-            <input type="checkbox" />
-            <label>Allow contact for product feedback surveys</label>
-          </div>
-        </div>
-
-        <div class="danger-zone">
-          <h4><i class="material-icons" style="font-size:1rem;vertical-align:middle;">warning</i> Delete Account</h4>
-          <p>Once you delete your account, there is no going back. Please be certain.</p>
-          <button class="btn btn-outline" style="border-color:var(--red);color:var(--red);" onclick="if(confirm('Are you sure? This will permanently delete your account and all data.')) { handleLogout(); alert('Account deletion initiated. Your data will be removed within 30 days.'); }">
-            <i class="material-icons">delete_forever</i> Delete Account
-          </button>
-        </div>
-      </div>
-
-    </main>
-  </div>
-</div>
-
-</div>
-
-<!-- ══════════════════ FOOTER ══════════════════ -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo">WandaTools</div>
-        <p>AI-powered financial insights for businesses and individuals across South Africa.</p>
-        <div class="footer-socials">
-          <a href="#" class="social-icon"><i class="material-icons">facebook</i></a>
-          <a href="#" class="social-icon"><i class="material-icons">tag</i></a>
-          <a href="#" class="social-icon"><i class="material-icons">work</i></a>
-          <a href="#" class="social-icon"><i class="material-icons">photo_camera</i></a>
-        </div>
-      </div>
-      <div class="footer-col"><h4>Product</h4>
-        <a href="tools.html">Transactions</a><a href="tools.html">Dashboard</a>
-        <a href="tools.html">Documents</a><a href="wandaAI.html">WandaAI</a>
-      </div>
-      <div class="footer-col"><h4>Company</h4>
-        <a href="index.html">About Us</a><a href="contact.html">Contact</a>
-        <a href="#">Careers</a><a href="#">Blog</a>
-      </div>
-      <div class="footer-col"><h4>Legal</h4>
-        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a><a href="#">POPIA Compliance</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 WandaTools. All rights reserved.</span>
-      <span>Made with <span style="color:#E53935;">♥</span> in South Africa</span>
-      <div style="display:flex;gap:16px;"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
-    </div>
-  </div>
-</footer>
-
-<script src="nav.js"></script>
-<script>
-  /* ── Initialize page ── */
   window.addEventListener('load', initProfilePage);
 
-  function initProfilePage() {
-    if (WandaAuth.isLoggedIn()) {
-      showProfilePage();
-    } else {
-      showAuthPage();
+  async function initProfilePage() {
+    if (!WandaAuth.isLoggedIn()) {
+      protectPage();
+      return;
     }
-  }
-
-  function showAuthPage() {
-    document.getElementById('authPage').style.display = 'grid';
-    document.getElementById('profilePage').style.display = 'none';
-  }
-
-  function showProfilePage() {
-    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('authPage').style.display    = 'none';
     document.getElementById('profilePage').style.display = 'block';
-    const name = WandaAuth.getName();
-    const email = WandaAuth.getEmail();
-    document.getElementById('profileName').textContent = name;
-    document.getElementById('profileEmail').textContent = email;
-    document.getElementById('ovName').textContent = name;
-    document.getElementById('ovEmail').textContent = email;
-    document.getElementById('settingName').value = name;
-    document.getElementById('settingEmail').value = email;
-    document.getElementById('ovMemberDate').textContent = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-    const txnCount = JSON.parse(localStorage.getItem('wt_transactions') || '[]').length;
-    document.getElementById('ovTransactions').textContent = txnCount || '0';
+    await loadProfile();
   }
 
-  /* ── Auth forms ── */
-  function switchAuthForm(form) {
-    document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.form-toggle-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(form + 'Panel').classList.add('active');
-    event.currentTarget.classList.add('active');
-  }
+  async function loadProfile() {
+    try {
+      const user = await apiCall('/auth/me');
 
-  async function handleLogin(e) {
-  e.preventDefault();
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
-  
-  try {
-    const response = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || "Login failed");
+      // Display name and email
+      const name  = user.name  || WandaAuth.getName();
+      const email = user.email || WandaAuth.getEmail();
+
+      document.getElementById('profileName').textContent  = name;
+      document.getElementById('profileEmail').textContent = email;
+      document.getElementById('ovName').textContent       = name;
+      document.getElementById('ovEmail').textContent      = email;
+
+      if (document.getElementById('settingName'))
+        document.getElementById('settingName').value = name;
+      if (document.getElementById('settingEmail'))
+        document.getElementById('settingEmail').value = email;
+
+      document.getElementById('ovMemberDate').textContent =
+        new Date(user.created_at || Date.now()).toLocaleDateString('en-ZA', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+      // Load transaction count
+      const stats = await apiCall('/users/me/stats');
+      if (document.getElementById('ovTransactions'))
+        document.getElementById('ovTransactions').textContent = stats.transaction_count || '0';
+
+    } catch (error) {
+      showToast('Failed to load profile: ' + error.message, 'error');
     }
-    
-    const data = await response.json();
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
-    localStorage.setItem("wt_user_name", email.split("@")[0]);
-    localStorage.setItem("wt_user_email", email);
-    localStorage.setItem("wt_logged_in", "true");
-    
-    showToast("Signed in successfully!");
-    setTimeout(() => location.reload(), 600);
-  } catch (error) {
-    showToast(error.message, "error");
-  }
-}
-
-async function handleRegister(e) {
-  e.preventDefault();
-  const name = document.getElementById("regName").value.trim();
-  const email = document.getElementById("regEmail").value.trim();
-  const password = document.getElementById("regPassword").value.trim();
-  
-  try {
-    const response = await fetch(`${API_BASE}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        business_type: "Individual",
-        timezone: "Africa/Johannesburg"
-      }),
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || "Registration failed");
-    }
-    
-    const data = await response.json();
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
-    localStorage.setItem("wt_user_name", name);
-    localStorage.setItem("wt_user_email", email);
-    localStorage.setItem("wt_logged_in", "true");
-    
-    showToast("Account created successfully!");
-    setTimeout(() => location.reload(), 600);
-  } catch (error) {
-    showToast(error.message, "error");
-  }
-}
-
-  function handleLogout() {
-    if (confirm('Are you sure you want to sign out?')) {
-      WandaAuth.logout();
-    }
-  }
-
-  function checkPasswordStrength(pwd) {
-    const bar = document.getElementById('strengthBar');
-    if (pwd.length < 6) bar.className = 'strength-bar weak';
-    else if (pwd.length < 10 || !/[0-9]/.test(pwd)) bar.className = 'strength-bar fair';
-    else bar.className = 'strength-bar strong';
   }
 
   /* ── Profile panels ── */
@@ -863,16 +370,91 @@ async function handleRegister(e) {
     btn.classList.add('active');
   }
 
-  function saveSettings() {
-    const name = document.getElementById('settingName').value.trim();
-    const email = document.getElementById('settingEmail').value.trim();
-    if (name && email) {
-      localStorage.setItem('wt_user_name', name);
-      localStorage.setItem('wt_user_email', email);
-      document.getElementById('profileName').textContent = name;
-      document.getElementById('profileEmail').textContent = email;
+  /* ── Save settings ── */
+  async function saveSettings() {
+    const name     = document.getElementById('settingName')?.value.trim();
+    const timezone = document.getElementById('settingTimezone')?.value;
+    const currency = document.getElementById('settingCurrency')?.value;
+
+    if (!name) { showToast('Name cannot be empty', 'error'); return; }
+
+    try {
+      const updated = await apiCall('/users/me', {
+        method: 'PUT',
+        body: JSON.stringify({
+          name:     name     || undefined,
+          timezone: timezone || undefined,
+          currency: currency || undefined,
+        }),
+      });
+
+      // Update localStorage so nav reflects changes immediately
+      localStorage.setItem('user_name',     updated.name);
+      localStorage.setItem('user_currency', updated.currency);
+
+      document.getElementById('profileName').textContent  = updated.name;
+      document.getElementById('profileEmail').textContent = updated.email;
       showToast('Settings saved successfully!');
+
+    } catch (error) {
+      showToast(error.message, 'error');
     }
+  }
+
+  /* ── Change password ── */
+  async function changePassword() {
+    const current   = document.getElementById('currentPassword')?.value;
+    const newPwd    = document.getElementById('newPassword')?.value;
+    const confirmPw = document.getElementById('confirmPassword')?.value;
+
+    if (!current || !newPwd) { showToast('Please fill in all fields', 'error'); return; }
+    if (newPwd !== confirmPw) { showToast('Passwords do not match', 'error'); return; }
+
+    const strength = checkPasswordStrength(newPwd);
+    if (!strength.is_strong) {
+      showToast('Password is too weak: ' + strength.feedback[0], 'error');
+      return;
+    }
+
+    try {
+      await apiCall('/auth/change-password', {
+        method: 'POST',
+        body: JSON.stringify({ current_password: current, new_password: newPwd }),
+      });
+      showToast('Password changed successfully! Please sign in again on other devices.');
+      if (document.getElementById('currentPassword')) document.getElementById('currentPassword').value = '';
+      if (document.getElementById('newPassword'))     document.getElementById('newPassword').value = '';
+      if (document.getElementById('confirmPassword')) document.getElementById('confirmPassword').value = '';
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
+  }
+
+  /* ── Logout ── */
+  function handleLogout() {
+    if (confirm('Are you sure you want to sign out?')) {
+      WandaAuth.handleLogout();
+    }
+  }
+
+  /* ── Delete account ── */
+  async function deleteAccount() {
+    if (!confirm('This will permanently delete your account and ALL data. This cannot be undone. Continue?')) return;
+    if (!confirm('Are you absolutely sure?')) return;
+    try {
+      await apiCall('/users/me', { method: 'DELETE' });
+      WandaAuth.auth.logout();
+      showToast('Account deleted. Redirecting...', 'success');
+      setTimeout(() => { location.href = '/'; }, 1500);
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
+  }
+
+  /* ── Password strength ── */
+  function checkPwdStrength(fieldId) {
+    const pwd = document.getElementById(fieldId)?.value || '';
+    if (pwd) updateStrengthUI(fieldId, pwd);
   }
 </script>
 </body>

@@ -298,194 +298,23 @@
 
 <script src="nav.js"></script>
 <script>
-    // Require login to access WandaAI
-    if (WandaAuth.protectPage() === false) {
-        // User not logged in, redirected
-    }
-</script>
+  protectPage();
 
-<!-- ══════════════════ NAVBAR ══════════════════ -->
-<nav class="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-      <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-      <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-      <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-      <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-      <a href="tools.html" class="btn btn-primary nav-cta">Dashboard</a>
-    </div>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="nav-mobile">
-    <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-    <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-    <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-    <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-    <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-  </div>
-</nav>
-
-<div class="page-content">
-<div class="ai-layout">
-
-  <!-- ══ AI SIDEBAR ══ -->
-  <aside class="ai-sidebar">
-    <div class="ai-sidebar-title">Assistant Mode</div>
-    <button class="ai-mode-btn active" onclick="setMode('insights', this)">
-      <i class="material-icons">insights</i>
-      <div>
-        <div class="mode-name">Financial Insights</div>
-        <div class="mode-desc">Analyse your income, expenses, and trends</div>
-      </div>
-    </button>
-    <button class="ai-mode-btn" onclick="setMode('recommendations', this)">
-      <i class="material-icons">lightbulb</i>
-      <div>
-        <div class="mode-name">Smart Recommendations</div>
-        <div class="mode-desc">Get actionable money-saving and growth tips</div>
-      </div>
-    </button>
-    <button class="ai-mode-btn" onclick="setMode('business', this)">
-      <i class="material-icons">storefront</i>
-      <div>
-        <div class="mode-name">Business Assistant</div>
-        <div class="mode-desc">Help with pricing, planning, and strategy</div>
-      </div>
-    </button>
-
-    <div class="ai-sidebar-divider"></div>
-    <div class="ai-sidebar-title">Quick Prompts</div>
-    <div class="prompt-library">
-      <button class="prompt-chip" onclick="sendPrompt('How is my cash flow looking this month?')">💰 How is my cash flow looking?</button>
-      <button class="prompt-chip" onclick="sendPrompt('Where am I spending the most money?')">📊 Where am I spending most?</button>
-      <button class="prompt-chip" onclick="sendPrompt('What is my profit margin this month?')">📈 What is my profit margin?</button>
-      <button class="prompt-chip" onclick="sendPrompt('How can I reduce my expenses?')">✂️ How can I cut costs?</button>
-      <button class="prompt-chip" onclick="sendPrompt('Am I ready to apply for a business loan?')">🏦 Am I loan-ready?</button>
-      <button class="prompt-chip" onclick="sendPrompt('What financial goals should I set for next month?')">🎯 Set my financial goals</button>
-    </div>
-
-    <div class="ai-sidebar-divider"></div>
-    <button class="ai-mode-btn" onclick="clearChat()" style="margin-top:auto;">
-      <i class="material-icons">refresh</i>
-      <div><div class="mode-name">New Conversation</div></div>
-    </button>
-  </aside>
-
-  <!-- ══ CHAT AREA ══ -->
-  <div class="chat-area">
-    <!-- Header -->
-    <div class="chat-header">
-      <div class="ai-avatar"><i class="material-icons">smart_toy</i></div>
-      <div class="chat-header-info">
-        <h3>WandaAI</h3>
-        <span><span class="online-dot"></span> Online &amp; ready</span>
-      </div>
-      <div class="chat-header-actions">
-        <button class="icon-btn" onclick="clearChat()" title="New chat"><i class="material-icons">refresh</i></button>
-        <a href="tools.html" class="icon-btn" title="Back to Dashboard"><i class="material-icons">dashboard</i></a>
-      </div>
-    </div>
-
-    <!-- Messages -->
-    <div class="chat-messages" id="chatMessages">
-      <!-- Welcome message injected by JS -->
-    </div>
-
-    <!-- Capabilities strip -->
-    <div class="capabilities-banner">
-      <div class="cap-item"><i class="material-icons">insights</i> Financial analysis</div>
-      <div class="cap-item"><i class="material-icons">lightbulb</i> Smart recommendations</div>
-      <div class="cap-item"><i class="material-icons">storefront</i> Business strategy</div>
-      <div class="cap-item"><i class="material-icons">trending_up</i> Growth projections</div>
-      <div class="cap-item"><i class="material-icons">gavel</i> Tax preparation tips</div>
-      <div class="cap-item"><i class="material-icons">security</i> Secure &amp; private</div>
-    </div>
-
-    <!-- Input -->
-    <div class="chat-input-wrap">
-      <div class="chat-input-inner">
-        <textarea id="chatInput" rows="1" placeholder="Ask WandaAI anything about your finances…"
-          oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()" aria-label="Send message">
-          <i class="material-icons">send</i>
-        </button>
-      </div>
-      <div class="input-hint">WandaAI uses your transaction data to give personalised insights. Press Enter to send.</div>
-    </div>
-  </div>
-
-</div>
-</div>
-
-<!-- ══════════════════ FOOTER ══════════════════ -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo">WandaTools</div>
-        <p>AI-powered financial insights for businesses and individuals across South Africa.</p>
-        <div class="footer-socials">
-          <a href="#" class="social-icon"><i class="material-icons">facebook</i></a>
-          <a href="#" class="social-icon"><i class="material-icons">tag</i></a>
-          <a href="#" class="social-icon"><i class="material-icons">work</i></a>
-          <a href="#" class="social-icon"><i class="material-icons">photo_camera</i></a>
-        </div>
-      </div>
-      <div class="footer-col"><h4>Product</h4>
-        <a href="tools.html">Transactions</a><a href="tools.html">Dashboard</a>
-        <a href="tools.html">Documents</a><a href="wandaAI.html">WandaAI</a>
-      </div>
-      <div class="footer-col"><h4>Company</h4>
-        <a href="index.html">About Us</a><a href="contact.html">Contact</a>
-        <a href="#">Careers</a><a href="#">Blog</a>
-      </div>
-      <div class="footer-col"><h4>Legal</h4>
-        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a><a href="#">POPIA Compliance</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 WandaTools. All rights reserved.</span>
-      <span>Made with <span style="color:#E53935;">♥</span> in South Africa</span>
-      <div style="display:flex;gap:16px;"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
-    </div>
-  </div>
-</footer>
-
-<script src="nav.js"></script>
-<script>
   let currentMode = 'insights';
   const chatMessages = document.getElementById('chatMessages');
-  const chatInput = document.getElementById('chatInput');
-  const sendBtn = document.getElementById('sendBtn');
+  const chatInput    = document.getElementById('chatInput');
+  const sendBtn      = document.getElementById('sendBtn');
 
   const welcomeMsg = `Hello${WandaAuth.isLoggedIn() ? ', ' + WandaAuth.getName().split(' ')[0] : ''}! 👋 I'm **WandaAI**, your personal financial assistant.\n\nI can help you understand your cash flow, find areas to save, plan for growth, and prepare for funding applications.\n\nWhat would you like to explore today?`;
 
-  const aiResponses = {
-    insights: [
-      { match: ['cash flow','cashflow'], reply: `Based on your recent transactions, your cash flow this month looks **healthy**. You've brought in R 42 500 against R 18 240 in expenses — a net positive of R 24 260.\n\n`, insight: { title: '📊 Cash Flow Insight', body: 'Your income-to-expense ratio is 2.33:1, which is above the healthy threshold of 1.5:1 for your business category. Keep maintaining your payment terms with clients.' } },
-      { match: ['spend','expense','cost'], reply: `Your top spending categories this month are **Rent (35%)**, **Stock (23%)**, and **Salaries (18%)**.\n\n`, insight: { title: '💡 Spending Insight', body: 'Your rent-to-revenue ratio is 15.3% — within the recommended 10–20% range for retail. Consider reviewing stock order frequency to reduce holding costs.' } },
-      { match: ['profit','margin'], reply: `Your profit margin this month is **57.1%**, which is excellent for your business type.\n\n`, insight: { title: '📈 Profitability', body: 'A 57% margin compares favourably to the industry average of 40–45%. WandaAI projects this could reach 62% by Q3 if current revenue growth continues.' } },
-      { match: ['loan','funding','bank'], reply: `Good news — based on your financial data, you appear **loan-ready**. Your consistent income, positive cash flow, and low debt-to-income ratio are strong indicators.\n\n`, insight: { title: '🏦 Loan Readiness', body: 'Your 6-month income history shows stable growth. I recommend generating a Loan Application Pack from the Documents section before approaching your bank.' } },
-    ],
-    default: [
-      `That's a great question! Based on your financial profile, I'd recommend focusing on maintaining your current income growth while reviewing discretionary spending.\n\n**My top recommendations:**\n• Review your stock holding period\n• Set aside 15% of monthly income as a cash reserve\n• Consider invoicing clients earlier in the month to improve cash timing`,
-      `Great question. Your financial data tells an interesting story. Your strongest months have been Q2, with consistent growth month over month. Let me highlight a few key patterns I'm seeing in your data that could help guide your next financial decisions.`,
-      `I've analysed your recent activity and here's what stands out: your income is growing steadily, but your expense timing could be optimised. Consider shifting large payments to align with your peak income weeks for better cash management.`
-    ]
-  };
-
   function addMessage(role, text, insightCard = null) {
-    const now = new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
-    const div = document.createElement('div');
+    const now  = new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+    const div  = document.createElement('div');
     div.className = `msg ${role}`;
-    const icon = role === 'ai' ? 'smart_toy' : 'person';
+    const icon      = role === 'ai' ? 'smart_toy' : 'person';
     const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-    const insightHTML = insightCard ? `<div class="insight-card"><strong>${insightCard.title}</strong>${insightCard.body}</div>` : '';
+    const insightHTML = insightCard
+      ? `<div class="insight-card"><strong>${insightCard.title}</strong>${insightCard.body}</div>` : '';
     div.innerHTML = `
       <div class="msg-avatar"><i class="material-icons">${icon}</i></div>
       <div>
@@ -512,52 +341,37 @@
     if (t) t.remove();
   }
 
-  function getAIReply(userText) {
-    const lower = userText.toLowerCase();
-    const modeResponses = aiResponses[currentMode] || [];
-    for (const r of modeResponses) {
-      if (r.match && r.match.some(k => lower.includes(k))) {
-        return { reply: r.reply, insight: r.insight || null };
-      }
-    }
-    const fallback = aiResponses.default[Math.floor(Math.random() * aiResponses.default.length)];
-    return { reply: fallback, insight: null };
-  }
-async function sendMessage() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-  
-  chatInput.value = "";
-  autoResize(chatInput);
-  sendBtn.disabled = true;
-  addMessage("user", text);
-  showTyping();
-  
-  try {
-    const response = await apiCall("/wandaai/query", {
-      method: "POST",
-      body: JSON.stringify({
-        question: text,
-        mode: currentMode,
-      }),
-    });
-    
-    hideTyping();
-    addMessage("ai", response.response);
-    
-    if (response.recommendations && response.recommendations.length > 0) {
-      showToast(`💡 ${response.recommendations[0]}`, "info");
-    }
-  } catch (error) {
-    hideTyping();
-    console.error("Error:", error);
-    addMessage("ai", "Sorry, I encountered an error. Please try again.");
-  } finally {
-    sendBtn.disabled = false;
-    chatInput.focus();
-  }
-}
+  async function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
 
+    chatInput.value = '';
+    autoResize(chatInput);
+    sendBtn.disabled = true;
+    addMessage('user', text);
+    showTyping();
+
+    try {
+      const response = await apiCall('/wandaai/query', {
+        method: 'POST',
+        body: JSON.stringify({ question: text, mode: currentMode }),
+      });
+
+      hideTyping();
+      addMessage('ai', response.response);
+
+      if (response.recommendations && response.recommendations.length > 0) {
+        showToast('💡 ' + response.recommendations[0], 'info');
+      }
+    } catch (error) {
+      hideTyping();
+      addMessage('ai', 'Sorry, I encountered an error. Please try again.');
+      console.error('WandaAI error:', error);
+    } finally {
+      sendBtn.disabled = false;
+      chatInput.focus();
+    }
+  }
 
   function sendPrompt(text) {
     chatInput.value = text;
@@ -583,14 +397,10 @@ async function sendMessage() {
 
   function clearChat() {
     chatMessages.innerHTML = '';
-    initWelcome();
-  }
-
-  function initWelcome() {
     addMessage('ai', welcomeMsg);
   }
 
-  initWelcome();
+  addMessage('ai', welcomeMsg);
 </script>
 </body>
 </html>

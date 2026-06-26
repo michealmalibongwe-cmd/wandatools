@@ -787,7 +787,7 @@
     
     <!-- FOOTER -->
     <footer>
-        <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
+        <p>&copy; 2025 WandaTools. All rights reserved. | Made for Eswatini 🇸🇿</p>
     </footer>
     
     <!-- ═══════════════════════════════════════════════════════════
@@ -795,463 +795,156 @@
          ═══════════════════════════════════════════════════════════ -->
     
     <script src="nav.js"></script>
-    
-    <script>
-        // ═════════════════════════════════════════════════════════════
-        // SECURITY: Wait for nav.js to load before initializing
-        // ═════════════════════════════════════════════════════════════
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // Protect from logged-in users
-            if (window.WandaAuth && window.WandaAuth.protectFromAuth() === false) {
-                return; // User already logged in
-            }
-            
-            console.log('✅ Signup page loaded and ready');
-        });
-        
-        // ═════════════════════════════════════════════════════════════
-        // FORM TAB SWITCHING
-        // ═════════════════════════════════════════════════════════════
-        
-        function switchForm(formName) {
-            // Hide all form sections
-            document.querySelectorAll('.form-section').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Show selected section
-            const selectedForm = document.getElementById(formName);
-            if (selectedForm) {
-                selectedForm.classList.add('active');
-            }
-            
-            // Update active tab button
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Mark clicked button as active
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
-            
-            // Scroll to form
-            document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        
-        // ═════════════════════════════════════════════════════════════
-        // ALERTS
-        // ═════════════════════════════════════════════════════════════
-        
-        function showAlert(message, type = 'error') {
-            const container = document.getElementById('alertContainer');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.textContent = message;
-            alert.setAttribute('role', 'alert');
-            
-            container.innerHTML = '';
-            container.appendChild(alert);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                if (alert.parentElement) {
-                    alert.remove();
-                }
-            }, 5000);
-        }
-        
-        // ═════════════════════════════════════════════════════════════
-        // PASSWORD STRENGTH CHECKER
-        // ═════════════════════════════════════════════════════════════
-        
-        async function checkPasswordStrength(fieldId) {
-            const password = document.getElementById(fieldId).value;
-            
-            if (!password) {
-                return;
-            }
-            
-            try {
-                // Get API_BASE from nav.js
-                const API_BASE = window.WandaAuth?.API_BASE;
-                
-                if (!API_BASE) {
-                    console.error('❌ API_BASE not available');
-                    return;
-                }
-                
-                const response = await fetch(`${API_BASE}/auth/check-password`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ password })
-                });
-                
-                const data = await response.json();
-                
-                // Get prefix for this form (ind, biz, reset, etc)
-                const prefix = fieldId.split('Password')[0];
-                
-                const barId = `${prefix}StrengthBar`;
-                const textId = `${prefix}StrengthText`;
-                const feedbackId = `${prefix}Feedback`;
-                
-                const bar = document.getElementById(barId);
-                const text = document.getElementById(textId);
-                const feedback = document.getElementById(feedbackId);
-                
-                if (!bar || !text) return;
-                
-                bar.className = `strength-bar strength-${data.score}`;
-                
-                const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
-                const strengthClasses = ['strength-weak', 'strength-weak', 'strength-fair', 'strength-good', 'strength-strong'];
-                
-                text.className = `strength-text ${strengthClasses[data.score]}`;
-                text.textContent = strengthLabels[data.score];
-                
-                if (feedback) {
-                    feedback.textContent = data.feedback.join(' • ');
-                }
-                
-            } catch (error) {
-                console.error('Password strength check error:', error);
-            }
-        }
-        
-        // ═════════════════════════════════════════════════════════════
-        // FORM VALIDATION
-        // ═════════════════════════════════════════════════════════════
-        
-        function validateIndividualForm() {
-            const name = document.getElementById('indName').value.trim();
-            const email = document.getElementById('indEmail').value.trim();
-            const password = document.getElementById('indPassword').value;
-            const passwordConfirm = document.getElementById('indPasswordConfirm').value;
-            
-            // Validate name
-            if (name.length < 2) {
-                showAlert('Name must be at least 2 characters');
-                return false;
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showAlert('Please enter a valid email address');
-                return false;
-            }
-            
-            // Validate password length
-            if (password.length < 12) {
-                showAlert('Password must be at least 12 characters');
-                return false;
-            }
-            
-            // Validate password match
-            if (password !== passwordConfirm) {
-                showAlert('Passwords do not match');
-                return false;
-            }
-            
-            return true;
-        }
-        
-        function validateBusinessForm() {
-            const name = document.getElementById('bizName').value.trim();
-            const email = document.getElementById('bizEmail').value.trim();
-            const businessName = document.getElementById('bizBusinessName').value.trim();
-            const businessType = document.getElementById('bizBusinessType').value;
-            const businessEmail = document.getElementById('bizBusinessEmail').value.trim();
-            const registration = document.getElementById('bizRegistration').value.trim();
-            const password = document.getElementById('bizPassword').value;
-            const passwordConfirm = document.getElementById('bizPasswordConfirm').value;
-            
-            if (name.length < 2) {
-                showAlert('Name must be at least 2 characters');
-                return false;
-            }
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showAlert('Please enter a valid personal email');
-                return false;
-            }
-            
-            if (businessName.length < 2) {
-                showAlert('Business name must be at least 2 characters');
-                return false;
-            }
-            
-            if (!businessType) {
-                showAlert('Please select a business type');
-                return false;
-            }
-            
-            if (!emailRegex.test(businessEmail)) {
-                showAlert('Please enter a valid business email');
-                return false;
-            }
-            
-            if (registration.length < 3) {
-                showAlert('Please enter a valid registration number');
-                return false;
-            }
-            
-            if (password.length < 12) {
-                showAlert('Password must be at least 12 characters');
-                return false;
-            }
-            
-            if (password !== passwordConfirm) {
-                showAlert('Passwords do not match');
-                return false;
-            }
-            
-            return true;
-        }
-        
-        // ═════════════════════════════════════════════════════════════
-        // SIGNUP HANDLERS
-        // ═════════════════════════════════════════════════════════════
-        
-        async function handleIndividualSignup(event) {
-            event.preventDefault();
-            
-            // Validate form
-            if (!validateIndividualForm()) {
-                return;
-            }
-            
-            const btn = document.getElementById('indSubmitBtn');
-            btn.disabled = true;
-            btn.textContent = 'Creating account...';
-            
-            try {
-                const API_BASE = window.WandaAuth?.API_BASE;
-                
-                if (!API_BASE) {
-                    showAlert('❌ API configuration error. Please refresh the page.');
-                    btn.disabled = false;
-                    btn.textContent = 'Create Account';
-                    return;
-                }
-                
-                const formData = {
-                    name: document.getElementById('indName').value.trim(),
-                    email: document.getElementById('indEmail').value.trim(),
-                    password: document.getElementById('indPassword').value,
-                    password_confirm: document.getElementById('indPasswordConfirm').value
-                };
-                
-                console.log('📤 Sending signup request to:', `${API_BASE}/auth/signup/individual`);
-                
-                const response = await fetch(`${API_BASE}/auth/signup/individual`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                console.log('📬 Response:', response.status);
-                const data = await response.json();
-                console.log('📦 Data:', data);
-                
-                if (!response.ok) {
-                    showAlert(data.detail || 'Signup failed. Please try again.');
-                    btn.disabled = false;
-                    btn.textContent = 'Create Account';
-                    return;
-                }
-                
-                // ✅ SUCCESS - Save tokens
-                if (data.access_token && data.refresh_token && data.user) {
-                    localStorage.setItem('access_token', data.access_token);
-                    localStorage.setItem('refresh_token', data.refresh_token);
-                    localStorage.setItem('user_email', data.user.email);
-                    
-                    console.log('✅ Tokens saved, redirecting...');
-                    
-                    showAlert('✅ Account created! Redirecting to verification...', 'success');
-                    
-                    setTimeout(() => {
-                        location.href = '/verify-email.html';
-                    }, 2000);
-                } else {
-                    showAlert('Invalid response from server');
-                    btn.disabled = false;
-                    btn.textContent = 'Create Account';
-                }
-                
-            } catch (error) {
-                console.error('❌ Signup error:', error);
-                showAlert(`Network error: ${error.message}`);
-                btn.disabled = false;
-                btn.textContent = 'Create Account';
-            }
-        }
-        
-        async function handleBusinessSignup(event) {
-            event.preventDefault();
-            
-            // Validate form
-            if (!validateBusinessForm()) {
-                return;
-            }
-            
-            const btn = document.getElementById('bizSubmitBtn');
-            btn.disabled = true;
-            btn.textContent = 'Creating account...';
-            
-            try {
-                const API_BASE = window.WandaAuth?.API_BASE;
-                
-                if (!API_BASE) {
-                    showAlert('❌ API configuration error. Please refresh the page.');
-                    btn.disabled = false;
-                    btn.textContent = 'Create Business Account';
-                    return;
-                }
-                
-                const formData = {
-                    name: document.getElementById('bizName').value.trim(),
-                    email: document.getElementById('bizEmail').value.trim(),
-                    password: document.getElementById('bizPassword').value,
-                    password_confirm: document.getElementById('bizPasswordConfirm').value,
-                    phone: document.getElementById('bizPhone').value.trim(),
-                    business_name: document.getElementById('bizBusinessName').value.trim(),
-                    business_type: document.getElementById('bizBusinessType').value,
-                    business_email: document.getElementById('bizBusinessEmail').value.trim(),
-                    business_registration: document.getElementById('bizRegistration').value.trim(),
-                    country: document.getElementById('bizCountry').value.trim()
-                };
-                
-                console.log('📤 Sending business signup request...');
-                
-                const response = await fetch(`${API_BASE}/auth/signup/business`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                console.log('📬 Response:', response.status);
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    showAlert(data.detail || 'Signup failed. Please try again.');
-                    btn.disabled = false;
-                    btn.textContent = 'Create Business Account';
-                    return;
-                }
-                
-                // ✅ SUCCESS - Save tokens
-                if (data.access_token && data.refresh_token && data.user) {
-                    localStorage.setItem('access_token', data.access_token);
-                    localStorage.setItem('refresh_token', data.refresh_token);
-                    localStorage.setItem('user_email', data.user.email);
-                    
-                    showAlert('✅ Business account created! Redirecting to verification...', 'success');
-                    
-                    setTimeout(() => {
-                        location.href = '/verify-email.html';
-                    }, 2000);
-                } else {
-                    showAlert('Invalid response from server');
-                    btn.disabled = false;
-                    btn.textContent = 'Create Business Account';
-                }
-                
-            } catch (error) {
-                console.error('❌ Business signup error:', error);
-                showAlert(`Network error: ${error.message}`);
-                btn.disabled = false;
-                btn.textContent = 'Create Business Account';
-            }
-        }
-        
-        async function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showAlert('Please fill in all fields');
-                return;
-            }
-            
-            const btn = document.getElementById('loginSubmitBtn');
-            btn.disabled = true;
-            btn.textContent = 'Signing in...';
-            
-            try {
-                const API_BASE = window.WandaAuth?.API_BASE;
-                
-                if (!API_BASE) {
-                    showAlert('❌ API configuration error. Please refresh the page.');
-                    btn.disabled = false;
-                    btn.textContent = 'Sign In';
-                    return;
-                }
-                
-                const response = await fetch(`${API_BASE}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    showAlert(data.detail || 'Invalid email or password');
-                    btn.disabled = false;
-                    btn.textContent = 'Sign In';
-                    return;
-                }
-                
-                // Check if MFA is required
-                if (data.mfa_required) {
-                    sessionStorage.setItem('mfa_email', email);
-                    showAlert('MFA verification required. Check your email.', 'success');
-                    return;
-                }
-                
-                // ✅ SUCCESS - Save tokens
-                if (data.access_token && data.refresh_token && data.user) {
-                    localStorage.setItem('access_token', data.access_token);
-                    localStorage.setItem('refresh_token', data.refresh_token);
-                    localStorage.setItem('user_email', data.user.email);
-                    
-                    showAlert('✅ Login successful! Redirecting to dashboard...', 'success');
-                    
-                    setTimeout(() => {
-                        // Refresh nav and redirect
-                        if (window.WandaAuth) {
-                            window.WandaAuth.renderNavigation();
-                        }
-                        location.href = '/tools.html';
-                    }, 1500);
-                } else {
-                    showAlert('Invalid response from server');
-                    btn.disabled = false;
-                    btn.textContent = 'Sign In';
-                }
-                
-            } catch (error) {
-                console.error('❌ Login error:', error);
-                showAlert(`Network error: ${error.message}`);
-                btn.disabled = false;
-                btn.textContent = 'Sign In';
-            }
-        }
-    </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Redirect logged-in users away from signup page
+    protectFromAuth();
+  });
+
+  // ── Form tab switching ──────────────────────────────────
+  function switchForm(formName) {
+    document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
+    const sel = document.getElementById(formName);
+    if (sel) sel.classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    document.querySelector('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Password strength ────────────────────────────────────
+  function checkPasswordStrength(fieldId) {
+    const pwd = document.getElementById(fieldId)?.value || '';
+    if (pwd) updateStrengthUI(fieldId, pwd);
+  }
+
+  // ── Validation ───────────────────────────────────────────
+  function validateIndividualForm() {
+    const name     = document.getElementById('indName').value.trim();
+    const email    = document.getElementById('indEmail').value.trim();
+    const password = document.getElementById('indPassword').value;
+    const confirm  = document.getElementById('indPasswordConfirm').value;
+    const emailRe  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (name.length < 2)        { showAlert('Name must be at least 2 characters'); return false; }
+    if (!emailRe.test(email))   { showAlert('Please enter a valid email address'); return false; }
+    if (password.length < 8)    { showAlert('Password must be at least 8 characters'); return false; }
+    if (password !== confirm)   { showAlert('Passwords do not match'); return false; }
+    const strength = checkPasswordStrength('indPassword');
+    return true;
+  }
+
+  function validateBusinessForm() {
+    const name         = document.getElementById('bizName').value.trim();
+    const email        = document.getElementById('bizEmail').value.trim();
+    const businessName = document.getElementById('bizBusinessName').value.trim();
+    const businessType = document.getElementById('bizBusinessType').value;
+    const password     = document.getElementById('bizPassword').value;
+    const confirm      = document.getElementById('bizPasswordConfirm').value;
+    const emailRe      = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (name.length < 2)             { showAlert('Name must be at least 2 characters'); return false; }
+    if (!emailRe.test(email))        { showAlert('Please enter a valid email'); return false; }
+    if (businessName.length < 2)     { showAlert('Business name must be at least 2 characters'); return false; }
+    if (!businessType)               { showAlert('Please select a business type'); return false; }
+    if (password.length < 8)         { showAlert('Password must be at least 8 characters'); return false; }
+    if (password !== confirm)        { showAlert('Passwords do not match'); return false; }
+    return true;
+  }
+
+  // ── Individual signup ─────────────────────────────────────
+  async function handleIndividualSignup(event) {
+    event.preventDefault();
+    if (!validateIndividualForm()) return;
+
+    const btn = document.getElementById('indSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    try {
+      const data = await apiCall('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name:     document.getElementById('indName').value.trim(),
+          email:    document.getElementById('indEmail').value.trim(),
+          password: document.getElementById('indPassword').value,
+          timezone: 'Africa/Johannesburg',
+          currency: 'E',
+        }),
+      });
+
+      WandaAuth.auth.login(data);
+      showAlert('✅ Account created! Redirecting to dashboard...', 'success');
+      setTimeout(() => { location.href = '/tools.html'; }, 1500);
+
+    } catch (error) {
+      showAlert(error.message);
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+  }
+
+  // ── Business signup ───────────────────────────────────────
+  async function handleBusinessSignup(event) {
+    event.preventDefault();
+    if (!validateBusinessForm()) return;
+
+    const btn = document.getElementById('bizSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    try {
+      const data = await apiCall('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name:          document.getElementById('bizName').value.trim(),
+          email:         document.getElementById('bizEmail').value.trim(),
+          password:      document.getElementById('bizPassword').value,
+          business_type: document.getElementById('bizBusinessType').value,
+          timezone:      'Africa/Johannesburg',
+          currency:      'E',
+        }),
+      });
+
+      WandaAuth.auth.login(data);
+      showAlert('✅ Business account created! Redirecting...', 'success');
+      setTimeout(() => { location.href = '/tools.html'; }, 1500);
+
+    } catch (error) {
+      showAlert(error.message);
+      btn.disabled = false;
+      btn.textContent = 'Create Business Account';
+    }
+  }
+
+  // ── Login ─────────────────────────────────────────────────
+  async function handleLogin(event) {
+    event.preventDefault();
+
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    if (!email || !password) { showAlert('Please fill in all fields'); return; }
+
+    const btn = document.getElementById('loginSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+
+    try {
+      const data = await apiCall('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+
+      WandaAuth.auth.login(data);
+      showAlert('✅ Login successful! Redirecting...', 'success');
+      setTimeout(() => { location.href = '/tools.html'; }, 1500);
+
+    } catch (error) {
+      showAlert(error.message);
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  }
+</script>
 </body>
 </html>

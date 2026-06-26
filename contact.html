@@ -475,7 +475,7 @@
     </div>
     <div class="footer-bottom">
       <span>© 2025 WandaTools. All rights reserved.</span>
-      <span>Made with <span style="color:#E53935;">♥</span> in South Africa</span>
+      <span>Made with <span style="color:#E53935;">♥</span> in Eswatini 🇸🇿</span>
       <div style="display:flex;gap:16px;"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
     </div>
   </div>
@@ -483,37 +483,37 @@
 
 <script src="nav.js"></script>
 <script>
- 
- async function handleContactSubmit(e) {
-  e.preventDefault();
-  const form = document.getElementById("contactForm");
-  
-  if (!validateForm(form)) return;
-  
-  const formData = new FormData(form);
-  
-  try {
-    const response = await fetch(`${API_BASE}/support/contact`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: formData.get("name"),
-        email: formData.get("email"),
-        phone: formData.get("phone"),
-        subject: formData.get("subject"),
-        message: formData.get("message")
-      }),
-    });
-    
-    if (!response.ok) throw new Error("Failed to submit");
-    
-    form.style.display = "none";
-    document.getElementById("successMessage").style.display = "block";
-    showToast("Message sent successfully!");
-  } catch (error) {
-    showToast(error.message, "error");
+  async function handleContactSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('contactForm');
+    if (typeof validateForm === 'function' && !validateForm(form)) return;
+
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+    const formData = new FormData(form);
+
+    try {
+      await apiCall('/support/contact', {
+        method: 'POST',
+        body: JSON.stringify({
+          name:    formData.get('name'),
+          email:   formData.get('email'),
+          subject: formData.get('subject') || 'WandaTools Contact Form',
+          message: formData.get('message'),
+        }),
+      });
+
+      form.style.display = 'none';
+      const success = document.getElementById('successMessage');
+      if (success) success.style.display = 'block';
+      showToast('Message sent successfully!');
+
+    } catch (error) {
+      showToast(error.message, 'error');
+      if (btn) { btn.disabled = false; btn.textContent = 'Send Message'; }
+    }
   }
-}
 </script>
 </body>
 </html>
