@@ -296,111 +296,239 @@
 </head>
 <body>
 
-<script src="nav.js"></script>
-<script>
-  protectPage();
+  <!-- ══ NAVBAR — populated by nav.js ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+      <ul class="nav-links" role="list"></ul>
+      <div id="navAuth"></div>
+    </div>
+  </nav>
 
-  let currentMode = 'insights';
-  const chatMessages = document.getElementById('chatMessages');
-  const chatInput    = document.getElementById('chatInput');
-  const sendBtn      = document.getElementById('sendBtn');
+  <!-- ══ AI LAYOUT ══ -->
+  <div class="ai-layout" style="margin-top:68px;">
 
-  const welcomeMsg = `Hello${WandaAuth.isLoggedIn() ? ', ' + WandaAuth.getName().split(' ')[0] : ''}! 👋 I'm **WandaAI**, your personal financial assistant.\n\nI can help you understand your cash flow, find areas to save, plan for growth, and prepare for funding applications.\n\nWhat would you like to explore today?`;
+    <!-- Sidebar -->
+    <aside class="ai-sidebar">
+      <div class="ai-sidebar-title">AI Mode</div>
 
-  function addMessage(role, text, insightCard = null) {
-    const now  = new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
-    const div  = document.createElement('div');
-    div.className = `msg ${role}`;
-    const icon      = role === 'ai' ? 'smart_toy' : 'person';
-    const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-    const insightHTML = insightCard
-      ? `<div class="insight-card"><strong>${insightCard.title}</strong>${insightCard.body}</div>` : '';
-    div.innerHTML = `
-      <div class="msg-avatar"><i class="material-icons">${icon}</i></div>
-      <div>
-        <div class="msg-bubble">${formatted}${insightHTML}</div>
-        <div class="msg-time">${now}</div>
-      </div>`;
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return div;
-  }
+      <button class="ai-mode-btn active" onclick="setMode('insights', this)">
+        <i class="material-icons">insights</i>
+        <div>
+          <div class="mode-name">Financial Insights</div>
+          <div class="mode-desc">Analyse your income, expenses &amp; trends</div>
+        </div>
+      </button>
 
-  function showTyping() {
-    const div = document.createElement('div');
-    div.className = 'msg ai typing-indicator';
-    div.id = 'typingIndicator';
-    div.innerHTML = `<div class="msg-avatar"><i class="material-icons">smart_toy</i></div>
-      <div class="msg-bubble" style="padding:0;"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+      <button class="ai-mode-btn" onclick="setMode('recommendations', this)">
+        <i class="material-icons">lightbulb</i>
+        <div>
+          <div class="mode-name">Smart Recommendations</div>
+          <div class="mode-desc">Get personalised advice to save &amp; grow</div>
+        </div>
+      </button>
 
-  function hideTyping() {
-    const t = document.getElementById('typingIndicator');
-    if (t) t.remove();
-  }
+      <button class="ai-mode-btn" onclick="setMode('business', this)">
+        <i class="material-icons">business_center</i>
+        <div>
+          <div class="mode-name">Business Assistant</div>
+          <div class="mode-desc">Funding prep, cash-flow planning &amp; more</div>
+        </div>
+      </button>
 
-  async function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
+      <div class="ai-sidebar-divider"></div>
+      <div class="ai-sidebar-title">Quick Prompts</div>
 
-    chatInput.value = '';
-    autoResize(chatInput);
-    sendBtn.disabled = true;
-    addMessage('user', text);
-    showTyping();
+      <div class="prompt-library">
+        <button class="prompt-chip" onclick="sendPrompt('Summarise my income and expenses this month')">
+          Summarise my income &amp; expenses
+        </button>
+        <button class="prompt-chip" onclick="sendPrompt('Where can I cut costs in my business?')">
+          Where can I cut costs?
+        </button>
+        <button class="prompt-chip" onclick="sendPrompt('How do I prepare for a business loan application?')">
+          Prepare for a loan application
+        </button>
+        <button class="prompt-chip" onclick="sendPrompt('What is my biggest expense category?')">
+          Biggest expense category?
+        </button>
+        <button class="prompt-chip" onclick="sendPrompt('Give me a cash-flow forecast for next month')">
+          Cash-flow forecast
+        </button>
+      </div>
+    </aside>
 
-    try {
-      const response = await apiCall('/wandaai/query', {
-        method: 'POST',
-        body: JSON.stringify({ question: text, mode: currentMode }),
-      });
+    <!-- Chat area -->
+    <div class="chat-area">
 
-      hideTyping();
-      addMessage('ai', response.response);
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="ai-avatar"><i class="material-icons">smart_toy</i></div>
+        <div class="chat-header-info">
+          <h3>WandaAI</h3>
+          <span><span class="online-dot"></span> Online — ready to help</span>
+        </div>
+        <div class="chat-header-actions">
+          <button class="icon-btn" onclick="clearChat()" title="Clear chat">
+            <i class="material-icons">refresh</i>
+          </button>
+        </div>
+      </div>
 
-      if (response.recommendations && response.recommendations.length > 0) {
-        showToast('💡 ' + response.recommendations[0], 'info');
-      }
-    } catch (error) {
-      hideTyping();
-      addMessage('ai', 'Sorry, I encountered an error. Please try again.');
-      console.error('WandaAI error:', error);
-    } finally {
-      sendBtn.disabled = false;
-      chatInput.focus();
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages"></div>
+
+      <!-- Input -->
+      <div class="chat-input-wrap">
+        <div class="chat-input-inner">
+          <textarea id="chatInput" rows="1" placeholder="Ask WandaAI anything about your finances…"
+                    oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+          <button id="sendBtn" class="send-btn" onclick="sendMessage()" title="Send">
+            <i class="material-icons">send</i>
+          </button>
+        </div>
+        <p class="input-hint">Press Enter to send · Shift+Enter for a new line</p>
+      </div>
+
+      <!-- Capabilities bar -->
+      <div class="capabilities-banner">
+        <div class="cap-item"><i class="material-icons">analytics</i> Transaction analysis</div>
+        <div class="cap-item"><i class="material-icons">trending_up</i> Growth insights</div>
+        <div class="cap-item"><i class="material-icons">security</i> Secure &amp; private</div>
+      </div>
+
+    </div><!-- /.chat-area -->
+  </div><!-- /.ai-layout -->
+
+  <!-- nav.js after DOM so renderNavigation() finds .nav-links and #navAuth -->
+  <script src="nav.js"></script>
+  <script>
+    // Module-level state — assigned inside DOMContentLoaded once elements exist
+    let currentMode  = 'insights';
+    let chatMessages = null;
+    let chatInput    = null;
+    let sendBtn      = null;
+
+    const welcomeMsg = `Hello! 👋 I'm **WandaAI**, your personal financial assistant.\n\nI can help you understand your cash flow, find areas to save, plan for growth, and prepare for funding applications.\n\nWhat would you like to explore today?`;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      protectPage();
+
+      chatMessages = document.getElementById('chatMessages');
+      chatInput    = document.getElementById('chatInput');
+      sendBtn      = document.getElementById('sendBtn');
+
+      const name = WandaAuth.isLoggedIn() ? WandaAuth.getName().split(' ')[0] : '';
+      const greeting = name
+        ? welcomeMsg.replace('Hello!', `Hello, ${name}!`)
+        : welcomeMsg;
+
+      addMessage('ai', greeting);
+    });
+
+    function addMessage(role, text, insightCard = null) {
+      if (!chatMessages) return null;
+
+      const now       = new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+      const div       = document.createElement('div');
+      div.className   = `msg ${role}`;
+      const icon      = role === 'ai' ? 'smart_toy' : 'person';
+      const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+      const insightHTML = insightCard
+        ? `<div class="insight-card"><strong>${insightCard.title}</strong>${insightCard.body}</div>` : '';
+      div.innerHTML = `
+        <div class="msg-avatar"><i class="material-icons">${icon}</i></div>
+        <div>
+          <div class="msg-bubble">${formatted}${insightHTML}</div>
+          <div class="msg-time">${now}</div>
+        </div>`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return div;
     }
-  }
 
-  function sendPrompt(text) {
-    chatInput.value = text;
-    sendMessage();
-  }
+    function showTyping() {
+      if (!chatMessages) return;
+      const div = document.createElement('div');
+      div.className = 'msg ai typing-indicator';
+      div.id = 'typingIndicator';
+      div.innerHTML = `
+        <div class="msg-avatar"><i class="material-icons">smart_toy</i></div>
+        <div class="msg-bubble" style="padding:0;">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+        </div>`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  }
+    function hideTyping() {
+      const t = document.getElementById('typingIndicator');
+      if (t) t.remove();
+    }
 
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-  }
+    async function sendMessage() {
+      if (!chatInput || !sendBtn) return;
+      const text = chatInput.value.trim();
+      if (!text) return;
 
-  function setMode(mode, btn) {
-    currentMode = mode;
-    document.querySelectorAll('.ai-mode-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const names = { insights: 'Financial Insights', recommendations: 'Smart Recommendations', business: 'Business Assistant' };
-    addMessage('ai', `Switched to **${names[mode]}** mode. How can I help you today?`);
-  }
+      chatInput.value = '';
+      autoResize(chatInput);
+      sendBtn.disabled = true;
+      addMessage('user', text);
+      showTyping();
 
-  function clearChat() {
-    chatMessages.innerHTML = '';
-    addMessage('ai', welcomeMsg);
-  }
+      try {
+        const response = await apiCall('/wandaai/query', {
+          method: 'POST',
+          body: JSON.stringify({ question: text, mode: currentMode }),
+        });
+        hideTyping();
+        addMessage('ai', response.response);
+        if (response.recommendations && response.recommendations.length > 0) {
+          showToast('💡 ' + response.recommendations[0], 'info');
+        }
+      } catch (error) {
+        hideTyping();
+        addMessage('ai', 'Sorry, I encountered an error. Please try again.');
+        console.error('WandaAI error:', error);
+      } finally {
+        sendBtn.disabled = false;
+        if (chatInput) chatInput.focus();
+      }
+    }
 
-  addMessage('ai', welcomeMsg);
-</script>
+    function sendPrompt(text) {
+      if (!chatInput) return;
+      chatInput.value = text;
+      sendMessage();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
+
+    function setMode(mode, btn) {
+      currentMode = mode;
+      document.querySelectorAll('.ai-mode-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const names = {
+        insights:        'Financial Insights',
+        recommendations: 'Smart Recommendations',
+        business:        'Business Assistant',
+      };
+      addMessage('ai', `Switched to **${names[mode] || mode}** mode. How can I help you today?`);
+    }
+
+    function clearChat() {
+      if (!chatMessages) return;
+      chatMessages.innerHTML = '';
+      addMessage('ai', welcomeMsg);
+    }
+  </script>
 </body>
 </html>
