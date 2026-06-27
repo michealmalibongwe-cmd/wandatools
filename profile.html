@@ -311,151 +311,310 @@
       .auth-form-wrap { max-width: 100%; }
       .social-login { grid-template-columns: 1fr; }
     }
+
+    .btn-danger {
+      background: #DC3545;
+      color: #fff;
+      border: none;
+    }
+    .btn-danger:hover { background: #C62828; transform: translateY(-2px); }
   </style>
 </head>
 <body>
 
+  <!-- ══ NAVBAR — populated by nav.js ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+      <ul class="nav-links" role="list"></ul>
+      <div id="navAuth"></div>
+    </div>
+  </nav>
+
+  <!-- Shown briefly while the auth check runs; protectPage() redirects if not logged in -->
+  <div id="authPage" style="min-height:80vh;display:flex;align-items:center;justify-content:center;margin-top:68px;">
+    <p style="color:var(--mid);font-size:1rem;">Checking your session…</p>
+  </div>
+
+  <!-- ══ PROFILE DASHBOARD (hidden until auth confirmed) ══ -->
+  <div id="profilePage" class="profile-layout" style="display:none;margin-top:68px;">
+
+    <!-- Sidebar -->
+    <aside class="profile-sidebar">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <h2 id="profileName">Loading…</h2>
+        <p id="profileEmail"></p>
+      </div>
+      <nav class="profile-menu">
+        <button class="profile-menu-item active" onclick="switchProfilePanel('overview', this)">
+          <i class="material-icons">person</i> Overview
+        </button>
+        <button class="profile-menu-item" onclick="switchProfilePanel('settings', this)">
+          <i class="material-icons">settings</i> Settings
+        </button>
+        <button class="profile-menu-item" onclick="switchProfilePanel('security', this)">
+          <i class="material-icons">lock</i> Security
+        </button>
+        <button class="profile-menu-item" onclick="handleLogout()" style="color:#EF5350;margin-top:16px;">
+          <i class="material-icons">logout</i> Sign Out
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main panels -->
+    <main class="profile-main">
+
+      <!-- Overview -->
+      <div id="panel-overview" class="profile-panel active">
+        <h2>Account Overview</h2>
+        <div class="profile-section">
+          <div class="profile-info-row">
+            <span class="profile-info-label">Full Name</span>
+            <span class="profile-info-value" id="ovName">—</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Email</span>
+            <span class="profile-info-value" id="ovEmail">—</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Member Since</span>
+            <span class="profile-info-value" id="ovMemberDate">—</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Transactions</span>
+            <span class="profile-info-value" id="ovTransactions">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="panel-settings" class="profile-panel">
+        <h2>Account Settings</h2>
+        <div class="profile-section">
+          <h3>Personal Information</h3>
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input id="settingName" type="text" class="form-control" placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input id="settingEmail" type="email" class="form-control" readonly />
+          </div>
+        </div>
+        <div class="profile-section">
+          <h3>Preferences</h3>
+          <div class="form-group">
+            <label class="form-label">Currency</label>
+            <select id="settingCurrency" class="form-control">
+              <option value="E">E — Swazi Lilangeni</option>
+              <option value="R">R — South African Rand</option>
+              <option value="$">$ — US Dollar</option>
+              <option value="£">£ — British Pound</option>
+              <option value="€">€ — Euro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Timezone</label>
+            <select id="settingTimezone" class="form-control">
+              <option value="Africa/Mbabane">Africa/Mbabane (Swaziland)</option>
+              <option value="Africa/Johannesburg">Africa/Johannesburg</option>
+              <option value="UTC">UTC</option>
+              <option value="America/New_York">America/New_York</option>
+              <option value="Europe/London">Europe/London</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+      </div>
+
+      <!-- Security -->
+      <div id="panel-security" class="profile-panel">
+        <h2>Security</h2>
+        <div class="profile-section">
+          <h3>Change Password</h3>
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input id="currentPassword" type="password" class="form-control" placeholder="Enter current password" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input id="newPassword" type="password" class="form-control" placeholder="Enter new password"
+                   oninput="checkPwdStrength('newPassword')" />
+            <div class="password-strength"><div class="strength-bar" id="newStrengthBar"></div></div>
+            <div id="newStrengthText" style="font-size:11px;margin-top:4px;"></div>
+            <div id="newFeedback" style="font-size:11px;color:#888;margin-top:2px;"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input id="confirmPassword" type="password" class="form-control" placeholder="Repeat new password" />
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+        </div>
+
+        <div class="danger-zone">
+          <h4>Danger Zone</h4>
+          <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+          <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- nav.js loaded after DOM so renderNavigation() finds .nav-links and #navAuth -->
   <script src="nav.js"></script>
-<script>
-  window.addEventListener('load', initProfilePage);
+  <script>
+    document.addEventListener('DOMContentLoaded', initProfilePage);
 
-  async function initProfilePage() {
-    if (!WandaAuth.isLoggedIn()) {
-      protectPage();
-      return;
+    async function initProfilePage() {
+      const authPage    = document.getElementById('authPage');
+      const profilePage = document.getElementById('profilePage');
+
+      if (!WandaAuth.isLoggedIn()) {
+        protectPage();
+        return;
+      }
+
+      if (authPage)    authPage.style.display    = 'none';
+      if (profilePage) profilePage.style.display = 'grid';
+      await loadProfile();
     }
-    document.getElementById('authPage').style.display    = 'none';
-    document.getElementById('profilePage').style.display = 'block';
-    await loadProfile();
-  }
 
-  async function loadProfile() {
-    try {
-      const user = await apiCall('/auth/me');
+    async function loadProfile() {
+      try {
+        const user = await apiCall('/auth/me');
 
-      // Display name and email
-      const name  = user.name  || WandaAuth.getName();
-      const email = user.email || WandaAuth.getEmail();
+        const name  = user.name  || WandaAuth.getName();
+        const email = user.email || WandaAuth.getEmail();
 
-      document.getElementById('profileName').textContent  = name;
-      document.getElementById('profileEmail').textContent = email;
-      document.getElementById('ovName').textContent       = name;
-      document.getElementById('ovEmail').textContent      = email;
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileName   = document.getElementById('profileName');
+        const profileEmail  = document.getElementById('profileEmail');
+        const ovName        = document.getElementById('ovName');
+        const ovEmail       = document.getElementById('ovEmail');
 
-      if (document.getElementById('settingName'))
-        document.getElementById('settingName').value = name;
-      if (document.getElementById('settingEmail'))
-        document.getElementById('settingEmail').value = email;
+        if (profileAvatar) profileAvatar.textContent = name.charAt(0).toUpperCase();
+        if (profileName)   profileName.textContent   = name;
+        if (profileEmail)  profileEmail.textContent  = email;
+        if (ovName)        ovName.textContent        = name;
+        if (ovEmail)       ovEmail.textContent       = email;
 
-      document.getElementById('ovMemberDate').textContent =
-        new Date(user.created_at || Date.now()).toLocaleDateString('en-ZA', {
-          year: 'numeric', month: 'long', day: 'numeric'
+        const settingName  = document.getElementById('settingName');
+        const settingEmail = document.getElementById('settingEmail');
+        if (settingName)  settingName.value  = name;
+        if (settingEmail) settingEmail.value = email;
+
+        const ovMemberDate = document.getElementById('ovMemberDate');
+        if (ovMemberDate)
+          ovMemberDate.textContent = new Date(user.created_at || Date.now()).toLocaleDateString('en-ZA', {
+            year: 'numeric', month: 'long', day: 'numeric'
+          });
+
+        try {
+          const stats = await apiCall('/users/me/stats');
+          const ovTransactions = document.getElementById('ovTransactions');
+          if (ovTransactions)
+            ovTransactions.textContent = stats.transaction_count || '0';
+        } catch {
+          // stats endpoint may not be available yet
+        }
+
+      } catch (error) {
+        showToast('Failed to load profile: ' + error.message, 'error');
+      }
+    }
+
+    function switchProfilePanel(panel, btn) {
+      document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.profile-menu-item').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById('panel-' + panel);
+      if (target) target.classList.add('active');
+      if (btn)    btn.classList.add('active');
+    }
+
+    async function saveSettings() {
+      const name     = document.getElementById('settingName')?.value.trim();
+      const timezone = document.getElementById('settingTimezone')?.value;
+      const currency = document.getElementById('settingCurrency')?.value;
+
+      if (!name) { showToast('Name cannot be empty', 'error'); return; }
+
+      try {
+        const updated = await apiCall('/users/me', {
+          method: 'PUT',
+          body: JSON.stringify({
+            name:     name     || undefined,
+            timezone: timezone || undefined,
+            currency: currency || undefined,
+          }),
         });
 
-      // Load transaction count
-      const stats = await apiCall('/users/me/stats');
-      if (document.getElementById('ovTransactions'))
-        document.getElementById('ovTransactions').textContent = stats.transaction_count || '0';
+        localStorage.setItem('user_name',     updated.name);
+        localStorage.setItem('user_currency', updated.currency);
 
-    } catch (error) {
-      showToast('Failed to load profile: ' + error.message, 'error');
-    }
-  }
+        const profileName  = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        if (profileName)  profileName.textContent  = updated.name;
+        if (profileEmail) profileEmail.textContent = updated.email;
+        showToast('Settings saved successfully!');
 
-  /* ── Profile panels ── */
-  function switchProfilePanel(panel, btn) {
-    document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.profile-menu-item').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + panel).classList.add('active');
-    btn.classList.add('active');
-  }
-
-  /* ── Save settings ── */
-  async function saveSettings() {
-    const name     = document.getElementById('settingName')?.value.trim();
-    const timezone = document.getElementById('settingTimezone')?.value;
-    const currency = document.getElementById('settingCurrency')?.value;
-
-    if (!name) { showToast('Name cannot be empty', 'error'); return; }
-
-    try {
-      const updated = await apiCall('/users/me', {
-        method: 'PUT',
-        body: JSON.stringify({
-          name:     name     || undefined,
-          timezone: timezone || undefined,
-          currency: currency || undefined,
-        }),
-      });
-
-      // Update localStorage so nav reflects changes immediately
-      localStorage.setItem('user_name',     updated.name);
-      localStorage.setItem('user_currency', updated.currency);
-
-      document.getElementById('profileName').textContent  = updated.name;
-      document.getElementById('profileEmail').textContent = updated.email;
-      showToast('Settings saved successfully!');
-
-    } catch (error) {
-      showToast(error.message, 'error');
-    }
-  }
-
-  /* ── Change password ── */
-  async function changePassword() {
-    const current   = document.getElementById('currentPassword')?.value;
-    const newPwd    = document.getElementById('newPassword')?.value;
-    const confirmPw = document.getElementById('confirmPassword')?.value;
-
-    if (!current || !newPwd) { showToast('Please fill in all fields', 'error'); return; }
-    if (newPwd !== confirmPw) { showToast('Passwords do not match', 'error'); return; }
-
-    const strength = checkPasswordStrength(newPwd);
-    if (!strength.is_strong) {
-      showToast('Password is too weak: ' + strength.feedback[0], 'error');
-      return;
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
     }
 
-    try {
-      await apiCall('/auth/change-password', {
-        method: 'POST',
-        body: JSON.stringify({ current_password: current, new_password: newPwd }),
-      });
-      showToast('Password changed successfully! Please sign in again on other devices.');
-      if (document.getElementById('currentPassword')) document.getElementById('currentPassword').value = '';
-      if (document.getElementById('newPassword'))     document.getElementById('newPassword').value = '';
-      if (document.getElementById('confirmPassword')) document.getElementById('confirmPassword').value = '';
-    } catch (error) {
-      showToast(error.message, 'error');
-    }
-  }
+    async function changePassword() {
+      const current   = document.getElementById('currentPassword')?.value;
+      const newPwd    = document.getElementById('newPassword')?.value;
+      const confirmPw = document.getElementById('confirmPassword')?.value;
 
-  /* ── Logout ── */
-  function handleLogout() {
-    if (confirm('Are you sure you want to sign out?')) {
-      WandaAuth.handleLogout();
-    }
-  }
+      if (!current || !newPwd) { showToast('Please fill in all fields', 'error'); return; }
+      if (newPwd !== confirmPw) { showToast('Passwords do not match', 'error'); return; }
 
-  /* ── Delete account ── */
-  async function deleteAccount() {
-    if (!confirm('This will permanently delete your account and ALL data. This cannot be undone. Continue?')) return;
-    if (!confirm('Are you absolutely sure?')) return;
-    try {
-      await apiCall('/users/me', { method: 'DELETE' });
-      WandaAuth.auth.logout();
-      showToast('Account deleted. Redirecting...', 'success');
-      setTimeout(() => { location.href = '/'; }, 1500);
-    } catch (error) {
-      showToast(error.message, 'error');
-    }
-  }
+      const strength = checkPasswordStrength(newPwd);
+      if (!strength.is_strong) {
+        showToast('Password is too weak: ' + strength.feedback[0], 'error');
+        return;
+      }
 
-  /* ── Password strength ── */
-  function checkPwdStrength(fieldId) {
-    const pwd = document.getElementById(fieldId)?.value || '';
-    if (pwd) updateStrengthUI(fieldId, pwd);
-  }
-</script>
+      try {
+        await apiCall('/auth/change-password', {
+          method: 'POST',
+          body: JSON.stringify({ current_password: current, new_password: newPwd }),
+        });
+        showToast('Password changed successfully! Please sign in again on other devices.');
+        if (document.getElementById('currentPassword')) document.getElementById('currentPassword').value = '';
+        if (document.getElementById('newPassword'))     document.getElementById('newPassword').value = '';
+        if (document.getElementById('confirmPassword')) document.getElementById('confirmPassword').value = '';
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    function handleLogout() {
+      if (confirm('Are you sure you want to sign out?')) {
+        WandaAuth.handleLogout();
+      }
+    }
+
+    async function deleteAccount() {
+      if (!confirm('This will permanently delete your account and ALL data. This cannot be undone. Continue?')) return;
+      if (!confirm('Are you absolutely sure?')) return;
+      try {
+        await apiCall('/users/me', { method: 'DELETE' });
+        WandaAuth.auth.logout();
+        showToast('Account deleted. Redirecting...', 'success');
+        setTimeout(() => { location.href = '/'; }, 1500);
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    function checkPwdStrength(fieldId) {
+      const pwd = document.getElementById(fieldId)?.value || '';
+      if (pwd) updateStrengthUI(fieldId, pwd);
+    }
+  </script>
 </body>
 </html>
