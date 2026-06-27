@@ -1,514 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Features - WandaTools</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            color: #333333;
-            background: #FFFFFF;
-        }
-        
-        /* NAV */
-        nav {
-            background: #FFFFFF;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
-        
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: #333333;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .nav-links a:hover {
-            color: #007BFF;
-        }
-        
-        .nav-auth {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .btn-nav-signin {
-            color: #007BFF;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border: 1px solid #007BFF;
-            border-radius: 6px;
-            cursor: pointer;
-            background: transparent;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .btn-nav-signin:hover {
-            background: #007BFF;
-            color: white;
-        }
-        
-        .btn-nav-signup {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .btn-nav-signup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-        }
-        
-        .user-menu {
-            position: relative;
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        .dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 101;
-            border: 1px solid #E0E0E0;
-        }
-        
-        .dropdown.active {
-            display: block;
-        }
-        
-        .dropdown a, .dropdown button {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            color: #333333;
-            text-decoration: none;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s;
-            text-align: left;
-        }
-        
-        .dropdown a:hover, .dropdown button:hover {
-            background: #F5F5F5;
-            color: #007BFF;
-        }
-        
-        .dropdown-divider {
-            height: 1px;
-            background: #E0E0E0;
-            margin: 0;
-        }
-        
-        /* CONTENT */
-        .feature-section {
-            background: #FFFFFF;
-            padding: 80px 20px;
-            border-bottom: 1px solid #F5F5F5;
-        }
-        
-        .feature-section:nth-child(even) {
-            background: #F9F9F9;
-        }
-        
-        .feature-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-        
-        .feature-content.reverse {
-            direction: rtl;
-        }
-        
-        .feature-content.reverse > * {
-            direction: ltr;
-        }
-        
-        .feature-text h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: #333333;
-            margin-bottom: 20px;
-            line-height: 1.3;
-        }
-        
-        .feature-text p {
-            font-size: 14px;
-            color: #666666;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-        
-        .feature-list {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-        
-        .feature-list li {
-            font-size: 13px;
-            color: #333333;
-            margin-bottom: 12px;
-            padding-left: 30px;
-            position: relative;
-        }
-        
-        .feature-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #28A745;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .feature-image {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            border-radius: 12px;
-            padding: 40px;
-            text-align: center;
-            color: white;
-            font-size: 80px;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .cta-section {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            color: white;
-            padding: 100px 20px;
-            text-align: center;
-        }
-        
-        .cta-section h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            font-size: 16px;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .btn-cta {
-            display: inline-block;
-            background: white;
-            color: #007BFF;
-            padding: 12px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            font-size: 13px;
-        }
-        
-        .btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        footer {
-            background: #333333;
-            color: white;
-            padding: 40px 20px;
-            font-size: 12px;
-        }
-        
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-column h4 {
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
-        
-        .footer-column a {
-            color: #CCCCCC;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-        }
-        
-        .footer-column a:hover {
-            color: #007BFF;
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid #555555;
-            padding-top: 20px;
-            text-align: center;
-            color: #999999;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        @media (max-width: 768px) {
-            .feature-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .feature-content.reverse {
-                direction: ltr;
-            }
-            
-            .feature-text h2 {
-                font-size: 24px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features – WandaTools</title>
+  <meta name="description" content="Explore every feature WandaTools offers — from transaction tracking to AI-powered financial insights." />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* ── Feature alternating sections ── */
+    .feat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .feat-row.reverse { direction: rtl; }
+    .feat-row.reverse > * { direction: ltr; }
+
+    .feat-visual {
+      border-radius: var(--radius-lg);
+      background: var(--gradient);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-visual::before {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      border: 40px solid rgba(255,255,255,0.08);
+      top: -60px; right: -60px;
+    }
+    .feat-visual i {
+      font-size: 5rem;
+      color: rgba(255,255,255,0.9);
+      position: relative;
+      z-index: 1;
+    }
+
+    .feat-text .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .tag-blue   { background: #E3F2FD; color: var(--blue); }
+    .tag-green  { background: #E8F5E9; color: var(--green); }
+    .tag-purple { background: #F3E5F5; color: #7B1FA2; }
+    .tag-orange { background: #FFF3E0; color: #E65100; }
+    .tag-teal   { background: #E0F2F1; color: #00695C; }
+    .tag-red    { background: #FFEBEE; color: var(--red); }
+
+    .feat-text h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 16px; }
+    .feat-text p  { color: var(--mid); font-size: 0.975rem; line-height: 1.75; margin-bottom: 20px; }
+
+    .feat-checklist { list-style: none; margin-bottom: 28px; }
+    .feat-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+    .feat-checklist li i { color: var(--green); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Hero banner ── */
+    .features-hero {
+      background: var(--gradient);
+      padding: 100px 24px 80px;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .features-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255,255,255,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .features-hero .section-label {
+      -webkit-text-fill-color: rgba(255,255,255,0.75);
+      background: none;
+      margin-bottom: 16px;
+    }
+    .features-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 16px; }
+    .features-hero p  { font-size: 1.1rem; opacity: 0.88; max-width: 520px; margin: 0 auto 36px; }
+
+    /* ── Capability pills ── */
+    .capability-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 48px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(4px);
+    }
+    .pill i { font-size: 1rem; }
+
+    @media (max-width: 768px) {
+      .feat-row { grid-template-columns: 1fr; gap: 36px; }
+      .feat-row.reverse { direction: ltr; }
+      .feat-visual { min-height: 220px; }
+      .features-hero { padding: 80px 20px 60px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="nav-container">
-            <a href="/" class="logo">WandaTools</a>
-            <ul class="nav-links"></ul>
-            <div id="navAuth"></div>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
+</nav>
+
+<div class="page-content">
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="features-hero">
+  <div>
+    <span class="section-label">Everything you need</span>
+    <h1>Powerful features for smarter finances</h1>
+    <p>Six integrated modules designed to give every Swazi business total financial clarity — from daily transactions to AI-powered growth advice.</p>
+    <a href="signup.html" class="btn btn-ghost">
+      <i class="material-icons">rocket_launch</i> Try all features free
+    </a>
+    <div class="capability-pills">
+      <span class="pill"><i class="material-icons">swap_horiz</i> Transactions</span>
+      <span class="pill"><i class="material-icons">description</i> Documents</span>
+      <span class="pill"><i class="material-icons">smart_toy</i> WandaAI</span>
+      <span class="pill"><i class="material-icons">bar_chart</i> Dashboard</span>
+      <span class="pill"><i class="material-icons">settings</i> Smart Tools</span>
+      <span class="pill"><i class="material-icons">groups</i> Community</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURE 1: TRANSACTIONS ══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="feat-row">
+      <div class="feat-text fade-up">
+        <span class="tag tag-blue">Core Feature</span>
+        <h2>Transaction Management</h2>
+        <p>Take complete control of your financial data. Track, categorise, and analyse every income and expense — all in Emalangeni, in real time.</p>
+        <ul class="feat-checklist">
+          <li><i class="material-icons">check_circle</i> Automatic income &amp; expense categorisation</li>
+          <li><i class="material-icons">check_circle</i> Profit and loss calculated instantly</li>
+          <li><i class="material-icons">check_circle</i> Custom categories for your business type</li>
+          <li><i class="material-icons">check_circle</i> Powerful search, filter, and date range views</li>
+          <li><i class="material-icons">check_circle</i> Multi-currency support (E, ZAR, USD, GBP, EUR)</li>
+        </ul>
+        <a href="tools.html" class="btn btn-primary"><i class="material-icons">swap_horiz</i> Open Transactions</a>
+      </div>
+      <div class="feat-visual fade-up">
+        <i class="material-icons">swap_horiz</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURE 2: DOCUMENTS ══════════════════ -->
+<section class="section section-grey">
+  <div class="container">
+    <div class="feat-row reverse">
+      <div class="feat-text fade-up">
+        <span class="tag tag-purple">Reports</span>
+        <h2>Export-Ready Documents</h2>
+        <p>Generate professional financial documents in seconds. Create audit reports, loan applications, and compliance packages with a single click.</p>
+        <ul class="feat-checklist">
+          <li><i class="material-icons">check_circle</i> Professional PDF audit reports</li>
+          <li><i class="material-icons">check_circle</i> Loan application packages — bank-ready</li>
+          <li><i class="material-icons">check_circle</i> CSV export for accounting integrations</li>
+          <li><i class="material-icons">check_circle</i> Tax-ready annual summaries</li>
+          <li><i class="material-icons">check_circle</i> POPIA-compliant data handling</li>
+        </ul>
+        <a href="tools.html" class="btn btn-primary"><i class="material-icons">description</i> Generate Reports</a>
+      </div>
+      <div class="feat-visual fade-up">
+        <i class="material-icons">description</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURE 3: WANDAAI ══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="feat-row">
+      <div class="feat-text fade-up">
+        <span class="tag tag-green">AI-Powered</span>
+        <h2>WandaAI — Your Financial Assistant</h2>
+        <p>Ask anything about your finances and get clear, actionable advice instantly. WandaAI reads your data and turns it into decisions — no jargon.</p>
+        <ul class="feat-checklist">
+          <li><i class="material-icons">check_circle</i> AI-powered cash-flow analysis</li>
+          <li><i class="material-icons">check_circle</i> Predictive forecasting for next month</li>
+          <li><i class="material-icons">check_circle</i> Personalised saving recommendations</li>
+          <li><i class="material-icons">check_circle</i> Business loan readiness assessment</li>
+          <li><i class="material-icons">check_circle</i> Plain-language answers to complex questions</li>
+        </ul>
+        <a href="wandaAI.html" class="btn btn-primary"><i class="material-icons">smart_toy</i> Chat with WandaAI</a>
+      </div>
+      <div class="feat-visual fade-up">
+        <i class="material-icons">smart_toy</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURE 4: DASHBOARD ══════════════════ -->
+<section class="section section-grey">
+  <div class="container">
+    <div class="feat-row reverse">
+      <div class="feat-text fade-up">
+        <span class="tag tag-orange">Insights</span>
+        <h2>Dashboard Summaries</h2>
+        <p>Visualise your financial health at a glance. Real-time dashboards show your cash flow, balances, and performance trends beautifully.</p>
+        <ul class="feat-checklist">
+          <li><i class="material-icons">check_circle</i> Real-time KPI dashboard</li>
+          <li><i class="material-icons">check_circle</i> Income vs expense charts</li>
+          <li><i class="material-icons">check_circle</i> Category breakdown visualisation</li>
+          <li><i class="material-icons">check_circle</i> Monthly and annual trend comparisons</li>
+          <li><i class="material-icons">check_circle</i> Net profit summary card</li>
+        </ul>
+        <a href="tools.html" class="btn btn-primary"><i class="material-icons">bar_chart</i> View Dashboard</a>
+      </div>
+      <div class="feat-visual fade-up">
+        <i class="material-icons">bar_chart</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURE 5: SMART TOOLS ══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="feat-row">
+      <div class="feat-text fade-up">
+        <span class="tag tag-teal">Automation</span>
+        <h2>Smart Tools</h2>
+        <p>Automate your financial workflows. Budget planning, expense automation, and compliance tools designed to save you time and reduce errors.</p>
+        <ul class="feat-checklist">
+          <li><i class="material-icons">check_circle</i> Automated budget planning templates</li>
+          <li><i class="material-icons">check_circle</i> Recurring expense rules</li>
+          <li><i class="material-icons">check_circle</i> Compliance checklist builder</li>
+          <li><i class="material-icons">check_circle</i> Workflow templates for common tasks</li>
+          <li><i class="material-icons">check_circle</i> Integration-ready CSV &amp; API export</li>
+        </ul>
+        <a href="tools.html" class="btn btn-primary"><i class="material-icons">settings</i> Open Tools</a>
+      </div>
+      <div class="feat-visual fade-up">
+        <i class="material-icons">settings</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURE 6: COMMUNITY ══════════════════ -->
+<section class="section section-grey">
+  <div class="container">
+    <div class="feat-row reverse">
+      <div class="feat-text fade-up">
+        <span class="tag tag-red">Community</span>
+        <h2>Community Forum</h2>
+        <p>Connect with thousands of Swazi business owners. Share strategies, ask questions, and grow your network in a vibrant, expert-moderated forum.</p>
+        <ul class="feat-checklist">
+          <li><i class="material-icons">check_circle</i> Topic-based discussion boards</li>
+          <li><i class="material-icons">check_circle</i> Expert-moderated channels</li>
+          <li><i class="material-icons">check_circle</i> Success story sharing</li>
+          <li><i class="material-icons">check_circle</i> Networking with local business owners</li>
+          <li><i class="material-icons">check_circle</i> Curated resource library</li>
+        </ul>
+        <a href="community.html" class="btn btn-primary"><i class="material-icons">groups</i> Join Community</a>
+      </div>
+      <div class="feat-visual fade-up">
+        <i class="material-icons">groups</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CTA ══════════════════ -->
+<section class="cta-banner section">
+  <div class="container" style="text-align:center;">
+    <span class="section-label">Ready to start?</span>
+    <h2 class="section-title">Get every feature — free</h2>
+    <p style="color:var(--mid);max-width:480px;margin:0 auto 36px;">No credit card needed. Full access to all six modules from day one.</p>
+    <a href="signup.html" class="btn btn-primary btn-pulse">
+      <i class="material-icons">person_add</i> Create Your Free Account
+    </a>
+  </div>
+</section>
+
+</div><!-- /.page-content -->
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">WandaTools</div>
+        <p>AI-powered financial insights for businesses and individuals across Eswatini 🇸🇿.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon" aria-label="Facebook"><i class="material-icons">facebook</i></a>
+          <a href="#" class="social-icon" aria-label="Twitter/X"><i class="material-icons">tag</i></a>
+          <a href="#" class="social-icon" aria-label="LinkedIn"><i class="material-icons">work</i></a>
+          <a href="#" class="social-icon" aria-label="Instagram"><i class="material-icons">photo_camera</i></a>
         </div>
-    </nav>
-    
-    <!-- FEATURES -->
-    <section class="feature-section">
-        <div class="feature-content">
-            <div class="feature-text">
-                <h2>📊 Transactions Management</h2>
-                <p>Take complete control of your financial data. Automatically track, categorize, and analyze every income and expense with intelligent categorization powered by machine learning.</p>
-                <ul class="feature-list">
-                    <li>Automatic transaction categorization</li>
-                    <li>Real-time income and expense tracking</li>
-                    <li>Profit and loss calculations</li>
-                    <li>Custom category creation</li>
-                    <li>Search and filter capabilities</li>
-                </ul>
-            </div>
-            <div class="feature-image">💰</div>
-        </div>
-    </section>
-    
-    <section class="feature-section">
-        <div class="feature-content reverse">
-            <div class="feature-text">
-                <h2>📄 Export-Ready Documents</h2>
-                <p>Generate professional financial documents instantly. Create audit reports, loan applications, investment summaries, and compliance documents with a single click.</p>
-                <ul class="feature-list">
-                    <li>Professional audit reports (PDF)</li>
-                    <li>Loan application packages</li>
-                    <li>Investment dossiers</li>
-                    <li>Compliance documentation</li>
-                    <li>Tax-ready reports</li>
-                </ul>
-            </div>
-            <div class="feature-image">📋</div>
-        </div>
-    </section>
-    
-    <section class="feature-section">
-        <div class="feature-content">
-            <div class="feature-text">
-                <h2>🤖 WandaAI Insights</h2>
-                <p>Meet your AI financial advisor. Get intelligent analysis of your financial data with predictive insights, personalized recommendations, and strategic business advice powered by advanced AI.</p>
-                <ul class="feature-list">
-                    <li>AI-powered financial analysis</li>
-                    <li>Predictive cash flow forecasting</li>
-                    <li>Personalized recommendations</li>
-                    <li>Expense optimization suggestions</li>
-                    <li>Business strategy insights</li>
-                </ul>
-            </div>
-            <div class="feature-image">🤖</div>
-        </div>
-    </section>
-    
-    <section class="feature-section">
-        <div class="feature-content reverse">
-            <div class="feature-text">
-                <h2>📈 Dashboard Summaries</h2>
-                <p>Visualize your financial health at a glance. Real-time dashboards display your cash flow, account balances, performance trends, and key financial metrics in beautiful, interactive charts.</p>
-                <ul class="feature-list">
-                    <li>Real-time KPI dashboard</li>
-                    <li>Cash flow visualization</li>
-                    <li>Balance summaries by category</li>
-                    <li>Performance trends & analytics</li>
-                    <li>Customizable widgets</li>
-                </ul>
-            </div>
-            <div class="feature-image">📊</div>
-        </div>
-    </section>
-    
-    <section class="feature-section">
-        <div class="feature-content">
-            <div class="feature-text">
-                <h2>⚙️ Smart Tools</h2>
-                <p>Automate your financial workflows. Budget planning, expense automation, compliance checking, and workflow optimization tools designed to save you time and reduce errors.</p>
-                <ul class="feature-list">
-                    <li>Automated budget planning</li>
-                    <li>Expense automation rules</li>
-                    <li>Compliance checklist builder</li>
-                    <li>Workflow templates</li>
-                    <li>Integration capabilities</li>
-                </ul>
-            </div>
-            <div class="feature-image">⚙️</div>
-        </div>
-    </section>
-    
-    <section class="feature-section">
-        <div class="feature-content reverse">
-            <div class="feature-text">
-                <h2>👥 Community Forum</h2>
-                <p>Connect with thousands of South African business owners and individuals. Share financial strategies, ask questions, learn from peers, and grow your network in our vibrant community.</p>
-                <ul class="feature-list">
-                    <li>Discussion boards by topic</li>
-                    <li>Expert-moderated channels</li>
-                    <li>Success story sharing</li>
-                    <li>Networking opportunities</li>
-                    <li>Resource library</li>
-                </ul>
-            </div>
-            <div class="feature-image">👥</div>
-        </div>
-    </section>
-    
-    <!-- CTA -->
-    <section class="cta-section">
-        <h2>Ready to Transform Your Finances?</h2>
-        <p>Start your free trial today. No credit card required. Get full access to all features for 30 days.</p>
-        <button class="btn-cta" onclick="location.href='/signup.html'">Start Free Trial</button>
-    </section>
-    
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h4>About WandaTools</h4>
-                <p style="color: #CCCCCC; margin-bottom: 0;">AI-powered financial management platform designed for South African businesses.</p>
-            </div>
-            <div class="footer-column">
-                <h4>Product</h4>
-                <a href="/features.html">Features</a>
-                <a href="/community.html">Community</a>
-                <a href="/api/docs">API Docs</a>
-            </div>
-            <div class="footer-column">
-                <h4>Company</h4>
-                <a href="#">Contact</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-            </div>
-            <div class="footer-column">
-                <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="mailto:admin@wandatools.com">Email Support</a>
-                <a href="#">Status Page</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
-        </div>
-    </footer>
-    
-    <!-- SCRIPTS -->
-    <script src="nav.js"></script>
-    <script>
-        console.log('✅ features.html loaded');
-    </script>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="tools.html">Transactions</a>
+        <a href="tools.html">Dashboard</a>
+        <a href="tools.html">Documents</a>
+        <a href="wandaAI.html">WandaAI</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="features.html">Features</a>
+        <a href="community.html">Community</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">POPIA Compliance</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 WandaTools. All rights reserved.</span>
+      <span>Made with <span style="color:#E53935;">♥</span> in Eswatini 🇸🇿</span>
+      <div style="display:flex;gap:16px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<script src="nav.js"></script>
+<script>
+  /* Scroll-triggered fade-up */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>

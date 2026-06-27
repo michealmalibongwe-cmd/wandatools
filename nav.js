@@ -194,78 +194,143 @@ async function _refreshAccessToken() {
 // ═══════════════════════════════════════════════════════════
 
 function renderNavigation() {
-  const navLinks = document.querySelector('.nav-links');
-  const navAuth  = document.getElementById('navAuth');
+  const navLinks  = document.querySelector('.nav-links');
+  const navAuth   = document.getElementById('navAuth');
+  const mobileNav = document.getElementById('mobileNav');
+  const hamburger = document.getElementById('hamburger');
 
   if (!navLinks || !navAuth) return;
 
   if (auth.isLoggedIn) {
-    _renderPrivateNav(navLinks, navAuth);
+    _renderPrivateNav(navLinks, navAuth, mobileNav);
   } else {
-    _renderPublicNav(navLinks, navAuth);
+    _renderPublicNav(navLinks, navAuth, mobileNav);
   }
+
+  // Hamburger toggle
+  if (hamburger && mobileNav) {
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      mobileNav.setAttribute('aria-hidden', String(!isOpen));
+    });
+  }
+
+  // Close mobile nav + dropdown on outside click
+  document.addEventListener('click', (e) => {
+    // Mobile nav
+    if (hamburger && mobileNav) {
+      if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      }
+    }
+    // Dropdown
+    const d  = document.getElementById('dropdown');
+    const um = document.querySelector('.user-menu');
+    if (d && um && !um.contains(e.target)) d.style.display = 'none';
+  });
 
   // Scroll shadow
   window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 10);
   });
+
+  // Active page highlight
+  const currentPage = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-link[data-page]').forEach(link => {
+    if (link.dataset.page === currentPage) link.classList.add('active');
+  });
 }
 
-function _renderPublicNav(navLinks, navAuth) {
-  navLinks.innerHTML = `
-    <li><a href="/" class="nav-link">Home</a></li>
-    <li><a href="/features.html" class="nav-link">Features</a></li>
-    <li><a href="/community.html" class="nav-link">Community</a></li>
-    <li><a href="/contact.html" class="nav-link">Contact</a></li>
-  `;
+function _renderPublicNav(navLinks, navAuth, mobileNav) {
+  const links = [
+    { href: 'index.html',     page: 'index.html',     label: 'Home' },
+    { href: 'features.html',  page: 'features.html',  label: 'Features' },
+    { href: 'community.html', page: 'community.html', label: 'Community' },
+    { href: 'contact.html',   page: 'contact.html',   label: 'Contact' },
+  ];
+
+  navLinks.innerHTML = links.map(l =>
+    `<li><a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a></li>`
+  ).join('');
+
   navAuth.innerHTML = `
-    <div class="nav-auth" style="display:flex;gap:10px;align-items:center;">
-      <button class="btn-nav-signin" onclick="location.href='/signup.html'">Sign In</button>
-      <button class="btn-nav-signup" onclick="location.href='/signup.html'">Get Started</button>
+    <div class="nav-auth-wrap">
+      <a href="signup.html" class="btn btn-outline nav-cta">Sign In</a>
+      <a href="signup.html" class="btn btn-primary nav-cta">Get Started</a>
     </div>
   `;
+
+  if (mobileNav) {
+    mobileNav.innerHTML = links.map(l =>
+      `<a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a>`
+    ).join('') + `
+      <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+      <a href="signup.html" class="btn btn-primary nav-cta" style="margin:4px 0 0;width:fit-content;">Get Started Free</a>
+    `;
+  }
 }
 
-function _renderPrivateNav(navLinks, navAuth) {
+function _renderPrivateNav(navLinks, navAuth, mobileNav) {
   const initials = auth.getUserInitials();
   const name     = auth.getUserName();
   const currency = auth.getCurrency();
 
-  navLinks.innerHTML = `
-    <li><a href="/tools.html" class="nav-link">Dashboard</a></li>
-    <li><a href="/wandaAI.html" class="nav-link">WandaAI</a></li>
-    <li><a href="/tools.html" class="nav-link">Tools</a></li>
-  `;
+  const links = [
+    { href: 'tools.html',    page: 'tools.html',    label: 'Tools' },
+    { href: 'wandaAI.html',  page: 'wandaAI.html',  label: 'WandaAI' },
+    { href: 'profile.html',  page: 'profile.html',  label: 'Profile' },
+  ];
+
+  navLinks.innerHTML = links.map(l =>
+    `<li><a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a></li>`
+  ).join('');
+
   navAuth.innerHTML = `
     <div class="user-menu" style="position:relative;">
       <div class="user-avatar" onclick="toggleDropdown()" title="${auth.getEmail()}"
-           style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#007BFF,#28A745);
+           style="width:36px;height:36px;border-radius:50%;background:var(--gradient);
                   color:#fff;display:flex;align-items:center;justify-content:center;
-                  font-weight:700;font-size:14px;cursor:pointer;font-family:Poppins,sans-serif;">
+                  font-weight:700;font-size:14px;cursor:pointer;font-family:Poppins,sans-serif;
+                  user-select:none;flex-shrink:0;">
         ${initials}
       </div>
       <div class="dropdown" id="dropdown"
            style="display:none;position:absolute;right:0;top:48px;background:#fff;
-                  border:1px solid #E0E0E0;border-radius:10px;min-width:200px;
-                  box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:999;">
-        <div style="padding:12px 16px;border-bottom:1px solid #E0E0E0;">
-          <div style="font-weight:700;font-size:13px;color:#333;">${name}</div>
-          <div style="font-size:11px;color:#888;">${auth.getEmail()}</div>
-          <div style="font-size:11px;color:#007BFF;margin-top:2px;">Currency: ${currency}</div>
+                  border:1px solid var(--border);border-radius:var(--radius);min-width:210px;
+                  box-shadow:var(--shadow-md);z-index:999;overflow:hidden;">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
+          <div style="font-weight:700;font-size:13px;color:var(--dark);font-family:'Poppins',sans-serif;">${name}</div>
+          <div style="font-size:11px;color:var(--mid);margin-top:2px;">${auth.getEmail()}</div>
+          <div style="font-size:11px;color:var(--blue);margin-top:2px;">Currency: ${currency}</div>
         </div>
-        <a href="/profile.html"  style="display:block;padding:11px 16px;font-size:13px;color:#333;text-decoration:none;">⚙️ Settings</a>
-        <a href="/tools.html"    style="display:block;padding:11px 16px;font-size:13px;color:#333;text-decoration:none;">📊 Dashboard</a>
-        <a href="/wandaAI.html"  style="display:block;padding:11px 16px;font-size:13px;color:#333;text-decoration:none;">🤖 WandaAI</a>
-        <div style="height:1px;background:#E0E0E0;margin:4px 0;"></div>
-        <button onclick="handleLogout()"
-                style="display:block;width:100%;padding:11px 16px;text-align:left;
-                       background:none;border:none;cursor:pointer;font-size:13px;color:#DC3545;">
-          🚪 Logout
+        <a href="profile.html"  class="_dd-item">⚙️ Settings</a>
+        <a href="tools.html"    class="_dd-item">📊 Dashboard</a>
+        <a href="wandaAI.html"  class="_dd-item">🤖 WandaAI</a>
+        <div style="height:1px;background:var(--border);"></div>
+        <button onclick="handleLogout()" class="_dd-item" style="color:var(--red);background:none;border:none;width:100%;text-align:left;cursor:pointer;font-family:inherit;">
+          🚪 Sign Out
         </button>
       </div>
     </div>
   `;
+
+  if (mobileNav) {
+    mobileNav.innerHTML = links.map(l =>
+      `<a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a>`
+    ).join('') + `
+      <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+      <button onclick="handleLogout()" class="nav-link" style="background:none;border:none;cursor:pointer;color:var(--red);text-align:left;width:100%;padding:12px 16px;font-size:0.95rem;font-family:'Poppins',sans-serif;font-weight:600;">
+        🚪 Sign Out
+      </button>
+    `;
+  }
 }
 
 function toggleDropdown() {
@@ -273,12 +338,6 @@ function toggleDropdown() {
   if (!d) return;
   d.style.display = d.style.display === 'block' ? 'none' : 'block';
 }
-
-document.addEventListener('click', (e) => {
-  const d  = document.getElementById('dropdown');
-  const um = document.querySelector('.user-menu');
-  if (d && um && !um.contains(e.target)) d.style.display = 'none';
-});
 
 // ═══════════════════════════════════════════════════════════
 // LOGOUT
@@ -415,32 +474,49 @@ function updateStrengthUI(fieldId, password) {
 // ALERTS / TOASTS
 // ═══════════════════════════════════════════════════════════
 
+const _toastIcons = {
+  success: '✅',
+  error:   '❌',
+  info:    'ℹ️',
+  warning: '⚠️',
+};
+
 function showAlert(message, type = 'error') {
-  let container = document.getElementById('alertContainer');
+  let container = document.getElementById('_toastContainer');
   if (!container) {
     container = document.createElement('div');
-    container.id = 'alertContainer';
-    container.style.cssText = `
-      position:fixed;top:80px;right:20px;z-index:9999;
-      display:flex;flex-direction:column;gap:8px;max-width:360px;
-    `;
+    container.id = '_toastContainer';
+    container.className = 'toast-container';
+    // Fallback inline style for pages that don't load styles.css
+    container.style.cssText =
+      'position:fixed;top:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:360px;pointer-events:none;';
     document.body.appendChild(container);
   }
 
   const el = document.createElement('div');
-  const styles = {
+  el.className = `toast toast-${type}`;
+  // Fallback inline colours for pages without styles.css
+  const fallback = {
     success: 'background:#E8F5E9;color:#1B5E20;border-left:4px solid #28A745;',
     error:   'background:#FFEBEE;color:#B71C1C;border-left:4px solid #DC3545;',
     info:    'background:#E3F2FD;color:#0D47A1;border-left:4px solid #007BFF;',
-    warning: 'background:#FFF8E1;color:#E65100;border-left:4px solid #FFC107;',
+    warning: 'background:#FFF8E1;color:#E65100;border-left:4px solid #F9A825;',
   };
-  el.style.cssText = `
-    padding:14px 18px;border-radius:8px;font-size:13px;
-    font-family:'Open Sans',sans-serif;box-shadow:0 4px 12px rgba(0,0,0,.1);
-    animation:slideIn .3s ease;
-    ${styles[type] || styles.error}
-  `;
-  el.textContent = message;
+  el.style.cssText = `padding:14px 18px;border-radius:12px;font-size:0.875rem;
+    font-family:'Open Sans',sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.12);
+    display:flex;align-items:center;gap:10px;pointer-events:auto;
+    animation:slideIn .3s cubic-bezier(.4,0,.2,1);
+    ${fallback[type] || fallback.error}`;
+
+  const icon = document.createElement('span');
+  icon.textContent = _toastIcons[type] || _toastIcons.error;
+  icon.style.flexShrink = '0';
+
+  const text = document.createElement('span');
+  text.textContent = message;
+
+  el.appendChild(icon);
+  el.appendChild(text);
   container.appendChild(el);
   setTimeout(() => el.remove(), 5000);
 }

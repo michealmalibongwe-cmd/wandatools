@@ -210,9 +210,20 @@
 </head>
 <body>
 
-  <!-- nav.js renders the top navigation bar here -->
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
+</nav>
 
-  <div class="tools-layout">
+  <div class="tools-layout" style="margin-top:68px;">
 
     <!-- ══════════════════════════════════════
          SIDEBAR
@@ -443,7 +454,19 @@
       </div>
 
     </main>
-  </div>
+  </div><!-- /.tools-layout -->
+
+  <!-- ══════════════════ MINI FOOTER ══════════════════ -->
+  <footer style="background:#1A1A2E;color:rgba(255,255,255,0.5);padding:20px 24px;
+                 display:flex;justify-content:space-between;align-items:center;
+                 flex-wrap:wrap;gap:8px;font-size:0.78rem;">
+    <span>© 2025 WandaTools. All rights reserved.</span>
+    <span style="display:flex;gap:20px;">
+      <a href="contact.html"  style="color:rgba(255,255,255,0.5);transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Support</a>
+      <a href="features.html" style="color:rgba(255,255,255,0.5);transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Features</a>
+      <a href="#"             style="color:rgba(255,255,255,0.5);transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Privacy</a>
+    </span>
+  </footer>
 
   <!-- ══════════════════════════════════════
        SCRIPTS — nav.js first, then page logic

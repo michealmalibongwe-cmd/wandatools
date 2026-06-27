@@ -1,586 +1,475 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community - WandaTools</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            color: #333333;
-            background: #F9F9F9;
-        }
-        
-        /* NAV */
-        nav {
-            background: #FFFFFF;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
-        
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: #333333;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .nav-links a:hover {
-            color: #007BFF;
-        }
-        
-        .nav-auth {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .btn-nav-signin {
-            color: #007BFF;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border: 1px solid #007BFF;
-            border-radius: 6px;
-            cursor: pointer;
-            background: transparent;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .btn-nav-signin:hover {
-            background: #007BFF;
-            color: white;
-        }
-        
-        .btn-nav-signup {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .btn-nav-signup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-        }
-        
-        .user-menu {
-            position: relative;
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        .dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 101;
-            border: 1px solid #E0E0E0;
-        }
-        
-        .dropdown.active {
-            display: block;
-        }
-        
-        .dropdown a, .dropdown button {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            color: #333333;
-            text-decoration: none;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s;
-            text-align: left;
-        }
-        
-        .dropdown a:hover, .dropdown button:hover {
-            background: #F5F5F5;
-            color: #007BFF;
-        }
-        
-        .dropdown-divider {
-            height: 1px;
-            background: #E0E0E0;
-            margin: 0;
-        }
-        
-        /* CONTENT */
-        .community-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-        }
-        
-        .sidebar {
-            position: sticky;
-            top: 90px;
-            height: fit-content;
-        }
-        
-        .sidebar-section {
-            background: #FFFFFF;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #E0E0E0;
-        }
-        
-        .sidebar-section h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333333;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .sidebar-section a {
-            display: block;
-            color: #333333;
-            text-decoration: none;
-            font-size: 12px;
-            padding: 8px 0;
-            border-left: 3px solid transparent;
-            padding-left: 10px;
-            transition: all 0.3s;
-        }
-        
-        .sidebar-section a:hover {
-            color: #007BFF;
-            border-left-color: #007BFF;
-        }
-        
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .header-bar {
-            background: #FFFFFF;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .header-bar h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #333333;
-        }
-        
-        .btn-new-post {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-        }
-        
-        .btn-new-post:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-        }
-        
-        .post {
-            background: #FFFFFF;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-        
-        .post:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        
-        .post-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-        }
-        
-        .post-info {
-            flex: 1;
-        }
-        
-        .post-author {
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333333;
-        }
-        
-        .post-time {
-            font-size: 11px;
-            color: #999999;
-        }
-        
-        .post-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 15px;
-            font-weight: 600;
-            color: #007BFF;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        
-        .post-title:hover {
-            color: #28A745;
-        }
-        
-        .post-content {
-            font-size: 13px;
-            color: #666666;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-        
-        .post-meta {
-            display: flex;
-            gap: 20px;
-            font-size: 12px;
-            color: #999999;
-        }
-        
-        .post-meta span {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .post-meta span:hover {
-            color: #007BFF;
-        }
-        
-        .category-badge {
-            display: inline-block;
-            background: #E3F2FD;
-            color: #007BFF;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        
-        .demo-notice {
-            background: #E3F2FD;
-            border-left: 4px solid #007BFF;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: #1565C0;
-        }
-        
-        footer {
-            background: #333333;
-            color: white;
-            padding: 40px 20px;
-            font-size: 12px;
-            margin-top: 60px;
-        }
-        
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-column h4 {
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
-        
-        .footer-column a {
-            color: #CCCCCC;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-        }
-        
-        .footer-column a:hover {
-            color: #007BFF;
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid #555555;
-            padding-top: 20px;
-            text-align: center;
-            color: #999999;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        @media (max-width: 768px) {
-            .community-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: static;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community – WandaTools</title>
+  <meta name="description" content="Connect with other WandaTools users, share financial tips, and grow your business together." />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* ── Page layout ── */
+    .community-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Sidebar ── */
+    .comm-sidebar {
+      position: sticky;
+      top: 88px;
+    }
+    .comm-sidebar-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .comm-sidebar-card h3 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 14px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .comm-sidebar-card a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--mid);
+      padding: 8px 10px;
+      border-radius: 8px;
+      transition: var(--transition);
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+    }
+    .comm-sidebar-card a:hover { background: var(--grey-bg); color: var(--dark); }
+    .comm-sidebar-card a i { font-size: 1rem; }
+
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: 50px;
+      background: var(--grey-bg);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--mid);
+      cursor: pointer;
+      transition: var(--transition);
+      margin: 3px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .tag-chip:hover { background: var(--gradient); color: var(--white); border-color: transparent; }
+
+    /* ── Posts feed ── */
+    .comm-feed { display: flex; flex-direction: column; gap: 16px; }
+
+    .comm-header {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .comm-header h1 { font-size: 1.4rem; }
+    .comm-header p  { color: var(--mid); font-size: 0.875rem; margin-top: 2px; }
+
+    .comm-notice {
+      background: #E3F2FD;
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 0.875rem;
+      color: #0D47A1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comm-notice i { font-size: 1.2rem; flex-shrink: 0; }
+
+    /* ── Post card ── */
+    .post-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .post-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+    .post-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .post-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: 'Poppins', sans-serif;
+      flex-shrink: 0;
+    }
+    .post-author { font-weight: 700; font-size: 0.875rem; font-family: 'Poppins', sans-serif; }
+    .post-time   { font-size: 0.75rem; color: var(--light); margin-top: 2px; }
+
+    .post-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+    .post-title:hover { color: var(--blue); }
+
+    .post-body {
+      font-size: 0.9rem;
+      color: var(--mid);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 18px;
+      font-size: 0.8rem;
+      color: var(--light);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .post-meta button {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--light);
+      font-size: 0.8rem;
+      transition: color var(--transition);
+      font-family: 'Open Sans', sans-serif;
+      padding: 0;
+    }
+    .post-meta button:hover { color: var(--blue); }
+    .post-meta button i { font-size: 1rem; }
+
+    /* ── Hero banner ── */
+    .comm-hero {
+      background: var(--gradient);
+      padding: 80px 24px 60px;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .comm-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255,255,255,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .comm-hero .section-label { -webkit-text-fill-color: rgba(255,255,255,0.75); background: none; }
+    .comm-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 12px; }
+    .comm-hero p  { font-size: 1.05rem; opacity: 0.88; max-width: 500px; margin: 0 auto 28px; }
+
+    @media (max-width: 900px) {
+      .community-layout { grid-template-columns: 1fr; }
+      .comm-sidebar { position: static; }
+    }
+    @media (max-width: 600px) {
+      .comm-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="nav-container">
-            <a href="/" class="logo">WandaTools</a>
-            <ul class="nav-links"></ul>
-            <div id="navAuth"></div>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
+</nav>
+
+<div class="page-content">
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="comm-hero">
+  <div>
+    <span class="section-label">WandaTools Community</span>
+    <h1>Connect. Share. Grow.</h1>
+    <p>Join thousands of Swazi business owners exchanging financial tips, success stories, and strategies.</p>
+    <button class="btn btn-ghost" onclick="handleNewPost()">
+      <i class="material-icons">edit</i> Start a Discussion
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="community-layout">
+
+      <!-- SIDEBAR -->
+      <aside class="comm-sidebar">
+        <div class="comm-sidebar-card">
+          <h3>Categories</h3>
+          <a href="#general"><i class="material-icons">forum</i> General Discussion</a>
+          <a href="#tips"><i class="material-icons">lightbulb</i> Tips &amp; Tricks</a>
+          <a href="#tools"><i class="material-icons">build</i> Tools &amp; Features</a>
+          <a href="#compliance"><i class="material-icons">gavel</i> Compliance</a>
+          <a href="#growth"><i class="material-icons">trending_up</i> Business Growth</a>
+          <a href="#success"><i class="material-icons">emoji_events</i> Success Stories</a>
         </div>
-    </nav>
-    
-    <!-- COMMUNITY -->
-    <div class="community-container">
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sidebar-section">
-                <h3>Categories</h3>
-                <a href="#general">💬 General Discussion</a>
-                <a href="#tips">💡 Tips & Tricks</a>
-                <a href="#tools">🛠️ Tools & Features</a>
-                <a href="#compliance">📋 Compliance</a>
-                <a href="#growth">📈 Business Growth</a>
-                <a href="#success">🎉 Success Stories</a>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Popular Tags</h3>
-                <a href="#">#freelancer</a>
-                <a href="#">#smallbusiness</a>
-                <a href="#">#tax</a>
-                <a href="#">#finance</a>
-                <a href="#">#eswatini</a>
-            </div>
-        </aside>
-        
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
-            <div class="demo-notice">
-                💬 <strong>WandaTools Community</strong> - Connect, share, and learn from other users
-            </div>
-            
-            <div class="header-bar">
-                <h1>Community Forum</h1>
-                <button class="btn-new-post" onclick="handleNewPost()">+ New Post</button>
-            </div>
-            
-            <!-- POST 1 -->
-            <div class="post">
-                <div class="category-badge">General Discussion</div>
-                <div class="post-header">
-                    <div class="post-avatar">TN</div>
-                    <div class="post-info">
-                        <div class="post-author">Thabo Nkosi</div>
-                        <div class="post-time">2 hours ago</div>
-                    </div>
-                </div>
-                <div class="post-title">How to use WandaAI for better financial planning?</div>
-                <div class="post-content">
-                    I'm new to WandaTools and I'm impressed with the WandaAI feature. Can someone walk me through how to best use it for my freelance business?
-                </div>
-                <div class="post-meta">
-                    <span>👍 12</span>
-                    <span>💬 8 comments</span>
-                    <span>📤 Share</span>
-                </div>
-            </div>
-            
-            <!-- POST 2 -->
-            <div class="post">
-                <div class="category-badge">Tips & Tricks</div>
-                <div class="post-header">
-                    <div class="post-avatar" style="background: linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%);">SK</div>
-                    <div class="post-info">
-                        <div class="post-author">Sibusiso Khumalo</div>
-                        <div class="post-time">5 hours ago</div>
-                    </div>
-                </div>
-                <div class="post-title">5 ways to save time with WandaTools export features</div>
-                <div class="post-content">
-                    I've been using WandaTools for 3 months and I'm amazed at how quickly I can generate audit reports now...
-                </div>
-                <div class="post-meta">
-                    <span>👍 28</span>
-                    <span>💬 15 comments</span>
-                    <span>📤 Share</span>
-                </div>
-            </div>
-            
-            <!-- POST 3 -->
-            <div class="post">
-                <div class="category-badge">Success Stories</div>
-                <div class="post-header">
-                    <div class="post-avatar" style="background: linear-gradient(135deg, #FF6B9D 0%, #C06C84 100%);">DZ</div>
-                    <div class="post-info">
-                        <div class="post-author">Dikeledi Zanele</div>
-                        <div class="post-time">3 days ago</div>
-                    </div>
-                </div>
-                <div class="post-title">Got my business loan approved! Thanks WandaTools! 🎉</div>
-                <div class="post-content">
-                    With WandaTools' professional audit reports, the bank approved my loan application in 2 weeks!
-                </div>
-                <div class="post-meta">
-                    <span>👍 120</span>
-                    <span>💬 45 comments</span>
-                    <span>📤 Share</span>
-                </div>
-            </div>
+        <div class="comm-sidebar-card">
+          <h3>Popular Tags</h3>
+          <div>
+            <span class="tag-chip">#freelancer</span>
+            <span class="tag-chip">#smallbusiness</span>
+            <span class="tag-chip">#tax</span>
+            <span class="tag-chip">#finance</span>
+            <span class="tag-chip">#eswatini</span>
+            <span class="tag-chip">#growth</span>
+            <span class="tag-chip">#wandaai</span>
+          </div>
         </div>
+        <div class="comm-sidebar-card">
+          <h3>Community Stats</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+              <span style="color:var(--mid);">Members</span>
+              <span style="font-weight:700;font-family:'Poppins',sans-serif;color:var(--dark);">2,400+</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+              <span style="color:var(--mid);">Posts</span>
+              <span style="font-weight:700;font-family:'Poppins',sans-serif;color:var(--dark);">1,850+</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+              <span style="color:var(--mid);">Active today</span>
+              <span style="font-weight:700;font-family:'Poppins',sans-serif;color:var(--green);">142</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- FEED -->
+      <div class="comm-feed">
+        <div class="comm-header">
+          <div>
+            <h1>Community Forum</h1>
+            <p>Discover discussions, tips, and stories from the WandaTools community</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="handleNewPost()">
+            <i class="material-icons">add</i> New Post
+          </button>
+        </div>
+
+        <div class="comm-notice">
+          <i class="material-icons">info</i>
+          <span><strong>Community is live!</strong> Be respectful, helpful, and share what you know.</span>
+        </div>
+
+        <!-- Post 1 -->
+        <article class="post-card fade-up">
+          <span class="post-category badge-blue" style="background:#E3F2FD;color:var(--blue);">
+            <i class="material-icons" style="font-size:0.85rem;">forum</i> General Discussion
+          </span>
+          <div class="post-header">
+            <div class="post-avatar">TN</div>
+            <div>
+              <div class="post-author">Thabo Nkosi</div>
+              <div class="post-time">2 hours ago · Mbabane</div>
+            </div>
+          </div>
+          <div class="post-title">How to use WandaAI for better financial planning?</div>
+          <div class="post-body">I'm new to WandaTools and I'm impressed with the WandaAI feature. Can someone walk me through how to best use it for my freelance business? Particularly interested in cash-flow forecasting.</div>
+          <div class="post-meta">
+            <button><i class="material-icons">thumb_up</i> 12</button>
+            <button><i class="material-icons">chat_bubble_outline</i> 8 comments</button>
+            <button><i class="material-icons">share</i> Share</button>
+          </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="post-card fade-up">
+          <span class="post-category" style="background:#E8F5E9;color:var(--green);display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;margin-bottom:12px;font-family:'Poppins',sans-serif;">
+            <i class="material-icons" style="font-size:0.85rem;">lightbulb</i> Tips &amp; Tricks
+          </span>
+          <div class="post-header">
+            <div class="post-avatar" style="background:linear-gradient(135deg,#FF6B6B,#FFD93D);">SK</div>
+            <div>
+              <div class="post-author">Sibusiso Khumalo</div>
+              <div class="post-time">5 hours ago · Manzini</div>
+            </div>
+          </div>
+          <div class="post-title">5 ways to save time with WandaTools export features</div>
+          <div class="post-body">I've been using WandaTools for 3 months and I'm amazed at how quickly I can generate audit reports now. Here are my top five tips for getting the most out of the Documents module...</div>
+          <div class="post-meta">
+            <button><i class="material-icons">thumb_up</i> 28</button>
+            <button><i class="material-icons">chat_bubble_outline</i> 15 comments</button>
+            <button><i class="material-icons">share</i> Share</button>
+          </div>
+        </article>
+
+        <!-- Post 3 -->
+        <article class="post-card fade-up">
+          <span class="post-category" style="background:#FFF3E0;color:#E65100;display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;margin-bottom:12px;font-family:'Poppins',sans-serif;">
+            <i class="material-icons" style="font-size:0.85rem;">emoji_events</i> Success Story
+          </span>
+          <div class="post-header">
+            <div class="post-avatar" style="background:linear-gradient(135deg,#FF6B9D,#C06C84);">DZ</div>
+            <div>
+              <div class="post-author">Dikeledi Zanele</div>
+              <div class="post-time">3 days ago · Siteki</div>
+            </div>
+          </div>
+          <div class="post-title">Got my business loan approved! Thanks WandaTools! 🎉</div>
+          <div class="post-body">With WandaTools' professional audit reports, the bank approved my loan application in just 2 weeks. The loan-ready PDF export was exactly what the bank needed — no back and forth!</div>
+          <div class="post-meta">
+            <button><i class="material-icons">thumb_up</i> 120</button>
+            <button><i class="material-icons">chat_bubble_outline</i> 45 comments</button>
+            <button><i class="material-icons">share</i> Share</button>
+          </div>
+        </article>
+
+        <!-- Post 4 -->
+        <article class="post-card fade-up">
+          <span class="post-category badge-blue" style="background:#E3F2FD;color:var(--blue);display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;margin-bottom:12px;font-family:'Poppins',sans-serif;">
+            <i class="material-icons" style="font-size:0.85rem;">trending_up</i> Business Growth
+          </span>
+          <div class="post-header">
+            <div class="post-avatar" style="background:linear-gradient(135deg,#007BFF,#00BCD4);">PM</div>
+            <div>
+              <div class="post-author">Priya Moodley</div>
+              <div class="post-time">1 week ago · Lobamba</div>
+            </div>
+          </div>
+          <div class="post-title">How I tracked my way to E50,000 profit in 6 months</div>
+          <div class="post-body">Consistent transaction tracking with WandaTools helped me identify that 40% of my expenses were unnecessary. WandaAI flagged the pattern and I acted on it — here's my story.</div>
+          <div class="post-meta">
+            <button><i class="material-icons">thumb_up</i> 87</button>
+            <button><i class="material-icons">chat_bubble_outline</i> 31 comments</button>
+            <button><i class="material-icons">share</i> Share</button>
+          </div>
+        </article>
+
+      </div><!-- /.comm-feed -->
+    </div><!-- /.community-layout -->
+  </div>
+</section>
+
+</div><!-- /.page-content -->
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">WandaTools</div>
+        <p>AI-powered financial insights for businesses and individuals across Eswatini 🇸🇿.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon" aria-label="Facebook"><i class="material-icons">facebook</i></a>
+          <a href="#" class="social-icon" aria-label="Twitter/X"><i class="material-icons">tag</i></a>
+          <a href="#" class="social-icon" aria-label="LinkedIn"><i class="material-icons">work</i></a>
+          <a href="#" class="social-icon" aria-label="Instagram"><i class="material-icons">photo_camera</i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="tools.html">Transactions</a>
+        <a href="tools.html">Dashboard</a>
+        <a href="tools.html">Documents</a>
+        <a href="wandaAI.html">WandaAI</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="features.html">Features</a>
+        <a href="community.html">Community</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">POPIA Compliance</a>
+      </div>
     </div>
-    
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h4>About WandaTools</h4>
-                <p style="color: #CCCCCC; margin-bottom: 0;">AI-powered financial management for South Africa</p>
-            </div>
-            <div class="footer-column">
-                <h4>Product</h4>
-                <a href="/features.html">Features</a>
-                <a href="/community.html">Community</a>
-                <a href="/api/docs">API</a>
-            </div>
-            <div class="footer-column">
-                <h4>Company</h4>
-                <a href="#">Contact</a>
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
-            </div>
-            <div class="footer-column">
-                <h4>Support</h4>
-                <a href="#">Help</a>
-                <a href="mailto:admin@wandatools.com">Email</a>
-                <a href="#">Status</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 WandaTools. All rights reserved. | Made for South Africa 🇿🇦</p>
-        </div>
-    </footer>
-    
-    <!-- SCRIPTS -->
-    <script src="nav.js"></script>
-    <script>
-        console.log('✅ community.html loaded');
-        
-        function handleNewPost() {
-            if (!window.WandaAuth.auth.isLoggedIn) {
-                WandaAuth.showAlert('⚠️ Please sign in to create a post', 'error');
-                setTimeout(() => {
-                    location.href = '/signup.html';
-                }, 1500);
-                return;
-            }
-            WandaAuth.showAlert('✨ New post feature coming soon!', 'success');
-        }
-    </script>
+    <div class="footer-bottom">
+      <span>© 2025 WandaTools. All rights reserved.</span>
+      <span>Made with <span style="color:#E53935;">♥</span> in Eswatini 🇸🇿</span>
+      <div style="display:flex;gap:16px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<script src="nav.js"></script>
+<script>
+  function handleNewPost() {
+    if (!WandaAuth.isLoggedIn()) {
+      showAlert('Please sign in to create a post', 'info');
+      setTimeout(() => { location.href = 'signup.html'; }, 1800);
+      return;
+    }
+    showAlert('New post feature coming soon!', 'info');
+  }
+
+  /* Scroll-triggered fade-up */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>

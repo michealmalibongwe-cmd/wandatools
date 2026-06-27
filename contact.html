@@ -189,28 +189,16 @@
 <body>
 
 <!-- ══════════════════ NAVBAR ══════════════════ -->
-<nav class="navbar">
+<nav class="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-      <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-      <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-      <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-      <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-      <a href="tools.html" class="btn btn-primary nav-cta">Dashboard</a>
-    </div>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
-  <div class="nav-mobile">
-    <a href="index.html" class="nav-link" data-page="index.html"><i class="material-icons">home</i> Home</a>
-    <a href="tools.html" class="nav-link" data-page="tools.html"><i class="material-icons">dashboard</i> Tools</a>
-    <a href="wandaAI.html" class="nav-link" data-page="wandaAI.html"><i class="material-icons">smart_toy</i> WandaAI</a>
-    <a href="contact.html" class="nav-link" data-page="contact.html"><i class="material-icons">support_agent</i> Support</a>
-    <a href="profile.html" class="nav-link" data-page="profile.html"><i class="material-icons">account_circle</i> Profile</a>
-  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
 </nav>
 
 <div class="page-content">
