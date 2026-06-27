@@ -542,13 +542,14 @@
                         
                         <div class="form-group">
                             <label for="indEmail">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="indEmail" 
+                            <input
+                                type="email"
+                                id="indEmail"
                                 name="email"
-                                placeholder="you@example.com" 
+                                placeholder="you@example.com"
                                 required
                                 maxlength="255"
+                                autocomplete="username"
                             >
                         </div>
                         
@@ -562,7 +563,6 @@
                                 required
                                 minlength="12"
                                 autocomplete="new-password"
-                                onchange="checkPasswordStrength('indPassword')"
                             >
                             <div class="password-strength">
                                 <div id="indStrengthBar" class="strength-bar"></div>
@@ -611,13 +611,14 @@
                         
                         <div class="form-group">
                             <label for="bizEmail">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="bizEmail" 
+                            <input
+                                type="email"
+                                id="bizEmail"
                                 name="email"
-                                placeholder="john@example.com" 
+                                placeholder="john@example.com"
                                 required
                                 maxlength="255"
+                                autocomplete="username"
                             >
                         </div>
                         
@@ -711,7 +712,6 @@
                                 required
                                 minlength="12"
                                 autocomplete="new-password"
-                                onchange="checkPasswordStrength('bizPassword')"
                             >
                             <div class="password-strength">
                                 <div id="bizStrengthBar" class="strength-bar"></div>
@@ -745,13 +745,14 @@
                     <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
                         <div class="form-group">
                             <label for="loginEmail">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="loginEmail" 
+                            <input
+                                type="email"
+                                id="loginEmail"
                                 name="email"
-                                placeholder="you@example.com" 
+                                placeholder="you@example.com"
                                 required
                                 maxlength="255"
+                                autocomplete="username"
                             >
                         </div>
                         
@@ -862,30 +863,42 @@
   // ── Individual signup ─────────────────────────────────────
   async function handleIndividualSignup(event) {
     event.preventDefault();
-    if (!validateIndividualForm()) return;
+    console.log("Individual signup submitted, sending to backend...");
+
+    const name     = document.getElementById('indName').value.trim();
+    const email    = document.getElementById('indEmail').value.trim();
+    const password = document.getElementById('indPassword').value;
+    const confirm  = document.getElementById('indPasswordConfirm').value;
+
+    if (name.length < 2)                              { showAlert('Name must be at least 2 characters'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))   { showAlert('Please enter a valid email address'); return; }
+    if (password.length < 12)                         { showAlert('Password must be at least 12 characters'); return; }
+    if (password !== confirm)                         { showAlert('Passwords do not match'); return; }
 
     const btn = document.getElementById('indSubmitBtn');
     btn.disabled = true;
     btn.textContent = 'Creating account...';
 
     try {
-      const data = await apiCall('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          name:     document.getElementById('indName').value.trim(),
-          email:    document.getElementById('indEmail').value.trim(),
-          password: document.getElementById('indPassword').value,
-          timezone: 'Africa/Johannesburg',
-          currency: 'E',
-        }),
+      const response = await fetch("https://wandatools.up.railway.app/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, timezone: "Africa/Johannesburg", currency: "E" })
       });
 
-      WandaAuth.auth.login(data);
-      showAlert('✅ Account created! Redirecting to dashboard...', 'success');
-      setTimeout(() => { location.href = '/tools.html'; }, 1500);
-
+      const result = await response.json();
+      if (response.ok) {
+        if (result.access_token) localStorage.setItem("token", result.access_token);
+        showAlert('✅ Account created! Redirecting...', 'success');
+        setTimeout(() => { location.href = '/tools.html'; }, 1500);
+      } else {
+        showAlert(result.detail || result.message || "Signup failed");
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
     } catch (error) {
-      showAlert(error.message);
+      console.error("Signup error:", error);
+      showAlert("Network error. Please check your connection.");
       btn.disabled = false;
       btn.textContent = 'Create Account';
     }
@@ -894,31 +907,58 @@
   // ── Business signup ───────────────────────────────────────
   async function handleBusinessSignup(event) {
     event.preventDefault();
-    if (!validateBusinessForm()) return;
+    console.log("Business signup submitted, sending to backend...");
+
+    const name         = document.getElementById('bizName').value.trim();
+    const email        = document.getElementById('bizEmail').value.trim();
+    const businessName = document.getElementById('bizBusinessName').value.trim();
+    const businessType = document.getElementById('bizBusinessType').value;
+    const password     = document.getElementById('bizPassword').value;
+    const confirm      = document.getElementById('bizPasswordConfirm').value;
+
+    if (name.length < 2)                              { showAlert('Name must be at least 2 characters'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))   { showAlert('Please enter a valid email'); return; }
+    if (businessName.length < 2)                      { showAlert('Business name must be at least 2 characters'); return; }
+    if (!businessType)                                { showAlert('Please select a business type'); return; }
+    if (password.length < 12)                         { showAlert('Password must be at least 12 characters'); return; }
+    if (password !== confirm)                         { showAlert('Passwords do not match'); return; }
 
     const btn = document.getElementById('bizSubmitBtn');
     btn.disabled = true;
     btn.textContent = 'Creating account...';
 
     try {
-      const data = await apiCall('/auth/register', {
-        method: 'POST',
+      const response = await fetch("https://wandatools.up.railway.app/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name:          document.getElementById('bizName').value.trim(),
-          email:         document.getElementById('bizEmail').value.trim(),
-          password:      document.getElementById('bizPassword').value,
-          business_type: document.getElementById('bizBusinessType').value,
-          timezone:      'Africa/Johannesburg',
-          currency:      'E',
-        }),
+          name,
+          email,
+          password,
+          business_name:         businessName,
+          business_type:         businessType,
+          business_email:        document.getElementById('bizBusinessEmail').value.trim(),
+          phone:                 document.getElementById('bizPhone').value.trim(),
+          business_registration: document.getElementById('bizRegistration').value.trim(),
+          country:               document.getElementById('bizCountry').value.trim(),
+          timezone:              "Africa/Johannesburg",
+          currency:              "E"
+        })
       });
 
-      WandaAuth.auth.login(data);
-      showAlert('✅ Business account created! Redirecting...', 'success');
-      setTimeout(() => { location.href = '/tools.html'; }, 1500);
-
+      const result = await response.json();
+      if (response.ok) {
+        if (result.access_token) localStorage.setItem("token", result.access_token);
+        showAlert('✅ Business account created! Redirecting...', 'success');
+        setTimeout(() => { location.href = '/tools.html'; }, 1500);
+      } else {
+        showAlert(result.detail || result.message || "Signup failed");
+        btn.disabled = false;
+        btn.textContent = 'Create Business Account';
+      }
     } catch (error) {
-      showAlert(error.message);
+      console.error("Signup error:", error);
+      showAlert("Network error. Please check your connection.");
       btn.disabled = false;
       btn.textContent = 'Create Business Account';
     }
@@ -927,6 +967,7 @@
   // ── Login ─────────────────────────────────────────────────
   async function handleLogin(event) {
     event.preventDefault();
+    console.log("Login submitted, sending to backend...");
 
     const email    = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
@@ -938,17 +979,25 @@
     btn.textContent = 'Signing in...';
 
     try {
-      const data = await apiCall('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
+      const response = await fetch("https://wandatools.up.railway.app/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
       });
 
-      WandaAuth.auth.login(data);
-      showAlert('✅ Login successful! Redirecting...', 'success');
-      setTimeout(() => { location.href = '/tools.html'; }, 1500);
-
+      const result = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", result.access_token);
+        showAlert('✅ Login successful! Redirecting...', 'success');
+        setTimeout(() => { location.href = '/tools.html'; }, 1500);
+      } else {
+        showAlert(result.detail || result.message || "Login failed");
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
     } catch (error) {
-      showAlert(error.message);
+      console.error("Login error:", error);
+      showAlert("Network error. Please check your connection.");
       btn.disabled = false;
       btn.textContent = 'Sign In';
     }
