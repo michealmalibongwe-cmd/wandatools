@@ -450,16 +450,12 @@
   ══════════════════════════════════════ -->
   <script src="nav.js"></script>
   <script>
-    const BACKEND = "https://wandatools.up.railway.app";
-
     document.addEventListener('DOMContentLoaded', () => {
       console.log("tools.html: DOMContentLoaded fired");
 
       // ── 1. Auth gate ──────────────────────────────────────
-      const token = localStorage.getItem("token");
-      console.log("tools.html: token in localStorage:", token ? "present" : "MISSING");
-
-      if (!token) {
+      // auth.token is loaded from localStorage key 'access_token' by nav.js
+      if (!auth.token) {
         console.warn("tools.html: No token — redirecting to signup");
         location.href = "/signup.html";
         return;
@@ -500,34 +496,19 @@
     });
 
     // ── Verify user with backend ──────────────────────────────
+    // Uses apiCall() so Authorization header and base URL (/api/v1) are handled
+    // automatically by nav.js. 401 handling (refresh + redirect) is also built in.
     async function verifyAndLoadUser() {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
+      if (!auth.token) return;
       console.log("tools.html: calling /auth/me …");
       try {
-        const res = await fetch(`${BACKEND}/auth/me`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        console.log("tools.html: /auth/me status:", res.status);
-
-        if (res.status === 401) {
-          console.warn("tools.html: token rejected — clearing and redirecting");
-          localStorage.removeItem("token");
-          location.href = "/signup.html";
-          return;
-        }
-
-        if (res.ok) {
-          const user = await res.json();
-          console.log("tools.html: user from /auth/me:", user);
-          const greetEl = document.getElementById('dashGreetName');
-          if (greetEl && user.name) greetEl.textContent = user.name.split(' ')[0];
-        } else {
-          console.warn("tools.html: /auth/me returned", res.status);
-        }
+        const user = await apiCall('/auth/me');
+        console.log("tools.html: user from /auth/me:", user);
+        const greetEl = document.getElementById('dashGreetName');
+        if (greetEl && user.name) greetEl.textContent = user.name.split(' ')[0];
       } catch (err) {
-        console.error("tools.html: /auth/me fetch failed:", err);
+        console.warn("tools.html: /auth/me failed:", err.message);
+        // apiCall already handles 401 — refreshes token or logs out + redirects
       }
     }
 
