@@ -555,12 +555,13 @@
                         <div class="form-group">
                             <label for="indPassword">Password</label>
                             <input 
-                                type="password" 
-                                id="indPassword" 
+                                type="password"
+                                id="indPassword"
                                 name="password"
-                                placeholder="••••••••••••" 
+                                placeholder="••••••••••••"
                                 required
                                 minlength="12"
+                                autocomplete="new-password"
                                 onchange="checkPasswordStrength('indPassword')"
                             >
                             <div class="password-strength">
@@ -573,12 +574,13 @@
                         <div class="form-group">
                             <label for="indPasswordConfirm">Confirm Password</label>
                             <input 
-                                type="password" 
-                                id="indPasswordConfirm" 
+                                type="password"
+                                id="indPasswordConfirm"
                                 name="passwordConfirm"
-                                placeholder="••••••••••••" 
+                                placeholder="••••••••••••"
                                 required
                                 minlength="12"
+                                autocomplete="new-password"
                             >
                         </div>
                         
@@ -702,12 +704,13 @@
                         <div class="form-group">
                             <label for="bizPassword">Password</label>
                             <input 
-                                type="password" 
-                                id="bizPassword" 
+                                type="password"
+                                id="bizPassword"
                                 name="password"
-                                placeholder="••••••••••••" 
+                                placeholder="••••••••••••"
                                 required
                                 minlength="12"
+                                autocomplete="new-password"
                                 onchange="checkPasswordStrength('bizPassword')"
                             >
                             <div class="password-strength">
@@ -720,12 +723,13 @@
                         <div class="form-group">
                             <label for="bizPasswordConfirm">Confirm Password</label>
                             <input 
-                                type="password" 
-                                id="bizPasswordConfirm" 
+                                type="password"
+                                id="bizPasswordConfirm"
                                 name="passwordConfirm"
-                                placeholder="••••••••••••" 
+                                placeholder="••••••••••••"
                                 required
                                 minlength="12"
+                                autocomplete="new-password"
                             >
                         </div>
                         
@@ -754,12 +758,13 @@
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
                             <input 
-                                type="password" 
-                                id="loginPassword" 
+                                type="password"
+                                id="loginPassword"
                                 name="password"
-                                placeholder="••••••••••••" 
+                                placeholder="••••••••••••"
                                 required
                                 minlength="8"
+                                autocomplete="current-password"
                             >
                         </div>
                         
@@ -813,8 +818,12 @@
 
   // ── Password strength ────────────────────────────────────
   function checkPasswordStrength(fieldId) {
-    const pwd = document.getElementById(fieldId)?.value || '';
-    if (pwd) updateStrengthUI(fieldId, pwd);
+    try {
+      const pwd = document.getElementById(fieldId)?.value || '';
+      if (pwd) updateStrengthUI(fieldId, pwd);
+    } catch (e) {
+      // Strength checker is non-critical — never block form submission
+    }
   }
 
   // ── Validation ───────────────────────────────────────────
@@ -829,7 +838,6 @@
     if (!emailRe.test(email))   { showAlert('Please enter a valid email address'); return false; }
     if (password.length < 8)    { showAlert('Password must be at least 8 characters'); return false; }
     if (password !== confirm)   { showAlert('Passwords do not match'); return false; }
-    const strength = checkPasswordStrength('indPassword');
     return true;
   }
 

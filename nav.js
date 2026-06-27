@@ -335,11 +335,9 @@ function protectFromAuth() {
 // PASSWORD STRENGTH — client-side, no API call needed
 // ═══════════════════════════════════════════════════════════
 
-function checkPasswordStrength(password) {
-  /**
-   * Returns { score: 0-5, feedback: [], is_strong: bool }
-   * Mirrors the logic in security.py so results are consistent.
-   */
+// Private scorer — called directly by updateStrengthUI so that page-level
+// overrides of the public checkPasswordStrength can't break the UI updater.
+function _scorePassword(password) {
   let score = 0;
   const feedback = [];
 
@@ -365,13 +363,18 @@ function checkPasswordStrength(password) {
   return { score, feedback, is_strong: score >= 4 };
 }
 
+// Public API — returns { score: 0-5, feedback: [], is_strong: bool }
+// Mirrors the logic in security.py so results are consistent.
+function checkPasswordStrength(password) {
+  return _scorePassword(password);
+}
+
 function updateStrengthUI(fieldId, password) {
-  /**
-   * Updates the strength bar and text for a password field.
-   * Expects elements with IDs: {prefix}StrengthBar, {prefix}StrengthText, {prefix}Feedback
-   * where prefix = everything before 'Password' in fieldId.
-   */
-  const result = checkPasswordStrength(password);
+  // Use _scorePassword directly to avoid breakage if a page redefines
+  // the global checkPasswordStrength with a different signature.
+  const result = _scorePassword(password);
+  if (!result) return;
+
   const prefix  = fieldId.replace(/Password.*$/i, '');
 
   const bar      = document.getElementById(`${prefix}StrengthBar`);
