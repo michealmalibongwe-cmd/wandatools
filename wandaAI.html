@@ -292,6 +292,10 @@
       .chat-area { height: calc(100vh - 68px); }
       .capabilities-banner { grid-template-columns: 1fr 1fr; }
     }
+
+    /* Ensure the page background matches WandaTools' light theme */
+    html, body { background: var(--grey-bg, #F5F5F5); }
+    .chat-area { min-height: 0; }
   </style>
 </head>
 <body>
@@ -403,7 +407,7 @@
   <!-- nav.js after DOM so renderNavigation() finds .nav-links and #navAuth -->
   <script src="nav.js"></script>
   <script>
-    // Module-level state — assigned inside DOMContentLoaded once elements exist
+    // Module-level state — assigned in initWandaAI() once DOM is confirmed ready
     let currentMode  = 'insights';
     let chatMessages = null;
     let chatInput    = null;
@@ -411,7 +415,7 @@
 
     const welcomeMsg = `Hello! 👋 I'm **WandaAI**, your personal financial assistant.\n\nI can help you understand your cash flow, find areas to save, plan for growth, and prepare for funding applications.\n\nWhat would you like to explore today?`;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initWandaAI() {
       protectPage();
 
       chatMessages = document.getElementById('chatMessages');
@@ -424,7 +428,15 @@
         : welcomeMsg;
 
       addMessage('ai', greeting);
-    });
+    }
+
+    // Since this script is at end of <body>, DOMContentLoaded has already fired.
+    // Guard with readyState so it works regardless of when the script runs.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initWandaAI);
+    } else {
+      initWandaAI();
+    }
 
     function addMessage(role, text, insightCard = null) {
       if (!chatMessages) return null;
