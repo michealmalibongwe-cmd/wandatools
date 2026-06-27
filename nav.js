@@ -338,6 +338,9 @@ function protectFromAuth() {
 // Private scorer — called directly by updateStrengthUI so that page-level
 // overrides of the public checkPasswordStrength can't break the UI updater.
 function _scorePassword(password) {
+  if (!password || typeof password !== 'string') {
+    return { score: 0, feedback: ['Enter a password'], is_strong: false };
+  }
   let score = 0;
   const feedback = [];
 
