@@ -9,13 +9,13 @@
   <style>
     /* ── Hero minimal ── */
     .contact-hero {
-      background: var(--gradient);
+      background: linear-gradient(135deg, #007BFF, #28A745);
       padding: 80px 24px 60px;
       text-align: center;
-      color: var(--white);
+      color: #ffffff;
     }
-    .contact-hero h1 { font-size: 2.2rem; margin-bottom: 12px; }
-    .contact-hero p { font-size: 1.05rem; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+    .contact-hero h1 { font-size: 2.2rem; margin-bottom: 12px; color: #ffffff; }
+    .contact-hero p  { font-size: 1.05rem; opacity: 0.9; max-width: 500px; margin: 0 auto; color: #ffffff; }
 
     /* ── Contact info cards ── */
     .contact-info-grid {
@@ -25,48 +25,49 @@
       margin-bottom: 60px;
     }
     .info-card {
-      background: var(--white);
-      border-radius: var(--radius);
+      background: #ffffff !important;
+      border-radius: 12px;
       padding: 32px 24px;
       text-align: center;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
-      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e0e0e0 !important;
+      transition: all 0.25s ease;
     }
-    .info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .info-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
     .info-card .icon-circle {
       width: 56px; height: 56px;
       border-radius: 14px;
-      background: var(--gradient);
+      background: linear-gradient(135deg, #007BFF, #28A745) !important;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 16px;
       font-size: 1.5rem;
-      color: var(--white);
+      color: #ffffff !important;
     }
-    .info-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
-    .info-card p { color: var(--mid); font-size: 0.9rem; margin-bottom: 12px; }
-    .info-card a {
-      color: var(--blue);
+    .info-card .icon-circle i { color: #ffffff !important; font-size: 1.5rem; }
+    .info-card h3 { font-size: 1.05rem; margin-bottom: 8px; color: #1a1a2e !important; }
+    .info-card p  { color: #555555 !important; font-size: 0.9rem; margin-bottom: 12px; }
+    .info-card a  {
+      color: #007BFF !important;
       font-weight: 600;
       text-decoration: none;
-      transition: color var(--transition);
+      transition: color 0.25s ease;
     }
-    .info-card a:hover { color: var(--green); }
+    .info-card a:hover { color: #28A745 !important; }
 
     /* ── Contact form section ── */
     .contact-form-wrap {
-      background: var(--white);
-      border-radius: var(--radius-lg);
+      background: #ffffff;
+      border-radius: 16px;
       padding: 48px;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border: 1px solid #e0e0e0;
       max-width: 600px;
       margin: 0 auto 80px;
     }
-    .contact-form-wrap h2 { font-size: 1.5rem; margin-bottom: 8px; }
-    .contact-form-wrap > p { color: var(--mid); margin-bottom: 32px; }
+    .contact-form-wrap h2 { font-size: 1.5rem; margin-bottom: 8px; color: #1a1a2e; }
+    .contact-form-wrap > p { color: #555555; margin-bottom: 32px; }
 
     .form-row {
       display: grid;
@@ -78,105 +79,91 @@
 
     /* ── FAQ section ── */
     .faq-wrap { max-width: 700px; margin: 0 auto; }
-    .faq-intro {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .faq-intro h2 { font-size: 1.8rem; margin-bottom: 12px; }
-    .faq-intro p { color: var(--mid); font-size: 1rem; }
+    .faq-intro { text-align: center; margin-bottom: 48px; }
+    .faq-intro h2 { font-size: 1.8rem; margin-bottom: 12px; color: #1a1a2e; }
+    .faq-intro p  { color: #555555; font-size: 1rem; }
 
-    /* ── FAQ item ── */
     .faq-item {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
       margin-bottom: 12px;
       overflow: hidden;
-      transition: box-shadow var(--transition);
+      transition: box-shadow 0.25s ease;
     }
-    .faq-item:hover { box-shadow: var(--shadow-md); }
+    .faq-item:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
     .faq-header {
       padding: 20px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      background: var(--white);
-      transition: background var(--transition);
+      background: #ffffff;
+      transition: background 0.25s ease;
     }
-    .faq-header:hover { background: var(--grey-bg); }
-    .faq-header h3 {
-      font-size: 1rem;
-      margin: 0;
-      flex: 1;
-    }
+    .faq-header:hover { background: #f5f5f5; }
+    .faq-header h3 { font-size: 1rem; margin: 0; flex: 1; color: #1a1a2e; }
     .faq-toggle {
       width: 32px; height: 32px;
       border-radius: 8px;
-      background: var(--grey-bg);
+      background: #f5f5f5;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--mid);
-      transition: var(--transition);
+      color: #555555;
+      transition: all 0.25s ease;
       flex-shrink: 0;
     }
     .faq-item.open .faq-toggle {
-      background: var(--gradient);
-      color: var(--white);
+      background: linear-gradient(135deg, #007BFF, #28A745);
+      color: #ffffff;
       transform: rotate(180deg);
     }
     .faq-body {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
-      background: var(--grey-bg);
+      background: #f9f9f9;
     }
     .faq-item.open .faq-body { max-height: 500px; }
     .faq-content {
       padding: 0 24px 20px;
-      color: var(--mid);
+      color: #555555;
       font-size: 0.95rem;
       line-height: 1.7;
     }
-    .faq-content strong { color: var(--dark); }
+    .faq-content strong { color: #1a1a2e; }
 
     /* ── Support hours badge ── */
     .support-hours {
       background: #E8F5E9;
-      border-left: 3px solid var(--green);
-      border-radius: var(--radius);
+      border-left: 3px solid #28A745;
+      border-radius: 12px;
       padding: 16px 20px;
       margin-bottom: 32px;
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .support-hours i { font-size: 1.3rem; color: var(--green); }
-    .support-hours div {
-      flex: 1;
-    }
-    .support-hours strong { display: block; font-family: 'Poppins', sans-serif; margin-bottom: 2px; }
-    .support-hours span { font-size: 0.9rem; }
+    .support-hours i { font-size: 1.3rem; color: #28A745; }
+    .support-hours strong { display: block; font-family: 'Poppins', sans-serif; margin-bottom: 2px; color: #1a1a2e; }
+    .support-hours span  { font-size: 0.9rem; color: #555555; }
 
     /* ── Success message ── */
-    .contact-success {
-      text-align: center;
-      padding: 48px 24px;
-    }
+    .contact-success { text-align: center; padding: 48px 24px; }
     .contact-success .check-icon {
       width: 80px; height: 80px;
       border-radius: 50%;
-      background: var(--gradient);
+      background: linear-gradient(135deg, #007BFF, #28A745);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--white);
+      color: #ffffff;
       font-size: 2.5rem;
       margin: 0 auto 20px;
     }
-    .contact-success h2 { font-size: 1.6rem; margin-bottom: 10px; }
-    .contact-success p { color: var(--mid); max-width: 400px; margin: 0 auto 28px; }
+    .contact-success h2 { font-size: 1.6rem; margin-bottom: 10px; color: #1a1a2e; }
+    .contact-success p  { color: #555555; max-width: 400px; margin: 0 auto 28px; }
 
     @media (max-width: 768px) {
       .contact-form-wrap { padding: 32px 24px; }
@@ -184,38 +171,6 @@
       .contact-hero { padding: 60px 20px 40px; }
       .contact-hero h1 { font-size: 1.6rem; }
     }
-
-    /* ── Visibility Fix ── */
-.info-card {
-  background: #ffffff !important;
-  border: 1px solid #e0e0e0 !important;
-}
-.info-card h3 {
-  color: #1a1a2e !important;
-  font-size: 1.05rem;
-}
-.info-card p {
-  color: #555555 !important;
-  font-size: 0.9rem;
-}
-.info-card a {
-  color: #007BFF !important;
-  font-weight: 600;
-}
-.info-card a:hover {
-  color: #28A745 !important;
-}
-.info-card .icon-circle {
-  background: linear-gradient(135deg, #007BFF, #28A745) !important;
-  color: #ffffff !important;
-}
-.contact-info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-
   </style>
 </head>
 <body>
@@ -245,42 +200,49 @@
 <section class="section">
   <div class="container">
     <div class="contact-info-grid">
+
       <div class="info-card fade-up">
         <div class="icon-circle"><i class="material-icons">mail</i></div>
         <h3>Email Us</h3>
         <p>Reach out anytime. We reply within 24 hours.</p>
-        <a href="mailto:support@wandatools.com">support@wandatools.com</a>
+        <a href="mailto:support@wandatools.app">support@wandatools.app</a>
       </div>
+
       <div class="info-card fade-up">
         <div class="icon-circle"><i class="material-icons">phone</i></div>
         <h3>Call Us</h3>
         <p>Speak to a team member directly (Mon–Fri, 09:00–17:00).</p>
         <a href="tel:+27764693531">+27 (0) 76 469 3531</a>
       </div>
+
       <div class="info-card fade-up">
         <div class="icon-circle"><i class="material-icons">forum</i></div>
         <h3>Chat</h3>
         <p>Live chat available during business hours.</p>
-        <a href="#" onclick="alert('Live chat feature coming soon!');">Start a chat</a>
+        <a href="#" onclick="alert('Live chat feature coming soon!'); return false;">Start a chat</a>
       </div>
+
       <div class="info-card fade-up">
         <div class="icon-circle"><i class="material-icons">schedule</i></div>
         <h3>Book a Session</h3>
         <p>Schedule a 1-on-1 walkthrough with our team.</p>
-        <a href="#" onclick="alert('Booking portal coming soon!');">Book now</a>
+        <a href="#" onclick="alert('Booking portal coming soon!'); return false;">Book now</a>
       </div>
+
       <div class="info-card fade-up">
         <div class="icon-circle"><i class="material-icons">school</i></div>
         <h3>Learn</h3>
         <p>Explore tutorials, guides, and best practices.</p>
         <a href="#">View resource hub</a>
       </div>
+
       <div class="info-card fade-up">
         <div class="icon-circle"><i class="material-icons">groups</i></div>
         <h3>Community</h3>
         <p>Connect with other WandaTools users and share tips.</p>
-        <a href="#">Join community</a>
+        <a href="community.html">Join community</a>
       </div>
+
     </div>
   </div>
 </section>
@@ -334,7 +296,7 @@
         <div class="form-row full">
           <div class="form-group">
             <label class="form-label">Message *</label>
-            <textarea class="form-control" name="message" placeholder="Tell us what's on your mind..." required></textarea>
+            <textarea class="form-control" name="message" rows="5" placeholder="Tell us what's on your mind..." required></textarea>
           </div>
         </div>
 
@@ -365,7 +327,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>Is my financial data secure?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -377,7 +339,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>How much does WandaTools cost?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -389,7 +351,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>Can I export my data?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -401,7 +363,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>Is WandaAI trained on my personal data?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -413,7 +375,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>Can I integrate WandaTools with my accounting software?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -425,7 +387,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>How do I delete my account?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -437,7 +399,7 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>What payment methods do you accept?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
@@ -449,13 +411,13 @@
       </div>
 
       <div class="faq-item">
-        <div class="faq-header">
+        <div class="faq-header" onclick="toggleFaq(this)">
           <h3>Can I use WandaTools for my non-profit or NGO?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            Yes! We offer <strong>discounted pricing for registered NGOs and non-profits</strong>. Email us at support@wandatools.com with your registration details to discuss options.
+            Yes! We offer <strong>discounted pricing for registered NGOs and non-profits</strong>. Email us at <a href="mailto:support@wandatools.com">support@wandatools.com</a> with your registration details to discuss options.
           </div>
         </div>
       </div>
@@ -464,7 +426,7 @@
   </div>
 </section>
 
-</div>
+</div><!-- end .page-content -->
 
 <!-- ══════════════════ FOOTER ══════════════════ -->
 <footer>
@@ -472,7 +434,7 @@
     <div class="footer-top">
       <div class="footer-brand">
         <div class="logo">WandaTools</div>
-        <p>AI-powered financial insights for businesses and individuals across South Africa.</p>
+        <p>AI-powered financial insights for businesses and individuals across Eswatini.</p>
         <div class="footer-socials">
           <a href="#" class="social-icon"><i class="material-icons">facebook</i></a>
           <a href="#" class="social-icon"><i class="material-icons">tag</i></a>
@@ -480,58 +442,84 @@
           <a href="#" class="social-icon"><i class="material-icons">photo_camera</i></a>
         </div>
       </div>
-      <div class="footer-col"><h4>Product</h4>
-        <a href="tools.html">Transactions</a><a href="tools.html">Dashboard</a>
-        <a href="tools.html">Documents</a><a href="wandaAI.html">WandaAI</a>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="tools.html">Transactions</a>
+        <a href="tools.html">Dashboard</a>
+        <a href="tools.html">Documents</a>
+        <a href="wandaAI.html">WandaAI</a>
       </div>
-      <div class="footer-col"><h4>Company</h4>
-        <a href="index.html">About Us</a><a href="contact.html">Contact</a>
-        <a href="#">Careers</a><a href="#">Blog</a>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
       </div>
-      <div class="footer-col"><h4>Legal</h4>
-        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a><a href="#">POPIA Compliance</a>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">POPIA Compliance</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2025 WandaTools. All rights reserved.</span>
       <span>Made with <span style="color:#E53935;">♥</span> in Eswatini 🇸🇿</span>
-      <div style="display:flex;gap:16px;"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+      <div style="display:flex;gap:16px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
     </div>
   </div>
 </footer>
 
 <script src="nav.js"></script>
 <script>
+  /* ── FAQ Toggle ── */
+  function toggleFaq(header) {
+    const item = header.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all open items first
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    // Open clicked one if it was closed
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── Contact Form Submit ── */
   async function handleContactSubmit(e) {
     e.preventDefault();
     const form = document.getElementById('contactForm');
-    if (typeof validateForm === 'function' && !validateForm(form)) return;
+
+    // Basic validation
+    const name    = form.querySelector('[name="name"]').value.trim();
+    const email   = form.querySelector('[name="email"]').value.trim();
+    const subject = form.querySelector('[name="subject"]').value;
+    const message = form.querySelector('[name="message"]').value.trim();
+
+    if (!name || !email || !subject || !message) {
+      if (typeof showToast === 'function') showToast('Please fill in all required fields.', 'error');
+      return;
+    }
 
     const btn = form.querySelector('button[type="submit"]');
-    if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
-
-    const formData = new FormData(form);
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="material-icons">hourglass_empty</i> Sending...'; }
 
     try {
       await apiCall('/support/contact', {
         method: 'POST',
-        body: JSON.stringify({
-          name:    formData.get('name'),
-          email:   formData.get('email'),
-          subject: formData.get('subject') || 'WandaTools Contact Form',
-          message: formData.get('message'),
-        }),
+        body: JSON.stringify({ name, email, subject, message }),
       });
 
       form.style.display = 'none';
       const success = document.getElementById('successMessage');
       if (success) success.style.display = 'block';
-      showToast('Message sent successfully!');
+      if (typeof showToast === 'function') showToast('Message sent successfully!');
 
     } catch (error) {
-      showToast(error.message, 'error');
-      if (btn) { btn.disabled = false; btn.textContent = 'Send Message'; }
+      if (typeof showToast === 'function') showToast(error.message || 'Failed to send message.', 'error');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="material-icons">send</i> Send Message'; }
     }
   }
 </script>
