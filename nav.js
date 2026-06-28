@@ -192,15 +192,17 @@ function renderNavigation() {
 }
 
 // ── Public nav (logged out) ──────────────────────────────
+// Row 1: WandaTools logo (left) + Sign In / Get Started (right)
+// Row 2: Home, Features, Community, Contact
 function _renderPublicNav(navLinks, navAuth) {
-  const links = [
+  _buildNavRows(navLinks, navAuth);
+
+  navLinks.innerHTML = [
     { href: 'index.html',     page: 'index.html',     label: 'Home'      },
     { href: 'features.html',  page: 'features.html',  label: 'Features'  },
     { href: 'community.html', page: 'community.html', label: 'Community' },
     { href: 'contact.html',   page: 'contact.html',   label: 'Contact'   },
-  ];
-
-  navLinks.innerHTML = links.map(l =>
+  ].map(l =>
     `<li><a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a></li>`
   ).join('');
 
@@ -213,18 +215,20 @@ function _renderPublicNav(navLinks, navAuth) {
 }
 
 // ── Private nav (logged in) ──────────────────────────────
+// Row 1: WandaTools logo (left) + user avatar/dropdown (right)
+// Row 2: Tools, WandaAI, Profile
 function _renderPrivateNav(navLinks, navAuth) {
+  _buildNavRows(navLinks, navAuth);
+
   const initials = auth.getUserInitials();
   const name     = auth.getUserName();
   const currency = auth.getCurrency();
 
-  const links = [
+  navLinks.innerHTML = [
     { href: 'tools.html',   page: 'tools.html',   label: 'Tools'   },
     { href: 'wandaAI.html', page: 'wandaAI.html', label: 'WandaAI' },
     { href: 'profile.html', page: 'profile.html', label: 'Profile' },
-  ];
-
-  navLinks.innerHTML = links.map(l =>
+  ].map(l =>
     `<li><a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a></li>`
   ).join('');
 
@@ -264,6 +268,40 @@ function _renderPrivateNav(navLinks, navAuth) {
       </div>
     </div>
   `;
+}
+
+// ── DOM builder: restructure nav-inner into two rows ─────
+// Called once per page load. Safe to call multiple times.
+//
+// BEFORE (from HTML):                AFTER:
+//   nav-inner                          nav-inner
+//     nav-logo                           nav-logo-row
+//     nav-links  (ul)                      nav-logo (a)
+//     navAuth    (div)                     navAuth  (div#navAuth)
+//                                        nav-links-row
+//                                          nav-links (ul)
+//
+function _buildNavRows(navLinks, navAuth) {
+  const inner = navLinks.closest('.nav-inner');
+  if (!inner || inner.querySelector('.nav-logo-row')) return; // already built
+
+  const logo = inner.querySelector('.nav-logo');
+
+  // Create Row 1
+  const row1 = document.createElement('div');
+  row1.className = 'nav-logo-row';
+  if (logo)    row1.appendChild(logo);
+  row1.appendChild(navAuth);   // navAuth moves to row 1 (right side)
+
+  // Create Row 2
+  const row2 = document.createElement('div');
+  row2.className = 'nav-links-row';
+  row2.appendChild(navLinks);  // navLinks moves to row 2
+
+  // Clear inner and rebuild
+  inner.innerHTML = '';
+  inner.appendChild(row1);
+  inner.appendChild(row2);
 }
 
 function toggleDropdown() {
