@@ -1,914 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Create your WandaTools account - AI-powered financial management">
-    <meta name="theme-color" content="#007BFF">
-    <title>Create Account - WandaTools</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* ═══════════════════════════════════════════════════════════
-           NAVIGATION
-           ═══════════════════════════════════════════════════════════ */
-        
-        nav {
-            background: #FFFFFF;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
-        
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .logo:hover {
-            opacity: 0.9;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: #333333;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .nav-links a:hover {
-            color: #007BFF;
-        }
-        
-        #navAuth {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .btn-nav-signin {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border: 1px solid #007BFF;
-            border-radius: 6px;
-            transition: all 0.3s;
-            cursor: pointer;
-            background: transparent;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .btn-nav-signin:hover {
-            background: #007BFF;
-            color: white;
-        }
-        
-        .btn-nav-signup {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            color: white;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .btn-nav-signup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-        }
-        
-        .user-menu {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        .dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 101;
-            border: 1px solid #E0E0E0;
-        }
-        
-        .dropdown.active {
-            display: block;
-        }
-        
-        .dropdown a, .dropdown button {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            color: #333333;
-            text-decoration: none;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s;
-            text-align: left;
-        }
-        
-        .dropdown a:hover, .dropdown button:hover {
-            background: #F5F5F5;
-            color: #007BFF;
-        }
-        
-        .dropdown-divider {
-            height: 1px;
-            background: #E0E0E0;
-            margin: 0;
-        }
-        
-        /* ═══════════════════════════════════════════════════════════
-           MAIN CONTENT
-           ═══════════════════════════════════════════════════════════ */
-        
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
-        
-        .container {
-            max-width: 500px;
-            width: 100%;
-        }
-        
-        .card {
-            background: #FFFFFF;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            padding: 40px;
-        }
-        
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            color: #333333;
-            margin-bottom: 5px;
-            font-size: 28px;
-            font-weight: 700;
-        }
-        
-        .subtitle {
-            color: #666666;
-            margin-bottom: 30px;
-            font-size: 13px;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        /* ALERTS */
-        #alertContainer {
-            margin-bottom: 20px;
-        }
-        
-        .alert {
-            padding: 12px 14px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            border-left: 4px solid;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        .alert-error {
-            background: #FFEBEE;
-            color: #C62828;
-            border-left-color: #F44336;
-        }
-        
-        .alert-success {
-            background: #E8F5E9;
-            color: #2E7D32;
-            border-left-color: #28A745;
-        }
-        
-        /* FORM TABS */
-        .form-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #F5F5F5;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 12px 0;
-            border: none;
-            background: transparent;
-            color: #999999;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .tab-btn.active {
-            color: #007BFF;
-            border-bottom-color: #007BFF;
-        }
-        
-        .tab-btn:hover {
-            color: #333333;
-        }
-        
-        .form-section {
-            display: none;
-        }
-        
-        .form-section.active {
-            display: block;
-        }
-        
-        /* FORM GROUPS */
-        .form-group {
-            margin-bottom: 18px;
-        }
-        
-        label {
-            display: block;
-            color: #333333;
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #E0E0E0;
-            border-radius: 6px;
-            font-size: 13px;
-            font-family: 'Open Sans', sans-serif;
-            background: #FFFFFF;
-            color: #333333;
-            transition: all 0.3s;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #007BFF;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-        
-        input::placeholder {
-            color: #999999;
-        }
-        
-        input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
-        }
-        
-        /* PASSWORD STRENGTH */
-        .password-strength {
-            margin-top: 6px;
-            height: 3px;
-            background: #E0E0E0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        
-        .strength-bar {
-            height: 100%;
-            width: 0%;
-            transition: all 0.3s;
-            border-radius: 3px;
-        }
-        
-        .strength-0 { width: 20%; background: #F44336; }
-        .strength-1 { width: 40%; background: #FF9800; }
-        .strength-2 { width: 60%; background: #FFC107; }
-        .strength-3 { width: 80%; background: #28A745; }
-        .strength-4 { width: 100%; background: #007BFF; }
-        
-        .strength-text {
-            font-size: 11px;
-            margin-top: 4px;
-            font-weight: 600;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .strength-weak { color: #F44336; }
-        .strength-fair { color: #FF9800; }
-        .strength-good { color: #28A745; }
-        .strength-strong { color: #007BFF; }
-        
-        .feedback {
-            font-size: 11px;
-            color: #999999;
-            margin-top: 4px;
-            font-family: 'Open Sans', sans-serif;
-            line-height: 1.4;
-        }
-        
-        /* BUTTONS */
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-            font-family: 'Open Sans', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-        }
-        
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .btn-secondary {
-            background: #F5F5F5;
-            color: #333333;
-            border: 1px solid #E0E0E0;
-        }
-        
-        .btn-secondary:hover {
-            background: #EEEEEE;
-        }
-        
-        /* TOGGLE FORM */
-        .toggle-form {
-            text-align: center;
-            margin-top: 20px;
-            color: #999999;
-            font-size: 12px;
-        }
-        
-        .toggle-form a {
-            color: #007BFF;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .toggle-form a:hover {
-            text-decoration: underline;
-        }
-        
-        h3 {
-            font-family: 'Poppins', sans-serif;
-            color: #333333;
-            font-size: 14px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        /* FOOTER */
-        footer {
-            background: rgba(0, 0, 0, 0.1);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 11px;
-        }
-        
-        @media (max-width: 768px) {
-            .card {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
-            
-            .form-tabs {
-                gap: 5px;
-            }
-            
-            .tab-btn {
-                font-size: 11px;
-                padding: 10px 0;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Create your WandaTools account - AI-powered financial management" />
+  <meta name="theme-color" content="#007BFF" />
+  <title>Create Account – WandaTools</title>
+
+  <!-- Shared stylesheet (defines all CSS variables, navbar, buttons, forms) -->
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <style>
+    /* ── Page background ── */
+    body {
+      background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Push content below fixed navbar ── */
+    .signup-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* ── Card ── */
+    .signup-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 520px;
+    }
+    .signup-card h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .signup-card .subtitle {
+      color: #666666;
+      font-size: 0.875rem;
+      margin-bottom: 28px;
+    }
+
+    /* ── Alerts ── */
+    #alertContainer { margin-bottom: 16px; }
+    .alert {
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      border-left: 4px solid;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-16px); opacity: 0; }
+      to   { transform: translateX(0);     opacity: 1; }
+    }
+    .alert-error   { background: #FFEBEE; color: #C62828; border-left-color: #F44336; }
+    .alert-success { background: #E8F5E9; color: #2E7D32; border-left-color: #28A745; }
+
+    /* ── Tabs ── */
+    .form-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #F0F0F0;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      border: none;
+      background: transparent;
+      color: #999999;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.75rem;
+      font-family: 'Open Sans', sans-serif;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tab-btn.active { color: #007BFF; border-bottom-color: #007BFF; }
+    .tab-btn:hover:not(.active) { color: #333333; }
+
+    /* ── Form sections ── */
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+
+    /* ── Form groups (override styles.css for tighter signup look) ── */
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      color: #333333;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+      font-family: 'Open Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-family: 'Open Sans', sans-serif;
+      background: #ffffff;
+      color: #333333;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+    .form-group input::placeholder { color: #AAAAAA; }
+    .form-group input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    /* ── Section sub-heading ── */
+    .form-section-title {
+      font-family: 'Poppins', sans-serif;
+      color: #333333;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin: 20px 0 14px;
+    }
+
+    /* ── Password strength ── */
+    .password-strength {
+      margin-top: 6px;
+      height: 3px;
+      background: #E0E0E0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .strength-bar { height: 100%; width: 0%; transition: all 0.3s; border-radius: 3px; }
+    .strength-0 { width: 20%;  background: #F44336; }
+    .strength-1 { width: 40%;  background: #FF9800; }
+    .strength-2 { width: 60%;  background: #FFC107; }
+    .strength-3 { width: 80%;  background: #28A745; }
+    .strength-4 { width: 100%; background: #007BFF; }
+    .strength-text { font-size: 0.7rem; margin-top: 4px; font-weight: 600; font-family: 'Open Sans', sans-serif; }
+    .strength-weak   { color: #F44336; }
+    .strength-fair   { color: #FF9800; }
+    .strength-good   { color: #28A745; }
+    .strength-strong { color: #007BFF; }
+    .feedback { font-size: 0.7rem; color: #999999; margin-top: 4px; font-family: 'Open Sans', sans-serif; line-height: 1.4; }
+
+    /* ── Buttons inside signup card ── */
+    .signup-card .btn {
+      width: 100%;
+      margin-top: 8px;
+      justify-content: center;
+    }
+    .signup-card .btn-secondary {
+      background: #F5F5F5;
+      color: #333333;
+      border: 1.5px solid #E0E0E0;
+      box-shadow: none;
+      margin-top: 10px;
+    }
+    .signup-card .btn-secondary:hover {
+      background: #EEEEEE;
+      transform: none;
+      box-shadow: none;
+    }
+    .signup-card .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── Toggle link ── */
+    .toggle-form {
+      text-align: center;
+      margin-top: 20px;
+      color: #999999;
+      font-size: 0.8rem;
+    }
+    .toggle-form a {
+      color: #007BFF;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .toggle-form a:hover { text-decoration: underline; }
+
+    /* ── Remember me row ── */
+    .remember-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .remember-row input { width: auto; margin: 0 8px 0 0; }
+    .remember-row label {
+      margin: 0;
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 400;
+      font-size: 0.8rem;
+    }
+
+    /* ── Footer ── */
+    .signup-footer {
+      background: rgba(0,0,0,0.12);
+      color: rgba(255,255,255,0.85);
+      padding: 18px 20px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    @media (max-width: 560px) {
+      .signup-card { padding: 32px 20px; }
+      .signup-card h1 { font-size: 1.4rem; }
+      .tab-btn { font-size: 0.7rem; padding: 10px 0; }
+    }
+  </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="nav-container">
-            <a href="/" class="logo">WandaTools</a>
-            <ul class="nav-links"></ul>
-            <div id="navAuth"></div>
-        </div>
-    </nav>
-    
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <div class="container">
-            <div class="card">
-                <h1>WandaTools</h1>
-                <p class="subtitle">Secure Financial Management Platform</p>
-                
-                <!-- ALERTS -->
-                <div id="alertContainer"></div>
-                
-                <!-- TABS -->
-                <div class="form-tabs">
-                    <button class="tab-btn active" onclick="switchForm('individual')">Individual</button>
-                    <button class="tab-btn" onclick="switchForm('business')">Business</button>
-                    <button class="tab-btn" onclick="switchForm('login')">Sign In</button>
-                </div>
-                
-                <!-- ═════════════════════════════════════════════════
-                     INDIVIDUAL SIGNUP
-                     ═════════════════════════════════════════════════ -->
-                
-                <div id="individual" class="form-section active">
-                    <form id="individualForm" onsubmit="handleIndividualSignup(event)" novalidate>
-                        <div class="form-group">
-                            <label for="indName">Full Name</label>
-                            <input 
-                                type="text" 
-                                id="indName" 
-                                name="name"
-                                placeholder="John Doe" 
-                                required
-                                minlength="2"
-                                maxlength="100"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="indEmail">Email Address</label>
-                            <input
-                                type="email"
-                                id="indEmail"
-                                name="email"
-                                placeholder="you@example.com"
-                                required
-                                maxlength="255"
-                                autocomplete="username"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="indPassword">Password</label>
-                            <input 
-                                type="password"
-                                id="indPassword"
-                                name="password"
-                                placeholder="••••••••••••"
-                                required
-                                minlength="12"
-                                autocomplete="new-password"
-                                oninput="updateStrengthUI('indPassword', this.value)"
-                            >
-                            <div class="password-strength">
-                                <div id="indStrengthBar" class="strength-bar"></div>
-                            </div>
-                            <div id="indStrengthText" class="strength-text"></div>
-                            <div id="indFeedback" class="feedback"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="indPasswordConfirm">Confirm Password</label>
-                            <input 
-                                type="password"
-                                id="indPasswordConfirm"
-                                name="passwordConfirm"
-                                placeholder="••••••••••••"
-                                required
-                                minlength="12"
-                                autocomplete="new-password"
-                            >
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" id="indSubmitBtn">Create Account</button>
-                    </form>
-                </div>
-                
-                <!-- ═════════════════════════════════════════════════
-                     BUSINESS SIGNUP
-                     ═════════════════════════════════════════════════ -->
-                
-                <div id="business" class="form-section">
-                    <form id="businessForm" onsubmit="handleBusinessSignup(event)" novalidate>
-                        <h3>Personal Information</h3>
-                        
-                        <div class="form-group">
-                            <label for="bizName">Full Name</label>
-                            <input 
-                                type="text" 
-                                id="bizName" 
-                                name="name"
-                                placeholder="John Doe" 
-                                required
-                                minlength="2"
-                                maxlength="100"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizEmail">Email Address</label>
-                            <input
-                                type="email"
-                                id="bizEmail"
-                                name="email"
-                                placeholder="john@example.com"
-                                required
-                                maxlength="255"
-                                autocomplete="username"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizPhone">Phone Number</label>
-                            <input 
-                                type="tel" 
-                                id="bizPhone" 
-                                name="phone"
-                                placeholder="+27 XX XXX XXXX" 
-                                required
-                                pattern="[0-9+\s\-]+"
-                            >
-                        </div>
-                        
-                        <h3 style="margin-top: 25px;">Business Information</h3>
-                        
-                        <div class="form-group">
-                            <label for="bizBusinessName">Business Name</label>
-                            <input 
-                                type="text" 
-                                id="bizBusinessName" 
-                                name="businessName"
-                                placeholder="Your Business Ltd" 
-                                required
-                                minlength="2"
-                                maxlength="255"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizBusinessType">Business Type / Industry</label>
-                            <select id="bizBusinessType" name="businessType" required>
-                                <option value="">Select industry...</option>
-                                <option value="Retail">Retail & E-Commerce</option>
-                                <option value="Services">Professional Services</option>
-                                <option value="Technology">Technology & Software</option>
-                                <option value="Manufacturing">Manufacturing</option>
-                                <option value="Healthcare">Healthcare & Wellness</option>
-                                <option value="Finance">Finance & Insurance</option>
-                                <option value="Hospitality">Hospitality & Tourism</option>
-                                <option value="Education">Education & Training</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizBusinessEmail">Business Email</label>
-                            <input 
-                                type="email" 
-                                id="bizBusinessEmail" 
-                                name="businessEmail"
-                                placeholder="business@company.com" 
-                                required
-                                maxlength="255"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizRegistration">Business Registration Number</label>
-                            <input 
-                                type="text" 
-                                id="bizRegistration" 
-                                name="businessRegistration"
-                                placeholder="Registration ID or Tax Number" 
-                                required
-                                minlength="3"
-                                maxlength="100"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizCountry">Country</label>
-                            <input 
-                                type="text" 
-                                id="bizCountry" 
-                                name="country"
-                                placeholder="South Africa" 
-                                required
-                                maxlength="100"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizPassword">Password</label>
-                            <input 
-                                type="password"
-                                id="bizPassword"
-                                name="password"
-                                placeholder="••••••••••••"
-                                required
-                                minlength="12"
-                                autocomplete="new-password"
-                                oninput="updateStrengthUI('bizPassword', this.value)"
-                            >
-                            <div class="password-strength">
-                                <div id="bizStrengthBar" class="strength-bar"></div>
-                            </div>
-                            <div id="bizStrengthText" class="strength-text"></div>
-                            <div id="bizFeedback" class="feedback"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bizPasswordConfirm">Confirm Password</label>
-                            <input 
-                                type="password"
-                                id="bizPasswordConfirm"
-                                name="passwordConfirm"
-                                placeholder="••••••••••••"
-                                required
-                                minlength="12"
-                                autocomplete="new-password"
-                            >
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" id="bizSubmitBtn">Create Business Account</button>
-                    </form>
-                </div>
-                
-                <!-- ═════════════════════════════════════════════════
-                     LOGIN
-                     ═════════════════════════════════════════════════ -->
-                
-                <div id="login" class="form-section">
-                    <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
-                        <div class="form-group">
-                            <label for="loginEmail">Email Address</label>
-                            <input
-                                type="email"
-                                id="loginEmail"
-                                name="email"
-                                placeholder="you@example.com"
-                                required
-                                maxlength="255"
-                                autocomplete="username"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="loginPassword">Password</label>
-                            <input 
-                                type="password"
-                                id="loginPassword"
-                                name="password"
-                                placeholder="••••••••••••"
-                                required
-                                minlength="8"
-                                autocomplete="current-password"
-                            >
-                        </div>
-                        
-                        <div class="form-group" style="display: flex; align-items: center; margin-bottom: 20px;">
-                            <input 
-                                type="checkbox" 
-                                id="rememberMe" 
-                                name="rememberMe"
-                                style="width: auto; margin: 0; margin-right: 8px;"
-                            >
-                            <label for="rememberMe" style="display: inline; margin: 0; text-transform: none; letter-spacing: normal; font-weight: 400; font-size: 12px;">Remember me</label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" id="loginSubmitBtn">Sign In</button>
-                        <button type="button" class="btn btn-secondary" onclick="location.href='/forget-password.html'">Forgot Password?</button>
-                    </form>
-                </div>
-                
-                <div class="toggle-form">
-                    Don't have an account? <a onclick="switchForm('individual')">Create one</a>
-                </div>
-            </div>
-        </div>
+
+<!-- ══════════════════ NAVBAR (injected by nav.js) ══════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
+</nav>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<div class="page-content signup-main">
+  <div style="width:100%;max-width:520px;">
+    <div class="signup-card">
+      <h1>WandaTools</h1>
+      <p class="subtitle">Secure Financial Management Platform</p>
+
+      <!-- Alerts -->
+      <div id="alertContainer"></div>
+
+      <!-- Tabs -->
+      <div class="form-tabs">
+        <button class="tab-btn active" onclick="switchForm('individual', this)">Individual</button>
+        <button class="tab-btn"        onclick="switchForm('business',   this)">Business</button>
+        <button class="tab-btn"        onclick="switchForm('login',      this)">Sign In</button>
+      </div>
+
+      <!-- ══ INDIVIDUAL SIGNUP ══ -->
+      <div id="individual" class="form-section active">
+        <form id="individualForm" onsubmit="handleIndividualSignup(event)" novalidate>
+          <div class="form-group">
+            <label for="indName">Full Name</label>
+            <input type="text"     id="indName"            name="name"            placeholder="John Doe"        required minlength="2" maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label for="indEmail">Email Address</label>
+            <input type="email"    id="indEmail"           name="email"           placeholder="you@example.com" required maxlength="255" autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label for="indPassword">Password</label>
+            <input type="password" id="indPassword"        name="password"        placeholder="••••••••••••"    required minlength="12" autocomplete="new-password"
+                   oninput="updateStrengthUI('indPassword', this.value)" />
+            <div class="password-strength"><div id="indStrengthBar" class="strength-bar"></div></div>
+            <div id="indStrengthText" class="strength-text"></div>
+            <div id="indFeedback"    class="feedback"></div>
+          </div>
+          <div class="form-group">
+            <label for="indPasswordConfirm">Confirm Password</label>
+            <input type="password" id="indPasswordConfirm" name="passwordConfirm" placeholder="••••••••••••"    required minlength="12" autocomplete="new-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="indSubmitBtn">Create Account</button>
+        </form>
+      </div>
+
+      <!-- ══ BUSINESS SIGNUP ══ -->
+      <div id="business" class="form-section">
+        <form id="businessForm" onsubmit="handleBusinessSignup(event)" novalidate>
+          <p class="form-section-title">Personal Information</p>
+          <div class="form-group">
+            <label for="bizName">Full Name</label>
+            <input type="text"  id="bizName"            name="name"                placeholder="John Doe"              required minlength="2" maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label for="bizEmail">Email Address</label>
+            <input type="email" id="bizEmail"           name="email"               placeholder="john@example.com"      required maxlength="255" autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label for="bizPhone">Phone Number</label>
+            <input type="tel"   id="bizPhone"           name="phone"               placeholder="+268 7XXX XXXX"        required pattern="[0-9+\s\-]+" />
+          </div>
+
+          <p class="form-section-title">Business Information</p>
+          <div class="form-group">
+            <label for="bizBusinessName">Business Name</label>
+            <input type="text"  id="bizBusinessName"   name="businessName"         placeholder="Your Business Ltd"     required minlength="2" maxlength="255" />
+          </div>
+          <div class="form-group">
+            <label for="bizBusinessType">Business Type / Industry</label>
+            <select id="bizBusinessType" name="businessType" required>
+              <option value="">Select industry...</option>
+              <option value="Retail">Retail &amp; E-Commerce</option>
+              <option value="Services">Professional Services</option>
+              <option value="Technology">Technology &amp; Software</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Healthcare">Healthcare &amp; Wellness</option>
+              <option value="Finance">Finance &amp; Insurance</option>
+              <option value="Hospitality">Hospitality &amp; Tourism</option>
+              <option value="Education">Education &amp; Training</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bizBusinessEmail">Business Email</label>
+            <input type="email" id="bizBusinessEmail"  name="businessEmail"        placeholder="business@company.com"  required maxlength="255" />
+          </div>
+          <div class="form-group">
+            <label for="bizRegistration">Business Registration Number</label>
+            <input type="text"  id="bizRegistration"   name="businessRegistration" placeholder="Registration / Tax No." required minlength="3" maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label for="bizCountry">Country</label>
+            <input type="text"  id="bizCountry"        name="country"              placeholder="Eswatini"              required maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label for="bizPassword">Password</label>
+            <input type="password" id="bizPassword"        name="password"         placeholder="••••••••••••" required minlength="12" autocomplete="new-password"
+                   oninput="updateStrengthUI('bizPassword', this.value)" />
+            <div class="password-strength"><div id="bizStrengthBar" class="strength-bar"></div></div>
+            <div id="bizStrengthText" class="strength-text"></div>
+            <div id="bizFeedback"    class="feedback"></div>
+          </div>
+          <div class="form-group">
+            <label for="bizPasswordConfirm">Confirm Password</label>
+            <input type="password" id="bizPasswordConfirm" name="passwordConfirm"  placeholder="••••••••••••" required minlength="12" autocomplete="new-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="bizSubmitBtn">Create Business Account</button>
+        </form>
+      </div>
+
+      <!-- ══ LOGIN ══ -->
+      <div id="login" class="form-section">
+        <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email"    id="loginEmail"    name="email"    placeholder="you@example.com" required maxlength="255" autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" placeholder="••••••••••••"    required minlength="8"   autocomplete="current-password" />
+          </div>
+          <div class="remember-row">
+            <input type="checkbox" id="rememberMe" name="rememberMe" />
+            <label for="rememberMe">Remember me</label>
+          </div>
+          <button type="submit"  class="btn btn-primary"   id="loginSubmitBtn">Sign In</button>
+          <button type="button"  class="btn btn-secondary" onclick="location.href='forget-password.html'">Forgot Password?</button>
+        </form>
+      </div>
+
+      <div class="toggle-form">
+        Don't have an account? <a onclick="switchForm('individual', null)">Create one</a>
+      </div>
     </div>
-    
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2025 WandaTools. All rights reserved. | Made for Eswatini 🇸🇿</p>
-    </footer>
-    
-    <!-- ═══════════════════════════════════════════════════════════
-         SCRIPTS - Load nav.js FIRST, then signup logic
-         ═══════════════════════════════════════════════════════════ -->
-    
-    <script src="nav.js"></script>
+  </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="signup-footer">
+  &copy; 2025 WandaTools. All rights reserved. | Made for Eswatini 🇸🇿
+</footer>
+
+<!-- nav.js MUST load first — it defines API_BASE, apiCall, showAlert, showToast, protectFromAuth, updateStrengthUI -->
+<script src="nav.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Redirect logged-in users away from signup page
-    protectFromAuth();
+    // Redirect already-logged-in users away from this page
+    if (typeof protectFromAuth === 'function') protectFromAuth();
   });
 
-  // ── Extract human-readable error message from any backend response ──
+  /* ── Tab switching ─────────────────────────────────────────── */
+  function switchForm(formName, btn) {
+    document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById(formName);
+    if (target) target.classList.add('active');
+
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    document.querySelector('.signup-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ── Extract readable error from backend response ──────────── */
   function extractError(result, fallback) {
     if (!result) return fallback;
     if (typeof result.detail === 'string') return result.detail;
-    if (Array.isArray(result.detail))
-      return result.detail.map(e => e.msg || String(e)).join(' • ');
+    if (Array.isArray(result.detail)) return result.detail.map(e => e.msg || String(e)).join(' • ');
     return result.message || fallback;
   }
 
-  // ── Form tab switching ──────────────────────────────────
-  function switchForm(formName) {
-    document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
-    const sel = document.getElementById(formName);
-    if (sel) sel.classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    if (event && event.target) event.target.classList.add('active');
-    document.querySelector('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  // ── Validation ───────────────────────────────────────────
-  function validateIndividualForm() {
-    const name     = document.getElementById('indName').value.trim();
-    const email    = document.getElementById('indEmail').value.trim();
-    const password = document.getElementById('indPassword').value;
-    const confirm  = document.getElementById('indPasswordConfirm').value;
-    const emailRe  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (name.length < 2)        { showAlert('Name must be at least 2 characters'); return false; }
-    if (!emailRe.test(email))   { showAlert('Please enter a valid email address'); return false; }
-    if (password.length < 8)    { showAlert('Password must be at least 8 characters'); return false; }
-    if (password !== confirm)   { showAlert('Passwords do not match'); return false; }
-    return true;
-  }
-
-  function validateBusinessForm() {
-    const name         = document.getElementById('bizName').value.trim();
-    const email        = document.getElementById('bizEmail').value.trim();
-    const businessName = document.getElementById('bizBusinessName').value.trim();
-    const businessType = document.getElementById('bizBusinessType').value;
-    const password     = document.getElementById('bizPassword').value;
-    const confirm      = document.getElementById('bizPasswordConfirm').value;
-    const emailRe      = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (name.length < 2)             { showAlert('Name must be at least 2 characters'); return false; }
-    if (!emailRe.test(email))        { showAlert('Please enter a valid email'); return false; }
-    if (businessName.length < 2)     { showAlert('Business name must be at least 2 characters'); return false; }
-    if (!businessType)               { showAlert('Please select a business type'); return false; }
-    if (password.length < 8)         { showAlert('Password must be at least 8 characters'); return false; }
-    if (password !== confirm)        { showAlert('Passwords do not match'); return false; }
-    return true;
-  }
-
-  // ── Individual signup ─────────────────────────────────────
+  /* ── Individual signup ─────────────────────────────────────── */
   async function handleIndividualSignup(event) {
     event.preventDefault();
-    console.log("Individual signup submitted, sending to backend...");
 
     const name     = document.getElementById('indName').value.trim();
     const email    = document.getElementById('indEmail').value.trim();
     const password = document.getElementById('indPassword').value;
     const confirm  = document.getElementById('indPasswordConfirm').value;
 
-    if (name.length < 2)                              { showAlert('Name must be at least 2 characters'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))   { showAlert('Please enter a valid email address'); return; }
-    if (password.length < 12)                         { showAlert('Password must be at least 12 characters'); return; }
-    if (password !== confirm)                         { showAlert('Passwords do not match'); return; }
+    if (name.length < 2)                            { showAlert('Name must be at least 2 characters'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('Please enter a valid email address'); return; }
+    if (password.length < 12)                       { showAlert('Password must be at least 12 characters'); return; }
+    if (password !== confirm)                       { showAlert('Passwords do not match'); return; }
 
     const btn = document.getElementById('indSubmitBtn');
     btn.disabled = true;
-    btn.textContent = 'Creating account...';
+    btn.innerHTML = '<i class="material-icons" style="font-size:1rem;vertical-align:middle;">hourglass_empty</i> Creating account...';
 
     try {
       const response = await fetch(`${API_BASE}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, timezone: "Africa/Johannesburg", currency: "E" })
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ name, email, password, timezone: 'Africa/Johannesburg', currency: 'E' }),
       });
-
       const result = await response.json();
+
       if (response.ok) {
         WandaAuth.auth.login(result);
         showAlert('✅ Account created! Redirecting...', 'success');
-        setTimeout(() => { location.href = '/tools.html'; }, 1500);
+        setTimeout(() => { location.href = 'tools.html'; }, 1500);
       } else {
         showAlert(extractError(result, 'Signup failed'), 'error');
         btn.disabled = false;
         btn.textContent = 'Create Account';
       }
-    } catch (error) {
-      console.error("Signup error:", error);
+    } catch {
       showAlert('Network error — please check your connection and try again.', 'error');
       btn.disabled = false;
       btn.textContent = 'Create Account';
     }
   }
 
-  // ── Business signup ───────────────────────────────────────
+  /* ── Business signup ───────────────────────────────────────── */
   async function handleBusinessSignup(event) {
     event.preventDefault();
-    console.log("Business signup submitted, sending to backend...");
 
     const name         = document.getElementById('bizName').value.trim();
     const email        = document.getElementById('bizEmail').value.trim();
@@ -917,22 +474,22 @@
     const password     = document.getElementById('bizPassword').value;
     const confirm      = document.getElementById('bizPasswordConfirm').value;
 
-    if (name.length < 2)                              { showAlert('Name must be at least 2 characters'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))   { showAlert('Please enter a valid email'); return; }
-    if (businessName.length < 2)                      { showAlert('Business name must be at least 2 characters'); return; }
-    if (!businessType)                                { showAlert('Please select a business type'); return; }
-    if (password.length < 12)                         { showAlert('Password must be at least 12 characters'); return; }
-    if (password !== confirm)                         { showAlert('Passwords do not match'); return; }
+    if (name.length < 2)                            { showAlert('Name must be at least 2 characters'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('Please enter a valid email'); return; }
+    if (businessName.length < 2)                    { showAlert('Business name must be at least 2 characters'); return; }
+    if (!businessType)                              { showAlert('Please select a business type'); return; }
+    if (password.length < 12)                       { showAlert('Password must be at least 12 characters'); return; }
+    if (password !== confirm)                       { showAlert('Passwords do not match'); return; }
 
     const btn = document.getElementById('bizSubmitBtn');
     btn.disabled = true;
-    btn.textContent = 'Creating account...';
+    btn.innerHTML = '<i class="material-icons" style="font-size:1rem;vertical-align:middle;">hourglass_empty</i> Creating account...';
 
     try {
       const response = await fetch(`${API_BASE}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
           name,
           email,
           password,
@@ -942,33 +499,31 @@
           phone:                 document.getElementById('bizPhone').value.trim(),
           business_registration: document.getElementById('bizRegistration').value.trim(),
           country:               document.getElementById('bizCountry').value.trim(),
-          timezone:              "Africa/Johannesburg",
-          currency:              "E"
-        })
+          timezone:              'Africa/Johannesburg',
+          currency:              'E',
+        }),
       });
-
       const result = await response.json();
+
       if (response.ok) {
         WandaAuth.auth.login(result);
         showAlert('✅ Business account created! Redirecting...', 'success');
-        setTimeout(() => { location.href = '/tools.html'; }, 1500);
+        setTimeout(() => { location.href = 'tools.html'; }, 1500);
       } else {
         showAlert(extractError(result, 'Signup failed'), 'error');
         btn.disabled = false;
         btn.textContent = 'Create Business Account';
       }
-    } catch (error) {
-      console.error("Signup error:", error);
+    } catch {
       showAlert('Network error — please check your connection and try again.', 'error');
       btn.disabled = false;
       btn.textContent = 'Create Business Account';
     }
   }
 
-  // ── Login ─────────────────────────────────────────────────
+  /* ── Login ─────────────────────────────────────────────────── */
   async function handleLogin(event) {
     event.preventDefault();
-    console.log("Login submitted, sending to backend...");
 
     const email    = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
@@ -977,27 +532,26 @@
 
     const btn = document.getElementById('loginSubmitBtn');
     btn.disabled = true;
-    btn.textContent = 'Signing in...';
+    btn.innerHTML = '<i class="material-icons" style="font-size:1rem;vertical-align:middle;">hourglass_empty</i> Signing in...';
 
     try {
       const response = await fetch(`${API_BASE}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, password }),
       });
-
       const result = await response.json();
+
       if (response.ok) {
         WandaAuth.auth.login(result);
         showAlert('✅ Login successful! Redirecting...', 'success');
-        setTimeout(() => { location.href = '/tools.html'; }, 1500);
+        setTimeout(() => { location.href = 'tools.html'; }, 1500);
       } else {
         showAlert(extractError(result, 'Login failed — please check your credentials'), 'error');
         btn.disabled = false;
         btn.textContent = 'Sign In';
       }
-    } catch (error) {
-      console.error("Login error:", error);
+    } catch {
       showAlert('Network error — please check your connection and try again.', 'error');
       btn.disabled = false;
       btn.textContent = 'Sign In';
