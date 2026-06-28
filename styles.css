@@ -168,13 +168,20 @@ ul { list-style: none; }
   gap: 12px;
 }
 
-/* ── Row 2: Nav links ── */
+/* ── Row 2: Nav links — swipeable / scrollable ── */
 .nav-links-row {
   display: flex;
   align-items: center;
   height: var(--nav-row2);
   gap: 0;
+  /* Swipe left/right to reach all links on small screens */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scroll */
+  scroll-behavior: smooth;
+  scrollbar-width: none;             /* hide scrollbar — Firefox */
 }
+.nav-links-row::-webkit-scrollbar { display: none; } /* Chrome / Safari */
 
 /* Logo */
 .nav-logo {
@@ -206,13 +213,14 @@ ul { list-style: none; }
   min-height: 34px;
 }
 
-/* Nav links list (row 2) */
+/* Nav links list (row 2) — never wraps, scrolls inside nav-links-row */
 .nav-links {
   display: flex;
   align-items: center;
   gap: 2px;
-  flex: 1;
-  flex-wrap: nowrap;
+  flex-wrap: nowrap;      /* one line always — row handles overflow scroll */
+  flex-shrink: 0;         /* don't compress links — let row scroll instead */
+  min-width: max-content; /* expand to full natural width so all links show */
 }
 
 .nav-link {
@@ -526,9 +534,9 @@ footer {
   .card-grid { grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
 }
 
-/* ── Phone (480px) — tighten links-row spacing ── */
+/* ── Phone (480px) ── */
 @media (max-width: 480px) {
-  .nav-links { gap: 0; }
+  /* nav-links gap kept — row scrolls so no need to squash */
   .footer-bottom { flex-direction: column; text-align: center; }
 }
 
