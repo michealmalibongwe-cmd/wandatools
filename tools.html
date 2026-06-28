@@ -365,6 +365,25 @@
     /* ── Loading ── */
     .loading-text { color: #888; font-style: italic; font-size: 0.875rem; padding: 20px 0; }
 
+    /* ── Export / Documents ── */
+    .doc-card h3 { font-size: 0.95rem; margin-bottom: 8px; color: #1A1A2E; }
+    .hidden { display: none !important; }
+    .export-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #007BFF;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
     /* ── Tools footer ── */
     .tools-footer {
       background: #1A1A2E;
@@ -583,32 +602,39 @@
         <div class="page-header">
           <div>
             <h1>Documents</h1>
-            <p>Export your financial records</p>
+            <p>Export your financial records as PDF reports</p>
           </div>
+          <span id="exportStatus" class="hidden export-status">
+            <i class="material-icons" style="font-size:1rem;">hourglass_top</i>
+            Generating PDF…
+          </span>
         </div>
         <div class="doc-grid">
           <div class="doc-card">
-            <div class="doc-icon"><i class="material-icons">picture_as_pdf</i></div>
-            <h4>Financial Report</h4>
-            <p>Full income and expense summary as a PDF</p>
-            <button class="btn btn-primary btn-sm" onclick="generateDoc('PDF Report')">
-              <i class="material-icons">download</i> Export PDF
+            <div class="doc-icon"><i class="material-icons">account_balance</i></div>
+            <h3>Loan Readiness</h3>
+            <p>Credibility score, income stability, and debt analysis formatted for lenders</p>
+            <button id="exportLoanPDF" class="btn btn-primary btn-sm" data-period="current_month"
+                    onclick="downloadPDF('/export/loan-readiness', 'exportLoanPDF')">
+              <i class="material-icons">picture_as_pdf</i> Export Loan Report (PDF)
             </button>
           </div>
           <div class="doc-card">
-            <div class="doc-icon"><i class="material-icons">table_chart</i></div>
-            <h4>CSV Export</h4>
-            <p>Download all transactions as a spreadsheet</p>
-            <button class="btn btn-primary btn-sm" onclick="generateDoc('CSV Export')">
-              <i class="material-icons">download</i> Export CSV
+            <div class="doc-icon"><i class="material-icons">trending_up</i></div>
+            <h3>Investment Worthiness</h3>
+            <p>Growth metrics, profitability ratios, and credibility score for investors</p>
+            <button id="exportInvestmentPDF" class="btn btn-primary btn-sm" data-period="current_month"
+                    onclick="downloadPDF('/export/investment-worthiness', 'exportInvestmentPDF')">
+              <i class="material-icons">picture_as_pdf</i> Export Investment Report (PDF)
             </button>
           </div>
           <div class="doc-card">
-            <div class="doc-icon"><i class="material-icons">receipt</i></div>
-            <h4>Tax Summary</h4>
-            <p>Annual tax-ready income and deductions summary</p>
-            <button class="btn btn-primary btn-sm" onclick="generateDoc('Tax Summary')">
-              <i class="material-icons">download</i> Export
+            <div class="doc-icon"><i class="material-icons">receipt_long</i></div>
+            <h3>Tax Compliance</h3>
+            <p>Annual tax-ready income, deductions, and VAT breakdown</p>
+            <button id="exportTaxPDF" class="btn btn-primary btn-sm" data-period="current_month"
+                    onclick="downloadPDF('/export/tax-compliance', 'exportTaxPDF')">
+              <i class="material-icons">picture_as_pdf</i> Export Tax Report (PDF)
             </button>
           </div>
         </div>
@@ -869,9 +895,52 @@
     if (recent) recent.innerHTML = list.slice(0, 5).map(t => buildRow(t, false)).join('');
   }
 
-  // ── Document export ───────────────────────────────────────
-  function generateDoc(type) {
-    showToast(`${type} is being prepared — download will start shortly.`);
+  // ── PDF export ────────────────────────────────────────────
+  async function downloadPDF(endpoint, buttonId) {
+    const btn    = document.getElementById(buttonId);
+    const period = btn.dataset.period || 'current_month';
+    btn.disabled = true;
+    document.getElementById('exportStatus').classList.remove('hidden');
+
+    try {
+      const res = await fetch(`${API_BASE}${endpoint}?period=${period}`, {
+        headers: { 'Authorization': `Bearer ${auth.token}` }
+      });
+
+      if (res.status === 401) {
+        showToast('Session expired. Please sign in again.', 'error');
+        setTimeout(() => { location.href = '/signup.html'; }, 1500);
+        return;
+      }
+
+      if (!res.ok) {
+        let detail = 'Export failed';
+        try { const err = await res.json(); detail = err.detail || detail; } catch (_) {}
+        const lower = detail.toLowerCase();
+        if (res.status === 404 || lower.includes('no data') || lower.includes('no transactions') || lower.includes('no records')) {
+          showToast('No data available for selected period', 'warning');
+        } else {
+          showToast(`Export failed: ${detail}`, 'error');
+        }
+        return;
+      }
+
+      const blob = await res.blob();
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      const cd   = res.headers.get('Content-Disposition') || '';
+      a.download = cd.split('filename=')[1]?.replace(/["']/g, '') || 'report.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      showToast(`Export failed: ${e.message}`, 'error');
+    } finally {
+      btn.disabled = false;
+      document.getElementById('exportStatus').classList.add('hidden');
+    }
   }
 
   // ── Clear notifications ───────────────────────────────────
