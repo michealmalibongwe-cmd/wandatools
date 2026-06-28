@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <style>
+
     /* ── Password strength ── */
     .password-strength {
       margin-top: 8px;
@@ -27,10 +28,11 @@
     /* ── Profile layout ── */
     .profile-layout {
       display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 32px;
-      min-height: calc(100vh - 68px);
-      padding: 40px;
+      grid-template-columns: 280px 1fr;
+      gap: clamp(16px, 3vw, 32px);
+      /* 88px = two-row navbar (logo row 48px + links row 40px) */
+      min-height: calc(100vh - 88px);
+      padding: clamp(16px, 4vw, 40px);
       background: var(--grey-bg);
     }
 
@@ -38,31 +40,33 @@
     .profile-sidebar {
       background: var(--white);
       border-radius: var(--radius);
-      padding: 28px 24px;
+      padding: clamp(20px, 3vw, 28px) clamp(16px, 2.5vw, 24px);
       box-shadow: var(--shadow-sm);
       height: fit-content;
       position: sticky;
-      top: 88px;
+      /* sits below navbar + small breathing gap */
+      top: calc(88px + 12px);
     }
+
     .profile-header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
     .profile-avatar {
-      width: 80px; height: 80px;
+      width: 72px; height: 72px;
       border-radius: 50%;
       background: var(--gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--white);
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-family: 'Poppins', sans-serif;
       font-weight: 700;
-      margin: 0 auto 16px;
+      margin: 0 auto 14px;
     }
-    .profile-header h2 { font-size: 1.2rem; margin-bottom: 4px; }
-    .profile-header p  { font-size: 0.85rem; color: var(--mid); }
+    .profile-header h2 { font-size: clamp(1rem, 2.5vw, 1.2rem); margin-bottom: 4px; }
+    .profile-header p  { font-size: 0.82rem; color: var(--mid); }
 
     .profile-menu {
       display: flex;
@@ -72,74 +76,80 @@
     .profile-menu-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
+      gap: 10px;
+      padding: 11px 13px;
       border-radius: 10px;
       border: none;
       background: transparent;
       font-family: 'Poppins', sans-serif;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: clamp(0.82rem, 2vw, 0.9rem);
       color: var(--mid);
       cursor: pointer;
       transition: var(--transition);
       text-align: left;
       width: 100%;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
     }
     .profile-menu-item:hover  { background: var(--grey-bg); color: var(--dark); }
     .profile-menu-item.active { background: var(--gradient); color: var(--white); }
-    .profile-menu-item i      { font-size: 1.1rem; }
-    .profile-menu-item.danger { color: #EF5350; margin-top: 16px; }
+    .profile-menu-item i      { font-size: 1.05rem; }
+    .profile-menu-item.danger { color: #EF5350; margin-top: 14px; }
     .profile-menu-item.danger:hover { background: #FFEBEE; color: #C62828; }
 
     /* ── Main panels ── */
     .profile-main {
       background: var(--white);
       border-radius: var(--radius);
-      padding: 32px;
+      padding: clamp(20px, 4vw, 32px);
       box-shadow: var(--shadow-sm);
+      /* prevent overflow on small screens */
+      min-width: 0;
     }
     .profile-panel        { display: none; }
     .profile-panel.active { display: block; }
-    .profile-panel h2     { font-size: 1.4rem; margin-bottom: 24px; }
+    .profile-panel h2     { font-size: clamp(1.1rem, 3vw, 1.4rem); margin-bottom: 24px; }
 
     /* ── Overview rows ── */
     .profile-info-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 0;
+      padding: 14px 0;
       border-bottom: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .profile-info-row:last-child { border-bottom: none; }
-    .profile-info-label { color: var(--mid);  font-size: 0.9rem;  font-weight: 600; }
-    .profile-info-value { color: var(--dark); font-size: 0.95rem; }
+    .profile-info-label { color: var(--mid);  font-size: 0.875rem; font-weight: 600; flex-shrink: 0; }
+    .profile-info-value { color: var(--dark); font-size: 0.9rem; word-break: break-word; }
 
-    .profile-section        { margin-bottom: 32px; }
-    .profile-section h3     { font-size: 1.05rem; margin-bottom: 16px; }
+    .profile-section     { margin-bottom: 28px; }
+    .profile-section h3  { font-size: 1rem; margin-bottom: 14px; }
 
     /* ── Danger zone ── */
     .danger-zone {
       background: #FFEBEE;
       border: 1.5px solid #EF5350;
       border-radius: var(--radius);
-      padding: 24px;
-      margin-top: 32px;
+      padding: clamp(16px, 3vw, 24px);
+      margin-top: 28px;
     }
-    .danger-zone h4 { color: #C62828; margin-bottom: 12px; font-size: 0.95rem; }
-    .danger-zone p  { color: #E53935; font-size: 0.85rem; margin-bottom: 16px; }
+    .danger-zone h4 { color: #C62828; margin-bottom: 10px; font-size: 0.95rem; }
+    .danger-zone p  { color: #E53935; font-size: 0.85rem; margin-bottom: 14px; line-height: 1.6; }
 
     /* ── Profile footer ── */
     .profile-footer {
       background: #1A1A2E;
       color: rgba(255,255,255,0.5);
-      padding: 20px 40px;
+      padding: 18px clamp(16px, 4vw, 40px);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-family: 'Open Sans', sans-serif;
     }
     .profile-footer-links { display: flex; gap: 20px; }
@@ -152,14 +162,14 @@
 
     /* ── Responsive ── */
     @media (max-width: 1024px) {
-      .profile-layout   { grid-template-columns: 1fr; padding: 24px; }
-      .profile-sidebar  { position: static; }
+      .profile-layout  { grid-template-columns: 1fr; }
+      .profile-sidebar { position: static; }
     }
     @media (max-width: 600px) {
-      .profile-layout   { padding: 16px; gap: 16px; }
-      .profile-main     { padding: 20px; }
-      .profile-footer   { padding: 20px 16px; }
+      .profile-layout { padding: 12px; gap: 12px; }
+      .profile-main   { padding: 18px 14px; }
     }
+
   </style>
 </head>
 <body>
@@ -177,10 +187,11 @@
   <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
 </nav>
 
+<!-- page-content applies padding-top: 88px via styles.css -->
 <div class="page-content">
 
   <!-- Loading state while auth check runs -->
-  <div id="authPage" style="min-height:80vh;display:flex;align-items:center;justify-content:center;">
+  <div id="authPage" style="min-height:60vh;display:flex;align-items:center;justify-content:center;">
     <p style="color:var(--mid);font-size:1rem;">Checking your session…</p>
   </div>
 
@@ -285,19 +296,25 @@
           <h3>Change Password</h3>
           <div class="form-group">
             <label class="form-label">Current Password</label>
-            <input id="currentPassword" type="password" class="form-control" placeholder="Enter current password" autocomplete="current-password" />
+            <input id="currentPassword" type="password" class="form-control"
+                   placeholder="Enter current password" autocomplete="current-password" />
           </div>
           <div class="form-group">
             <label class="form-label">New Password</label>
-            <input id="newPassword" type="password" class="form-control" placeholder="Min. 12 characters"
-                   autocomplete="new-password" oninput="checkPwdStrength('newPassword')" />
-            <div class="password-strength"><div class="strength-bar" id="newStrengthBar"></div></div>
+            <input id="newPassword" type="password" class="form-control"
+                   placeholder="Min. 12 characters"
+                   autocomplete="new-password"
+                   oninput="checkPwdStrength('newPassword')" />
+            <div class="password-strength">
+              <div class="strength-bar" id="newStrengthBar"></div>
+            </div>
             <div id="newStrengthText" style="font-size:11px;margin-top:4px;font-weight:600;"></div>
             <div id="newFeedback"     style="font-size:11px;color:#888;margin-top:2px;"></div>
           </div>
           <div class="form-group">
             <label class="form-label">Confirm New Password</label>
-            <input id="confirmPassword" type="password" class="form-control" placeholder="Repeat new password" autocomplete="new-password" />
+            <input id="confirmPassword" type="password" class="form-control"
+                   placeholder="Repeat new password" autocomplete="new-password" />
           </div>
           <button class="btn btn-primary" onclick="changePassword()">
             <i class="material-icons">lock_reset</i> Update Password
@@ -367,7 +384,6 @@
           year: 'numeric', month: 'long', day: 'numeric'
         });
 
-      // Load transaction count (non-critical)
       try {
         const stats = await apiCall('/users/me/stats');
         document.getElementById('ovTransactions').textContent = stats.transaction_count || '0';
@@ -468,4 +484,4 @@
   }
 </script>
 </body>
-</html>
+</html>whe
