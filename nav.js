@@ -220,9 +220,12 @@ function _renderPrivateNav(navLinks, navAuth) {
   const currency = auth.getCurrency();
 
   navLinks.innerHTML = [
-    { href: 'tools.html',   page: 'tools.html',   label: 'Tools'   },
-    { href: 'wandaAI.html', page: 'wandaAI.html', label: 'WandaAI' },
-    { href: 'profile.html', page: 'profile.html', label: 'Profile' },
+    { href: 'index.html',     page: 'index.html',     label: 'Home'      },
+    { href: 'tools.html',     page: 'tools.html',     label: 'Tools'     },
+    { href: 'wandaAI.html',   page: 'wandaAI.html',   label: 'WandaAI'  },
+    { href: 'community.html', page: 'community.html', label: 'Community' },
+    { href: 'contact.html',   page: 'contact.html',   label: 'Contact'   },
+    { href: 'profile.html',   page: 'profile.html',   label: 'Profile'   },
   ].map(l =>
     `<li><a href="${l.href}" class="nav-link" data-page="${l.page}">${l.label}</a></li>`
   ).join('');
