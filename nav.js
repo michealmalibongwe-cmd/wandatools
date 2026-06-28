@@ -160,12 +160,7 @@ function renderNavigation() {
     _renderPublicNav(navLinks, navAuth);
   }
 
-  // Close dropdown on outside click
-  document.addEventListener('click', (e) => {
-    const d  = document.getElementById('_userDropdown');
-    const um = document.querySelector('.user-menu');
-    if (d && um && !um.contains(e.target)) d.style.display = 'none';
-  });
+  // No dropdown — avatar links directly to profile.html
 
   // Scroll shadow on navbar
   window.addEventListener('scroll', () => {
@@ -233,40 +228,23 @@ function _renderPrivateNav(navLinks, navAuth) {
   ).join('');
 
   navAuth.innerHTML = `
-    <div class="user-menu" style="position:relative;">
-      <div class="user-avatar"
-           onclick="toggleDropdown()"
-           title="${auth.getEmail()}"
-           role="button"
-           aria-haspopup="true"
-           aria-expanded="false"
-           aria-label="Account menu for ${name}">
-        ${initials}
-      </div>
-      <div id="_userDropdown"
-           role="menu"
-           style="display:none;position:absolute;right:0;top:calc(100% + 8px);
-                  background:#fff;border:1px solid var(--border);
-                  border-radius:var(--radius);min-width:210px;
-                  box-shadow:var(--shadow-md);z-index:999;overflow:hidden;">
-        <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
-          <div style="font-weight:700;font-size:0.8rem;color:var(--dark);font-family:'Poppins',sans-serif;">${name}</div>
-          <div style="font-size:0.7rem;color:var(--mid);margin-top:2px;">${auth.getEmail()}</div>
-          <div style="font-size:0.7rem;color:var(--blue);margin-top:2px;">Currency: ${currency}</div>
-        </div>
-        <a href="profile.html"  class="_dd-item" role="menuitem">⚙️ Settings</a>
-        <a href="tools.html"    class="_dd-item" role="menuitem">📊 Dashboard</a>
-        <a href="wandaAI.html"  class="_dd-item" role="menuitem">🤖 WandaAI</a>
-        <div style="height:1px;background:var(--border);"></div>
-        <button onclick="handleLogout()"
-                class="_dd-item"
-                role="menuitem"
-                style="color:var(--red);background:none;border:none;width:100%;
-                       text-align:left;cursor:pointer;font-family:inherit;">
-          🚪 Sign Out
-        </button>
-      </div>
-    </div>
+    <a href="profile.html"
+       title="My Account — ${auth.getEmail()}"
+       aria-label="Go to profile for ${name}"
+       style="display:flex;align-items:center;justify-content:center;
+              width:clamp(32px,5vw,38px);height:clamp(32px,5vw,38px);
+              border-radius:50%;
+              background:linear-gradient(135deg,#007BFF,#28A745);
+              color:#fff;font-weight:700;
+              font-size:clamp(0.75rem,2vw,0.9rem);
+              font-family:'Poppins',sans-serif;
+              text-decoration:none;
+              transition:transform 0.2s,box-shadow 0.2s;
+              flex-shrink:0;"
+       onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 4px 16px rgba(0,123,255,0.35)'"
+       onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">
+      ${initials}
+    </a>
   `;
 }
 
@@ -304,14 +282,7 @@ function _buildNavRows(navLinks, navAuth) {
   inner.appendChild(row2);
 }
 
-function toggleDropdown() {
-  const d  = document.getElementById('_userDropdown');
-  const um = document.querySelector('.user-avatar');
-  if (!d) return;
-  const isOpen = d.style.display === 'block';
-  d.style.display = isOpen ? 'none' : 'block';
-  if (um) um.setAttribute('aria-expanded', String(!isOpen));
-}
+// toggleDropdown removed — avatar is now a direct link to profile.html
 
 // ═══════════════════════════════════════════════════════════
 // LOGOUT
