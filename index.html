@@ -82,6 +82,8 @@
       justify-content: center;
       flex-wrap: wrap;
     }
+
+    /* ── Hero stats — counting animation ── */
     .hero-stats {
       display: flex;
       justify-content: center;
@@ -95,8 +97,14 @@
       font-size: 2.2rem;
       font-weight: 800;
       display: block;
+      /* smooth number change */
+      transition: opacity 0.1s ease;
     }
-    .hero-stat .lbl { font-size: 0.8rem; opacity: 0.75; letter-spacing: 0.5px; }
+    .hero-stat .lbl {
+      font-size: 0.8rem;
+      opacity: 0.75;
+      letter-spacing: 0.5px;
+    }
     .hero-stat-divider {
       width: 1px;
       height: 48px;
@@ -243,25 +251,13 @@
 <!-- ══════════════════ NAVBAR ══════════════════ -->
 <nav class="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
-
-    <!-- Logo -->
-    <a href="index.html" class="nav-logo">wandatools<span>Tools</span></a>
-
-    <!-- Desktop nav links — populated by nav.js -->
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
     <ul class="nav-links" role="list"></ul>
-
-    <!-- Auth area — populated by nav.js -->
     <div id="navAuth"></div>
-
-    <!-- Hamburger (mobile) -->
-    <button class="nav-hamburger" id="hamburger"
-            aria-label="Toggle menu" aria-expanded="false">
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-
   </div>
-
-  <!-- Mobile nav — populated by nav.js -->
   <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
 </nav>
 
@@ -271,7 +267,7 @@
   <div>
     <div class="hero-eyebrow">
       <i class="material-icons">auto_awesome</i>
-      Your financial blueprint 
+      Your financial blueprint
     </div>
 
     <h1>Smart finances for <em>every</em> business in Eswatini</h1>
@@ -290,26 +286,55 @@
       </a>
     </div>
 
-    <div class="hero-stats">
+    <!-- ══ HERO STATS — animated counters ══
+         data-target : the final number to count to
+         data-prefix : text before the number  (e.g. "E ")
+         data-suffix : text after  the number  (e.g. "+", "%", " ★")
+         data-decimals: decimal places (default 0)
+    -->
+    <div class="hero-stats" id="heroStats">
+
       <div class="hero-stat">
-        <span class="val">2 400+</span>
+        <span class="val" id="stat-users"
+              data-target="2400"
+              data-suffix="+"
+              data-duration="2000">0</span>
         <span class="lbl">Active users</span>
       </div>
+
       <div class="hero-stat-divider"></div>
+
       <div class="hero-stat">
-        <span class="val">E 1.2 B+</span>
+        <span class="val" id="stat-txns"
+              data-target="1.2"
+              data-prefix="E "
+              data-suffix=" M+"
+              data-decimals="1"
+              data-duration="2200">0</span>
         <span class="lbl">Transactions tracked</span>
       </div>
+
       <div class="hero-stat-divider"></div>
+
       <div class="hero-stat">
-        <span class="val">98 %</span>
+        <span class="val" id="stat-accuracy"
+              data-target="98"
+              data-suffix=" %"
+              data-duration="1800">0</span>
         <span class="lbl">Accuracy rate</span>
       </div>
+
       <div class="hero-stat-divider"></div>
+
       <div class="hero-stat">
-        <span class="val">4.9 ★</span>
+        <span class="val" id="stat-rating"
+              data-target="4.9"
+              data-suffix=" ★"
+              data-decimals="1"
+              data-duration="1600">0</span>
         <span class="lbl">User rating</span>
       </div>
+
     </div>
   </div>
 </section>
@@ -324,7 +349,6 @@
     </div>
 
     <div class="features-grid">
-
       <div class="card feat-card fade-up">
         <div class="tag">Core</div>
         <div class="icon-wrap"><i class="material-icons">swap_horiz</i></div>
@@ -369,7 +393,6 @@
           <i class="material-icons" style="font-size:0.9rem;-webkit-text-fill-color:inherit;">arrow_forward</i>
         </a>
       </div>
-
     </div>
   </div>
 </section>
@@ -486,7 +509,7 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="logo">wandatools</div>
+        <div class="logo">WandaTools</div>
         <p>AI-powered financial insights for businesses and individuals across Eswatini 🇸🇿.</p>
         <div class="footer-socials">
           <a href="#" class="social-icon" aria-label="Facebook"><i class="material-icons">facebook</i></a>
@@ -531,40 +554,81 @@
 <!-- ══════════════════ SCRIPTS ══════════════════ -->
 <script src="nav.js"></script>
 <script>
-  /* ── Hamburger menu ── */
-  const hamburger  = document.getElementById('hamburger');
-  const mobileNav  = document.getElementById('mobileNav');
-
-  hamburger.addEventListener('click', () => {
-    const isOpen = hamburger.classList.toggle('open');
-    mobileNav.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen);
-    mobileNav.setAttribute('aria-hidden',  !isOpen);
-  });
-
   /* ── Hero CTA: redirect logged-in users to dashboard ── */
   const heroBtn = document.getElementById('heroGetStarted');
   if (heroBtn && WandaAuth.isLoggedIn()) {
-    heroBtn.href = '/tools.html';
+    heroBtn.href = 'tools.html';
   }
 
-  /* ── Scroll-triggered fade-up animations ── */
-  const observer = new IntersectionObserver((entries) => {
+  /* ── Fade-up scroll animations ── */
+  const fadeObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+        fadeObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
 
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  /* ════════════════════════════════════════════════════════
+     COUNTER ANIMATION
+     Reads data attributes from each .val element:
+       data-target   — final number (required)
+       data-prefix   — text before number e.g. "E "
+       data-suffix   — text after  number e.g. "+"
+       data-decimals — decimal places (default 0)
+       data-duration — animation ms   (default 2000)
+     Triggers once when the stats section enters the viewport.
+  ═══════════════════════════════════════════════════════ */
+  function animateCounter(el) {
+    const target   = parseFloat(el.dataset.target)   || 0;
+    const prefix   = el.dataset.prefix               || '';
+    const suffix   = el.dataset.suffix               || '';
+    const decimals = parseInt(el.dataset.decimals)   || 0;
+    const duration = parseInt(el.dataset.duration)   || 2000;
 
-  /* ── Navbar active link highlight ── */
-  const currentPage = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-link[data-page]').forEach(link => {
-    if (link.dataset.page === currentPage) link.classList.add('active');
-  });
+    const startTime = performance.now();
+
+    function easeOutQuart(t) {
+      // Fast start, slow finish — feels natural
+      return 1 - Math.pow(1 - t, 4);
+    }
+
+    function tick(now) {
+      const elapsed  = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased    = easeOutQuart(progress);
+      const current  = eased * target;
+
+      el.textContent = prefix + current.toFixed(decimals) + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        // Snap to exact final value
+        el.textContent = prefix + target.toFixed(decimals) + suffix;
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  /* Trigger all counters once stats section is visible */
+  let countersStarted = false;
+  const statsSection  = document.getElementById('heroStats');
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !countersStarted) {
+        countersStarted = true;
+        document.querySelectorAll('#heroStats .val[data-target]').forEach(animateCounter);
+        counterObserver.disconnect(); // run once only
+      }
+    });
+  }, { threshold: 0.3 });
+
+  if (statsSection) counterObserver.observe(statsSection);
 </script>
 </body>
 </html>
