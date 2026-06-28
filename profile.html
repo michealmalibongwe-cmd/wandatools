@@ -7,93 +7,6 @@
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <style>
-    /* ── Auth page layout ── */
-    .auth-page {
-      min-height: calc(100vh - 68px);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    /* ── Left side (branding) ── */
-    .auth-brand {
-      background: var(--gradient);
-      padding: 60px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: var(--white);
-      position: relative;
-      overflow: hidden;
-    }
-    .auth-brand::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    .auth-brand-content { position: relative; z-index: 1; }
-    .auth-brand-content i { font-size: 4rem; margin-bottom: 20px; }
-    .auth-brand-content h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
-    .auth-brand-content p { font-size: 1rem; opacity: 0.85; max-width: 300px; line-height: 1.7; }
-
-    /* ── Right side (form) ── */
-    .auth-form-side {
-      padding: 60px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .auth-form-wrap {
-      max-width: 380px;
-    }
-
-    .auth-form-header {
-      margin-bottom: 32px;
-    }
-    .auth-form-header h1 { font-size: 1.6rem; margin-bottom: 8px; }
-    .auth-form-header p { color: var(--mid); font-size: 0.95rem; }
-
-    /* ── Form toggle ── */
-    .form-toggle {
-      display: flex;
-      background: var(--grey-bg);
-      border-radius: 10px;
-      padding: 3px;
-      margin-bottom: 28px;
-      gap: 3px;
-    }
-    .form-toggle-btn {
-      flex: 1;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: none;
-      background: transparent;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: var(--mid);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .form-toggle-btn.active {
-      background: var(--white);
-      color: var(--dark);
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* ── Form panels ── */
-    .auth-panel { display: none; }
-    .auth-panel.active { display: block; }
-
-    .form-group { margin-bottom: 18px; }
-
     /* ── Password strength ── */
     .password-strength {
       margin-top: 8px;
@@ -107,93 +20,11 @@
       width: 0;
       transition: width 0.3s, background-color 0.3s;
     }
-    .strength-bar.weak { width: 33%; background: var(--red); }
-    .strength-bar.fair { width: 66%; background: #F9A825; }
+    .strength-bar.weak   { width: 33%;  background: var(--red); }
+    .strength-bar.fair   { width: 66%;  background: #F9A825; }
     .strength-bar.strong { width: 100%; background: var(--green); }
 
-    /* ── Remember me ── */
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .checkbox-group input[type="checkbox"] {
-      width: 18px; height: 18px; cursor: pointer;
-    }
-    .checkbox-group label { cursor: pointer; font-size: 0.9rem; color: var(--mid); }
-
-    /* ── Forgot password ── */
-    .forgot-link {
-      text-align: right;
-      margin-bottom: 20px;
-    }
-    .forgot-link a {
-      font-size: 0.85rem;
-      color: var(--blue);
-      font-weight: 600;
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-    .forgot-link a:hover { color: var(--green); }
-
-    /* ── Social login ── */
-    .social-login {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 28px 0;
-    }
-    .social-btn {
-      padding: 12px;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      transition: var(--transition);
-    }
-    .social-btn:hover { border-color: var(--blue); background: var(--grey-bg); }
-    .social-btn i { font-size: 1.1rem; }
-
-    /* ── Divider ── */
-    .form-divider {
-      position: relative;
-      margin: 24px 0;
-      text-align: center;
-      color: var(--light);
-      font-size: 0.8rem;
-    }
-    .form-divider::before {
-      content: '';
-      position: absolute;
-      inset: 50% 0 auto;
-      height: 1px;
-      background: var(--border);
-    }
-    .form-divider span { position: relative; background: var(--white); padding: 0 8px; }
-
-    /* ── Switch auth type ── */
-    .switch-auth {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 0.9rem;
-      color: var(--mid);
-    }
-    .switch-auth a {
-      color: var(--blue);
-      font-weight: 600;
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-    .switch-auth a:hover { color: var(--green); }
-
-    /* ── Profile Dashboard (logged in) ── */
+    /* ── Profile layout ── */
     .profile-layout {
       display: grid;
       grid-template-columns: 300px 1fr;
@@ -203,6 +34,7 @@
       background: var(--grey-bg);
     }
 
+    /* ── Sidebar ── */
     .profile-sidebar {
       background: var(--white);
       border-radius: var(--radius);
@@ -212,7 +44,6 @@
       position: sticky;
       top: 88px;
     }
-
     .profile-header {
       text-align: center;
       margin-bottom: 28px;
@@ -226,10 +57,12 @@
       justify-content: center;
       color: var(--white);
       font-size: 2rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
       margin: 0 auto 16px;
     }
     .profile-header h2 { font-size: 1.2rem; margin-bottom: 4px; }
-    .profile-header p { font-size: 0.85rem; color: var(--mid); }
+    .profile-header p  { font-size: 0.85rem; color: var(--mid); }
 
     .profile-menu {
       display: flex;
@@ -253,23 +86,24 @@
       text-align: left;
       width: 100%;
     }
-    .profile-menu-item:hover { background: var(--grey-bg); color: var(--dark); }
+    .profile-menu-item:hover  { background: var(--grey-bg); color: var(--dark); }
     .profile-menu-item.active { background: var(--gradient); color: var(--white); }
-    .profile-menu-item i { font-size: 1.1rem; }
+    .profile-menu-item i      { font-size: 1.1rem; }
+    .profile-menu-item.danger { color: #EF5350; margin-top: 16px; }
+    .profile-menu-item.danger:hover { background: #FFEBEE; color: #C62828; }
 
-    /* ── Profile panels ── */
+    /* ── Main panels ── */
     .profile-main {
       background: var(--white);
       border-radius: var(--radius);
       padding: 32px;
       box-shadow: var(--shadow-sm);
     }
-
-    .profile-panel { display: none; }
+    .profile-panel        { display: none; }
     .profile-panel.active { display: block; }
+    .profile-panel h2     { font-size: 1.4rem; margin-bottom: 24px; }
 
-    .profile-panel h2 { font-size: 1.4rem; margin-bottom: 24px; }
-
+    /* ── Overview rows ── */
     .profile-info-row {
       display: flex;
       justify-content: space-between;
@@ -278,13 +112,11 @@
       border-bottom: 1px solid var(--border);
     }
     .profile-info-row:last-child { border-bottom: none; }
-    .profile-info-label { color: var(--mid); font-size: 0.9rem; font-weight: 600; }
-    .profile-info-value { font-size: 0.95rem; color: var(--dark); }
+    .profile-info-label { color: var(--mid);  font-size: 0.9rem;  font-weight: 600; }
+    .profile-info-value { color: var(--dark); font-size: 0.95rem; }
 
-    .profile-section {
-      margin-bottom: 32px;
-    }
-    .profile-section h3 { font-size: 1.05rem; margin-bottom: 16px; }
+    .profile-section        { margin-bottom: 32px; }
+    .profile-section h3     { font-size: 1.05rem; margin-bottom: 16px; }
 
     /* ── Danger zone ── */
     .danger-zone {
@@ -295,58 +127,74 @@
       margin-top: 32px;
     }
     .danger-zone h4 { color: #C62828; margin-bottom: 12px; font-size: 0.95rem; }
-    .danger-zone p { color: #E53935; font-size: 0.85rem; margin-bottom: 16px; }
-    .danger-zone .btn { width: fit-content; }
+    .danger-zone p  { color: #E53935; font-size: 0.85rem; margin-bottom: 16px; }
 
+    /* ── Profile footer ── */
+    .profile-footer {
+      background: #1A1A2E;
+      color: rgba(255,255,255,0.5);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .profile-footer-links { display: flex; gap: 20px; }
+    .profile-footer a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .profile-footer a:hover { color: var(--white); }
+
+    /* ── Responsive ── */
     @media (max-width: 1024px) {
-      .auth-page { grid-template-columns: 1fr; }
-      .auth-brand { padding: 40px 24px; min-height: 300px; }
-      .auth-form-side { padding: 40px 24px; }
-      .profile-layout { grid-template-columns: 1fr; }
-      .profile-sidebar { position: static; }
+      .profile-layout   { grid-template-columns: 1fr; padding: 24px; }
+      .profile-sidebar  { position: static; }
     }
-
     @media (max-width: 600px) {
-      .auth-page { grid-template-columns: 1fr; }
-      .auth-form-wrap { max-width: 100%; }
-      .social-login { grid-template-columns: 1fr; }
+      .profile-layout   { padding: 16px; gap: 16px; }
+      .profile-main     { padding: 20px; }
+      .profile-footer   { padding: 20px 16px; }
     }
-
-    .btn-danger {
-      background: #DC3545;
-      color: #fff;
-      border: none;
-    }
-    .btn-danger:hover { background: #C62828; transform: translateY(-2px); }
   </style>
 </head>
 <body>
 
-  <!-- ══ NAVBAR — populated by nav.js ══ -->
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
-      <ul class="nav-links" role="list"></ul>
-      <div id="navAuth"></div>
-    </div>
-  </nav>
+<!-- ══════════════════ NAVBAR (injected by nav.js) ══════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
+</nav>
 
-  <!-- Shown briefly while the auth check runs; protectPage() redirects if not logged in -->
-  <div id="authPage" style="min-height:80vh;display:flex;align-items:center;justify-content:center;margin-top:68px;">
+<div class="page-content">
+
+  <!-- Loading state while auth check runs -->
+  <div id="authPage" style="min-height:80vh;display:flex;align-items:center;justify-content:center;">
     <p style="color:var(--mid);font-size:1rem;">Checking your session…</p>
   </div>
 
   <!-- ══ PROFILE DASHBOARD (hidden until auth confirmed) ══ -->
-  <div id="profilePage" class="profile-layout" style="display:none;margin-top:68px;">
+  <div id="profilePage" class="profile-layout" style="display:none;">
 
     <!-- Sidebar -->
     <aside class="profile-sidebar">
       <div class="profile-header">
         <div class="profile-avatar" id="profileAvatar">U</div>
         <h2 id="profileName">Loading…</h2>
-        <p id="profileEmail"></p>
+        <p  id="profileEmail"></p>
       </div>
-      <nav class="profile-menu">
+      <nav class="profile-menu" aria-label="Profile sections">
         <button class="profile-menu-item active" onclick="switchProfilePanel('overview', this)">
           <i class="material-icons">person</i> Overview
         </button>
@@ -356,7 +204,7 @@
         <button class="profile-menu-item" onclick="switchProfilePanel('security', this)">
           <i class="material-icons">lock</i> Security
         </button>
-        <button class="profile-menu-item" onclick="handleLogout()" style="color:#EF5350;margin-top:16px;">
+        <button class="profile-menu-item danger" onclick="handleLogout()">
           <i class="material-icons">logout</i> Sign Out
         </button>
       </nav>
@@ -365,7 +213,7 @@
     <!-- Main panels -->
     <main class="profile-main">
 
-      <!-- Overview -->
+      <!-- ── Overview ── -->
       <div id="panel-overview" class="profile-panel active">
         <h2>Account Overview</h2>
         <div class="profile-section">
@@ -388,7 +236,7 @@
         </div>
       </div>
 
-      <!-- Settings -->
+      <!-- ── Settings ── -->
       <div id="panel-settings" class="profile-panel">
         <h2>Account Settings</h2>
         <div class="profile-section">
@@ -417,7 +265,7 @@
           <div class="form-group">
             <label class="form-label">Timezone</label>
             <select id="settingTimezone" class="form-control">
-              <option value="Africa/Mbabane">Africa/Mbabane (Swaziland)</option>
+              <option value="Africa/Mbabane">Africa/Mbabane (Eswatini)</option>
               <option value="Africa/Johannesburg">Africa/Johannesburg</option>
               <option value="UTC">UTC</option>
               <option value="America/New_York">America/New_York</option>
@@ -425,208 +273,199 @@
             </select>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+        <button class="btn btn-primary" onclick="saveSettings()">
+          <i class="material-icons">save</i> Save Changes
+        </button>
       </div>
 
-      <!-- Security -->
+      <!-- ── Security ── -->
       <div id="panel-security" class="profile-panel">
         <h2>Security</h2>
         <div class="profile-section">
           <h3>Change Password</h3>
           <div class="form-group">
             <label class="form-label">Current Password</label>
-            <input id="currentPassword" type="password" class="form-control" placeholder="Enter current password" />
+            <input id="currentPassword" type="password" class="form-control" placeholder="Enter current password" autocomplete="current-password" />
           </div>
           <div class="form-group">
             <label class="form-label">New Password</label>
-            <input id="newPassword" type="password" class="form-control" placeholder="Enter new password"
-                   oninput="checkPwdStrength('newPassword')" />
+            <input id="newPassword" type="password" class="form-control" placeholder="Min. 12 characters"
+                   autocomplete="new-password" oninput="checkPwdStrength('newPassword')" />
             <div class="password-strength"><div class="strength-bar" id="newStrengthBar"></div></div>
-            <div id="newStrengthText" style="font-size:11px;margin-top:4px;"></div>
-            <div id="newFeedback" style="font-size:11px;color:#888;margin-top:2px;"></div>
+            <div id="newStrengthText" style="font-size:11px;margin-top:4px;font-weight:600;"></div>
+            <div id="newFeedback"     style="font-size:11px;color:#888;margin-top:2px;"></div>
           </div>
           <div class="form-group">
             <label class="form-label">Confirm New Password</label>
-            <input id="confirmPassword" type="password" class="form-control" placeholder="Repeat new password" />
+            <input id="confirmPassword" type="password" class="form-control" placeholder="Repeat new password" autocomplete="new-password" />
           </div>
-          <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+          <button class="btn btn-primary" onclick="changePassword()">
+            <i class="material-icons">lock_reset</i> Update Password
+          </button>
         </div>
 
         <div class="danger-zone">
-          <h4>Danger Zone</h4>
+          <h4>⚠ Danger Zone</h4>
           <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
-          <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+          <button class="btn btn-danger" onclick="deleteAccount()">
+            <i class="material-icons">delete_forever</i> Delete Account
+          </button>
         </div>
       </div>
 
     </main>
-  </div><!-- /.profile-layout / #profilePage -->
+  </div><!-- /#profilePage -->
 
-  <!-- ══ MINI FOOTER ══ -->
-  <footer style="background:#1A1A2E;color:rgba(255,255,255,0.5);padding:20px 24px;
-                 display:flex;justify-content:space-between;align-items:center;
-                 flex-wrap:wrap;gap:8px;font-size:0.78rem;">
-    <span>© 2025 WandaTools. All rights reserved.</span>
-    <span style="display:flex;gap:20px;">
-      <a href="contact.html"  style="color:rgba(255,255,255,0.5);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Support</a>
-      <a href="features.html" style="color:rgba(255,255,255,0.5);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Features</a>
-      <a href="#"             style="color:rgba(255,255,255,0.5);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Privacy</a>
-    </span>
-  </footer>
+</div><!-- /.page-content -->
 
-  <!-- nav.js loaded after DOM so renderNavigation() finds .nav-links and #navAuth -->
-  <script src="nav.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', initProfilePage);
+<!-- ══ FOOTER ══ -->
+<footer class="profile-footer">
+  <span>© 2025 WandaTools. All rights reserved.</span>
+  <div class="profile-footer-links">
+    <a href="contact.html">Support</a>
+    <a href="features.html">Features</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
 
-    async function initProfilePage() {
-      const authPage    = document.getElementById('authPage');
-      const profilePage = document.getElementById('profilePage');
+<script src="nav.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', initProfilePage);
 
-      if (!WandaAuth.isLoggedIn()) {
-        protectPage();
-        return;
-      }
+  /* ── Init: auth check then load profile ── */
+  async function initProfilePage() {
+    const authPage    = document.getElementById('authPage');
+    const profilePage = document.getElementById('profilePage');
 
-      if (authPage)    authPage.style.display    = 'none';
-      if (profilePage) profilePage.style.display = 'grid';
-      await loadProfile();
+    if (!WandaAuth.isLoggedIn()) {
+      protectPage();
+      return;
     }
 
-    async function loadProfile() {
-      try {
-        const user = await apiCall('/auth/me');
+    if (authPage)    authPage.style.display    = 'none';
+    if (profilePage) profilePage.style.display = 'grid';
+    await loadProfile();
+  }
 
-        const name  = user.name  || WandaAuth.getName();
-        const email = user.email || WandaAuth.getEmail();
+  /* ── Load user data from backend ── */
+  async function loadProfile() {
+    try {
+      const user  = await apiCall('/auth/me');
+      const name  = user.name  || WandaAuth.getName();
+      const email = user.email || WandaAuth.getEmail();
 
-        const profileAvatar = document.getElementById('profileAvatar');
-        const profileName   = document.getElementById('profileName');
-        const profileEmail  = document.getElementById('profileEmail');
-        const ovName        = document.getElementById('ovName');
-        const ovEmail       = document.getElementById('ovEmail');
+      document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+      document.getElementById('profileName').textContent   = name;
+      document.getElementById('profileEmail').textContent  = email;
+      document.getElementById('ovName').textContent        = name;
+      document.getElementById('ovEmail').textContent       = email;
+      document.getElementById('settingName').value         = name;
+      document.getElementById('settingEmail').value        = email;
 
-        if (profileAvatar) profileAvatar.textContent = name.charAt(0).toUpperCase();
-        if (profileName)   profileName.textContent   = name;
-        if (profileEmail)  profileEmail.textContent  = email;
-        if (ovName)        ovName.textContent        = name;
-        if (ovEmail)       ovEmail.textContent       = email;
-
-        const settingName  = document.getElementById('settingName');
-        const settingEmail = document.getElementById('settingEmail');
-        if (settingName)  settingName.value  = name;
-        if (settingEmail) settingEmail.value = email;
-
-        const ovMemberDate = document.getElementById('ovMemberDate');
-        if (ovMemberDate)
-          ovMemberDate.textContent = new Date(user.created_at || Date.now()).toLocaleDateString('en-ZA', {
-            year: 'numeric', month: 'long', day: 'numeric'
-          });
-
-        try {
-          const stats = await apiCall('/users/me/stats');
-          const ovTransactions = document.getElementById('ovTransactions');
-          if (ovTransactions)
-            ovTransactions.textContent = stats.transaction_count || '0';
-        } catch {
-          // stats endpoint may not be available yet
-        }
-
-      } catch (error) {
-        showToast('Failed to load profile: ' + error.message, 'error');
-      }
-    }
-
-    function switchProfilePanel(panel, btn) {
-      document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.profile-menu-item').forEach(b => b.classList.remove('active'));
-      const target = document.getElementById('panel-' + panel);
-      if (target) target.classList.add('active');
-      if (btn)    btn.classList.add('active');
-    }
-
-    async function saveSettings() {
-      const name     = document.getElementById('settingName')?.value.trim();
-      const timezone = document.getElementById('settingTimezone')?.value;
-      const currency = document.getElementById('settingCurrency')?.value;
-
-      if (!name) { showToast('Name cannot be empty', 'error'); return; }
-
-      try {
-        const updated = await apiCall('/users/me', {
-          method: 'PUT',
-          body: JSON.stringify({
-            name:     name     || undefined,
-            timezone: timezone || undefined,
-            currency: currency || undefined,
-          }),
+      document.getElementById('ovMemberDate').textContent =
+        new Date(user.created_at || Date.now()).toLocaleDateString('en-ZA', {
+          year: 'numeric', month: 'long', day: 'numeric'
         });
 
-        localStorage.setItem('user_name',     updated.name);
-        localStorage.setItem('user_currency', updated.currency);
-
-        const profileName  = document.getElementById('profileName');
-        const profileEmail = document.getElementById('profileEmail');
-        if (profileName)  profileName.textContent  = updated.name;
-        if (profileEmail) profileEmail.textContent = updated.email;
-        showToast('Settings saved successfully!');
-
-      } catch (error) {
-        showToast(error.message, 'error');
-      }
-    }
-
-    async function changePassword() {
-      const current   = document.getElementById('currentPassword')?.value;
-      const newPwd    = document.getElementById('newPassword')?.value;
-      const confirmPw = document.getElementById('confirmPassword')?.value;
-
-      if (!current || !newPwd) { showToast('Please fill in all fields', 'error'); return; }
-      if (newPwd !== confirmPw) { showToast('Passwords do not match', 'error'); return; }
-
-      const strength = checkPasswordStrength(newPwd);
-      if (!strength.is_strong) {
-        showToast('Password is too weak: ' + strength.feedback[0], 'error');
-        return;
-      }
-
+      // Load transaction count (non-critical)
       try {
-        await apiCall('/auth/change-password', {
-          method: 'POST',
-          body: JSON.stringify({ current_password: current, new_password: newPwd }),
-        });
-        showToast('Password changed successfully! Please sign in again on other devices.');
-        if (document.getElementById('currentPassword')) document.getElementById('currentPassword').value = '';
-        if (document.getElementById('newPassword'))     document.getElementById('newPassword').value = '';
-        if (document.getElementById('confirmPassword')) document.getElementById('confirmPassword').value = '';
-      } catch (error) {
-        showToast(error.message, 'error');
-      }
+        const stats = await apiCall('/users/me/stats');
+        document.getElementById('ovTransactions').textContent = stats.transaction_count || '0';
+      } catch { /* stats endpoint may not be ready yet */ }
+
+    } catch (error) {
+      showToast('Failed to load profile: ' + error.message, 'error');
+    }
+  }
+
+  /* ── Panel switching ── */
+  function switchProfilePanel(panel, btn) {
+    document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.profile-menu-item:not(.danger)').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById('panel-' + panel);
+    if (target) target.classList.add('active');
+    if (btn && !btn.classList.contains('danger')) btn.classList.add('active');
+  }
+
+  /* ── Save settings ── */
+  async function saveSettings() {
+    const name     = document.getElementById('settingName')?.value.trim();
+    const timezone = document.getElementById('settingTimezone')?.value;
+    const currency = document.getElementById('settingCurrency')?.value;
+
+    if (!name) { showToast('Name cannot be empty', 'error'); return; }
+
+    try {
+      const updated = await apiCall('/users/me', {
+        method: 'PUT',
+        body: JSON.stringify({ name, timezone, currency }),
+      });
+      localStorage.setItem('user_name',     updated.name);
+      localStorage.setItem('user_currency', updated.currency);
+      document.getElementById('profileName').textContent  = updated.name;
+      document.getElementById('profileEmail').textContent = updated.email;
+      showToast('Settings saved successfully!');
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
+  }
+
+  /* ── Change password ── */
+  async function changePassword() {
+    const current   = document.getElementById('currentPassword')?.value;
+    const newPwd    = document.getElementById('newPassword')?.value;
+    const confirmPw = document.getElementById('confirmPassword')?.value;
+
+    if (!current || !newPwd)  { showToast('Please fill in all fields', 'error'); return; }
+    if (newPwd !== confirmPw) { showToast('Passwords do not match', 'error'); return; }
+    if (newPwd.length < 12)   { showToast('New password must be at least 12 characters', 'error'); return; }
+
+    const strength = checkPasswordStrength(newPwd);
+    if (!strength.is_strong) {
+      showToast('Password is too weak: ' + strength.feedback[0], 'error');
+      return;
     }
 
-    function handleLogout() {
-      if (confirm('Are you sure you want to sign out?')) {
-        WandaAuth.handleLogout();
-      }
+    try {
+      await apiCall('/auth/change-password', {
+        method: 'POST',
+        body: JSON.stringify({ current_password: current, new_password: newPwd }),
+      });
+      showToast('Password changed successfully!');
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value     = '';
+      document.getElementById('confirmPassword').value = '';
+    } catch (error) {
+      showToast(error.message, 'error');
     }
+  }
 
-    async function deleteAccount() {
-      if (!confirm('This will permanently delete your account and ALL data. This cannot be undone. Continue?')) return;
-      if (!confirm('Are you absolutely sure?')) return;
-      try {
-        await apiCall('/users/me', { method: 'DELETE' });
-        WandaAuth.auth.logout();
-        showToast('Account deleted. Redirecting...', 'success');
-        setTimeout(() => { location.href = '/'; }, 1500);
-      } catch (error) {
-        showToast(error.message, 'error');
-      }
+  /* ── Logout ── */
+  function handleLogout() {
+    if (confirm('Are you sure you want to sign out?')) {
+      WandaAuth.handleLogout();
     }
+  }
 
-    function checkPwdStrength(fieldId) {
-      const pwd = document.getElementById(fieldId)?.value || '';
-      if (pwd) updateStrengthUI(fieldId, pwd);
+  /* ── Delete account ── */
+  async function deleteAccount() {
+    if (!confirm('This will permanently delete your account and ALL data. This cannot be undone. Continue?')) return;
+    if (!confirm('Are you absolutely sure? This cannot be reversed.')) return;
+    try {
+      await apiCall('/users/me', { method: 'DELETE' });
+      WandaAuth.auth.logout();
+      showToast('Account deleted. Redirecting...', 'success');
+      setTimeout(() => { location.href = 'index.html'; }, 1500);
+    } catch (error) {
+      showToast(error.message, 'error');
     }
-  </script>
+  }
+
+  /* ── Password strength indicator ── */
+  function checkPwdStrength(fieldId) {
+    const pwd = document.getElementById(fieldId)?.value || '';
+    if (pwd && typeof updateStrengthUI === 'function') updateStrengthUI(fieldId, pwd);
+  }
+</script>
 </body>
 </html>
