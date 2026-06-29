@@ -639,3 +639,240 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 
 /* ── Nav auth wrap ── */
 .nav-auth-wrap { display: flex; gap: clamp(0.25rem, 1vw, 0.625rem); align-items: center; flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PWA — Install banner, offline bar, update banner, iOS prompt
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Install banner (Android / Desktop) ─────────────────────────────────────── */
+#pwa-install-banner {
+  position: fixed;
+  bottom: -120px;
+  left: 16px;
+  right: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  z-index: 9990;
+  transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#pwa-install-banner.pwa-install-banner--visible { bottom: 24px; }
+
+.pwa-banner-icon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.pwa-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+.pwa-banner-text strong {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--dark);
+}
+.pwa-banner-text span {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--mid);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pwa-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.pwa-btn-install {
+  background: var(--gradient);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+  transition: opacity 0.2s, transform 0.15s;
+}
+.pwa-btn-install:hover { opacity: 0.9; }
+.pwa-btn-install:active { transform: scale(0.97); }
+.pwa-btn-dismiss {
+  background: none;
+  border: none;
+  color: var(--light);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+.pwa-btn-dismiss:hover { color: var(--mid); background: var(--grey-bg); }
+
+/* ── iOS Safari install prompt ──────────────────────────────────────────────── */
+#pwa-ios-banner {
+  position: fixed;
+  bottom: -220px;
+  left: 12px;
+  right: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  background: rgba(30, 30, 40, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 18px 18px 28px;
+  z-index: 9990;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 -4px 40px rgba(0, 0, 0, 0.35);
+  transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#pwa-ios-banner.pwa-ios-banner--visible { bottom: 0; }
+
+.pwa-ios-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.pwa-ios-close:hover { background: rgba(255,255,255,0.25); }
+.pwa-ios-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+.pwa-ios-icon {
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.pwa-ios-text strong {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+.pwa-ios-text p { font-size: 0.82rem; color: rgba(255,255,255,0.75); line-height: 1.5; }
+.pwa-ios-arrow {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.5);
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pwa-bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes pwa-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+/* ── Update available banner ─────────────────────────────────────────────────── */
+#pwa-update-banner {
+  position: fixed;
+  top: -80px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, #007BFF, #28A745);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 20px;
+  z-index: 9995;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  transition: top 0.3s ease;
+}
+#pwa-update-banner.pwa-update-banner--visible { top: 0; }
+#pwa-update-banner .material-icons { font-size: 1.1rem; flex-shrink: 0; }
+#pwa-update-now {
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  padding: 4px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+#pwa-update-now:hover { background: rgba(255,255,255,0.35); }
+#pwa-update-later {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  margin-left: auto;
+}
+
+/* ── Offline status bar ──────────────────────────────────────────────────────── */
+#pwa-offline-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1a1a2e;
+  color: rgba(255,255,255,0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-family: 'Open Sans', sans-serif;
+  z-index: 9980;
+}
+#pwa-offline-bar .material-icons { font-size: 1rem; color: #FFC107; flex-shrink: 0; }
+#pwa-offline-bar[hidden] { display: none; }
+
+/* ── Reduced-motion overrides ────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  #pwa-install-banner,
+  #pwa-ios-banner,
+  #pwa-update-banner { transition: none; }
+  .pwa-ios-arrow { animation: none; }
+}
+
+/* ── Responsive tweaks for small phones ─────────────────────────────────────── */
+@media (max-width: 400px) {
+  #pwa-install-banner { flex-wrap: wrap; }
+  .pwa-banner-text span { display: none; }
+  .pwa-btn-install { padding: 8px 14px; }
+}

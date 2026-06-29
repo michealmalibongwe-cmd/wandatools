@@ -1,0 +1,68 @@
+{
+  "name": "WandaTools – Smart Finance for Eswatini",
+  "short_name": "WandaTools",
+  "description": "AI-powered financial management for businesses and individuals in Eswatini. Track transactions, view dashboards, and get AI-driven recommendations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#007BFF",
+  "background_color": "#FFFFFF",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["finance", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "WandaTools Dashboard"
+    },
+    {
+      "src": "/icons/screenshot-narrow.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "WandaTools on mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tools Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your financial dashboard and transactions",
+      "url": "/tools.html",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "WandaAI",
+      "short_name": "AI Chat",
+      "description": "Chat with your AI financial assistant",
+      "url": "/wandaAI.html",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
+}

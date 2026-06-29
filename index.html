@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA Manifest & cross-platform meta -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#007BFF" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="WandaTools" />
+  <link rel="apple-touch-icon" href="/icons/icon.svg" />
   <title>WandaTools – AI-Powered Financial Insights for Eswatini</title>
   <meta name="description" content="WandaTools empowers small businesses and individuals in Eswatini with real-time financial insights, predictive analytics, and AI-driven recommendations." />
   <link rel="stylesheet" href="styles.css" />
@@ -553,6 +561,7 @@
 
 <!-- ══════════════════ SCRIPTS ══════════════════ -->
 <script src="nav.js"></script>
+<script src="/pwa.js" defer></script>
 <script>
   /* ── Hero CTA: redirect logged-in users to dashboard ── */
   const heroBtn = document.getElementById('heroGetStarted');

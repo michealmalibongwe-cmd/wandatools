@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WandaTools Icon Generator</title>
+  <style>
+    body { font-family: sans-serif; padding: 32px; background: #f5f5f5; }
+    h1   { margin-bottom: 8px; }
+    p    { color: #666; margin-bottom: 24px; }
+    .grid { display: flex; flex-wrap: wrap; gap: 24px; }
+    .card {
+      background: #fff; border-radius: 12px; padding: 20px; text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    canvas { display: block; margin: 0 auto 12px; border-radius: 12px; }
+    button {
+      background: #007BFF; color: #fff; border: none; padding: 8px 20px;
+      border-radius: 6px; cursor: pointer; font-size: 14px;
+    }
+    button:hover { background: #0056cc; }
+  </style>
+</head>
+<body>
+  <h1>WandaTools Icon Generator</h1>
+  <p>
+    Open this file in a browser, then click each "Download" button to save the
+    PNG icons. Place the downloaded files in the <code>icons/</code> folder.
+  </p>
+  <div class="grid" id="grid"></div>
+
+<script>
+  const sizes = [
+    { size: 192,  name: 'icon-192.png',         radius: 42  },
+    { size: 512,  name: 'icon-512.png',          radius: 96  },
+    { size: 180,  name: 'apple-touch-icon.png',  radius: 40  },
+  ];
+
+  function drawIcon(canvas, size, cornerRadius) {
+    const ctx  = canvas.getContext('2d');
+    const half = size / 2;
+
+    // Rounded background
+    const grad = ctx.createLinearGradient(0, 0, size, size);
+    grad.addColorStop(0, '#007BFF');
+    grad.addColorStop(1, '#28A745');
+
+    ctx.beginPath();
+    ctx.roundRect(0, 0, size, size, cornerRadius);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // W lettermark
+    const pad   = size * 0.14;
+    const top   = size * 0.26;
+    const bot   = size * 0.76;
+    const midY  = size * 0.54;
+    const lw    = size * 0.10;
+
+    ctx.strokeStyle   = 'white';
+    ctx.lineWidth     = lw;
+    ctx.lineCap       = 'round';
+    ctx.lineJoin      = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(pad, top);
+    ctx.lineTo(half * 0.65 + pad * 0.4, bot);
+    ctx.lineTo(half, midY);
+    ctx.lineTo(half * 1.35 + pad * 0.2, bot);
+    ctx.lineTo(size - pad, top);
+    ctx.stroke();
+  }
+
+  const grid = document.getElementById('grid');
+
+  sizes.forEach(({ size, name, radius }) => {
+    const card   = document.createElement('div');
+    card.className = 'card';
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = size;
+    canvas.height = size;
+    canvas.style.width  = Math.min(size, 180) + 'px';
+    canvas.style.height = Math.min(size, 180) + 'px';
+
+    drawIcon(canvas, size, radius);
+
+    const label = document.createElement('p');
+    label.textContent = `${name} (${size}×${size})`;
+    label.style.marginBottom = '12px';
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Download';
+    btn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = name;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    card.appendChild(canvas);
+    card.appendChild(label);
+    card.appendChild(btn);
+    grid.appendChild(card);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WandaTools icon">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007BFF"/>
+      <stop offset="100%" stop-color="#28A745"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background — safe zone for maskable icons -->
+  <rect width="512" height="512" rx="96" ry="96" fill="url(#bg-grad)"/>
+  <!-- W lettermark -->
+  <path
+    d="M 80 140 L 148 372 L 256 220 L 364 372 L 432 140"
+    fill="none"
+    stroke="white"
+    stroke-width="52"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Create your WandaTools account - AI-powered financial management" />
   <meta name="theme-color" content="#007BFF" />
+  <!-- PWA Manifest & cross-platform meta -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="WandaTools" />
+  <link rel="apple-touch-icon" href="/icons/icon.svg" />
   <title>Create Account – WandaTools</title>
 
   <!-- Shared stylesheet (defines all CSS variables, navbar, buttons, forms) -->
@@ -395,6 +402,7 @@
 
 <!-- nav.js MUST load first — it defines API_BASE, apiCall, showAlert, showToast, protectFromAuth, updateStrengthUI -->
 <script src="nav.js"></script>
+<script src="/pwa.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     // Redirect already-logged-in users away from this page
