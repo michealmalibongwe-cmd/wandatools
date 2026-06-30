@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  const VAPID_PUBLIC_KEY = 'Public key: <cryptography.hazmat.bindings._rust.openssl.ec.ECPublicKey object at 0x00000278CE639A50>';
+  const API_BASE = 'https://wandatools.up.railway.app';
   let deferredInstallPrompt = null;
 
   // ─── Service Worker ──────────────────────────────────────────────────────────
@@ -195,17 +195,28 @@
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') return { error: 'denied' };
 
+    // Fetch VAPID public key from backend — never hardcode it
+    let vapidPublicKey;
+    try {
+      const resp = await fetch(`${API_BASE}/api/v1/pwa/vapid-public-key`);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      vapidPublicKey = (await resp.json()).publicKey;
+    } catch (err) {
+      console.warn('[WandaPWA] Could not fetch VAPID public key:', err);
+      return { error: 'vapid_unavailable' };
+    }
+
     const reg          = await navigator.serviceWorker.ready;
     const subscription = await reg.pushManager.subscribe({
       userVisibleOnly:      true,
-      applicationServerKey: _urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      applicationServerKey: _urlBase64ToUint8Array(vapidPublicKey),
     });
 
-    // Register subscription with backend
+    // Register subscription with backend — send browser's native PushSubscription object
     const token = localStorage.getItem('access_token');
     if (token) {
       try {
-        await fetch('https://wandatools.up.railway.app/api/v1/push/subscribe', {
+        const res = await fetch(`${API_BASE}/api/v1/pwa/push/subscribe`, {
           method:  'POST',
           headers: {
             'Content-Type':  'application/json',
@@ -213,6 +224,7 @@
           },
           body: JSON.stringify(subscription),
         });
+        if (!res.ok) console.warn('[WandaPWA] Subscribe response:', res.status, await res.text());
       } catch (err) {
         console.warn('[WandaPWA] Could not register push subscription:', err);
       }
