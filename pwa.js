@@ -20,6 +20,7 @@
               }
             });
           });
+          _initPushNotifications();
         })
         .catch((err) => console.warn('[WandaPWA] SW registration failed:', err));
 
@@ -239,6 +240,79 @@
     return Uint8Array.from(Array.from(raw, (c) => c.charCodeAt(0)));
   }
 
+  // ─── Push notification permission prompt ──────────────────────────────────────
+  async function _initPushNotifications() {
+    if (!('Notification' in window) || !('PushManager' in window)) return;
+    if (Notification.permission === 'denied') return;
+    if (Notification.permission === 'granted') {
+      // Permission was previously granted — make sure a subscription still exists
+      _ensurePushSubscription();
+      return;
+    }
+    // 'default' — show the in-app banner after 10 s so the page feels settled
+    setTimeout(_showNotificationBanner, 10_000);
+  }
+
+  async function _ensurePushSubscription() {
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const existing = await reg.pushManager.getSubscription();
+      if (!existing) await subscribeToPush();
+    } catch (err) {
+      console.warn('[WandaPWA] Could not verify push subscription:', err);
+    }
+  }
+
+  function _showNotificationBanner() {
+    if (document.getElementById('pwa-notify-banner')) return;
+    if (sessionStorage.getItem('pwa-notify-dismissed')) return;
+    if (Notification.permission !== 'default') return;
+
+    const banner = document.createElement('div');
+    banner.id = 'pwa-notify-banner';
+    banner.setAttribute('role', 'complementary');
+    banner.setAttribute('aria-label', 'Enable push notifications');
+    banner.innerHTML = `
+      <div class="pwa-banner-icon" aria-hidden="true">
+        <span class="material-icons">notifications_active</span>
+      </div>
+      <div class="pwa-banner-text">
+        <strong>Stay in the loop</strong>
+        <span>Get alerts for tips, new features &amp; account activity</span>
+      </div>
+      <div class="pwa-banner-actions">
+        <button class="pwa-btn-install" id="pwa-notify-allow">Allow</button>
+        <button class="pwa-btn-dismiss" id="pwa-notify-dismiss" aria-label="Dismiss">&#x2715;</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => banner.classList.add('pwa-install-banner--visible'));
+
+    document.getElementById('pwa-notify-allow').addEventListener('click', async () => {
+      _hideNotificationBanner();
+      const result = await subscribeToPush();
+      if (result.error === 'denied') {
+        _showToast('Notifications blocked. Enable them in your browser settings.', 'warning');
+      } else if (result.subscription) {
+        _showToast('Notifications enabled!', 'success');
+      } else {
+        _showToast('Could not enable notifications. Try again later.', 'error');
+      }
+    });
+
+    document.getElementById('pwa-notify-dismiss').addEventListener('click', () => {
+      _hideNotificationBanner();
+      sessionStorage.setItem('pwa-notify-dismissed', '1');
+    });
+  }
+
+  function _hideNotificationBanner() {
+    const banner = document.getElementById('pwa-notify-banner');
+    if (!banner) return;
+    banner.classList.remove('pwa-install-banner--visible');
+    setTimeout(() => banner.remove(), 400);
+  }
+
   // ─── Background Sync — IndexedDB queue for offline mutations ─────────────────
   let _idb = null;
 
@@ -301,6 +375,7 @@
   window.WandaPWA = {
     subscribeToPush,
     queueOfflineRequest,
-    triggerInstall: _triggerInstall,
+    triggerInstall:      _triggerInstall,
+    enableNotifications: _showNotificationBanner,
   };
 })();
