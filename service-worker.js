@@ -1,6 +1,6 @@
 /* WandaTools Service Worker — offline caching, push, background sync */
 
-const CACHE_VERSION = 'v2.0';
+const CACHE_VERSION = 'v2.1';
 const STATIC_CACHE  = `wanda-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `wanda-dynamic-${CACHE_VERSION}`;
 const API_CACHE     = `wanda-api-${CACHE_VERSION}`;

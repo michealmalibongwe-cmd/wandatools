@@ -177,16 +177,15 @@
     document.body.appendChild(bar);
     _updateOnlineStatus();
 
-    // When running as an installed PWA, enforce PIN setup once before the user
-    // can use the app. Runs once per session (sessionStorage guards repeat prompts
-    // within the same tab); repeats each new session until a PIN is actually saved.
+    // When running as an installed PWA, enforce PIN setup before the app can
+    // be used. The check runs on every page load — _dbHasPin() is the gate.
+    // Once a PIN is saved this resolves instantly and the modal never shows.
     const _isPWA = window.matchMedia('(display-mode: standalone)').matches ||
                    ('standalone' in navigator && navigator.standalone === true);
-    if (_isPWA && !sessionStorage.getItem('pwa-pin-checked')) {
-      sessionStorage.setItem('pwa-pin-checked', '1');
+    if (_isPWA) {
       const token = localStorage.getItem('access_token');
       if (token && !(await _dbHasPin())) {
-        await _pinPromptSetup();
+        await _pinPromptSetup();   // blocks until PIN is saved or user logs out
       }
     }
   });
@@ -210,9 +209,10 @@
       return { error: 'vapid_unavailable' };
     }
 
-    // Validate the key before trying to decode — backend may return null/garbage
-    if (!vapidPublicKey || typeof vapidPublicKey !== 'string' || vapidPublicKey.length < 10) {
-      console.warn('[WandaPWA] VAPID key missing or invalid — push disabled');
+    // Strict base64url validation — rejects anything with spaces, <>, or other
+    // non-base64url chars that would cause atob to throw InvalidCharacterError.
+    if (!vapidPublicKey || !/^[A-Za-z0-9_-]{20,}$/.test(vapidPublicKey.trim())) {
+      console.warn('[WandaPWA] VAPID key missing or not base64url — push disabled');
       return { error: 'vapid_unavailable' };
     }
 
@@ -562,13 +562,15 @@
     setTimeout(() => ov.remove(), 260);
   }
 
-  // Prompt user to set a PIN after their first successful login.
+  // Mandatory PIN setup — must save a PIN before the PWA can be used.
+  // The only escape is "Log out", which clears auth and redirects to login.
   async function _pinPromptSetup() {
-    if (await _dbHasPin()) return; // already configured
+    if (await _dbHasPin()) return true;
     return new Promise(resolve => {
       const ov = _pinOverlay(`
         <h3 class="wpin-title">Set up Offline PIN</h3>
-        <p class="wpin-sub">Create a 4–6 digit PIN to access WandaTools when you're offline.</p>
+        <p class="wpin-sub">Create a 4–6 digit PIN to access WandaTools when offline.
+          This is required before you can use the installed app.</p>
         <div class="wpin-fields">
           <input type="password" inputmode="numeric" maxlength="6" id="wpin1"
                  placeholder="Enter PIN" autocomplete="new-password" />
@@ -578,9 +580,12 @@
         <span class="wpin-err" id="wpin-err"></span>
         <div class="wpin-actions">
           <button class="wpin-btn wpin-btn-primary" id="wpin-save">Save PIN</button>
-          <button class="wpin-btn" id="wpin-skip">Skip</button>
+          <button class="wpin-btn" id="wpin-logout">Log out</button>
         </div>
       `);
+
+      // Prevent dismissing by clicking the backdrop
+      ov.addEventListener('click', (e) => { if (e.target === ov) e.stopPropagation(); });
 
       ov.querySelector('#wpin-save').addEventListener('click', async () => {
         const p1 = ov.querySelector('#wpin1').value;
@@ -591,13 +596,18 @@
         await _dbSavePin(p1);
         await _setting.set('pin.attempts', 0);
         _pinClose(ov);
-        _showToast('Offline PIN saved!', 'success');
+        _showToast('Offline PIN saved! You can now use WandaTools offline.', 'success');
         resolve(true);
       });
 
-      ov.querySelector('#wpin-skip').addEventListener('click', () => {
+      // Log out clears all local auth data and sends user back to login
+      ov.querySelector('#wpin-logout').addEventListener('click', async () => {
+        await _dbClearAuth();
+        localStorage.clear();
+        sessionStorage.clear();
         _pinClose(ov);
         resolve(false);
+        location.href = '/index.html';
       });
     });
   }
@@ -693,28 +703,34 @@
     }
   }
 
-  // ─── Auto-sync: batch-send queued requests when connection returns ─────────────
+  // ─── Auto-sync: replay queued requests when connection returns ───────────────
   async function _autoSync() {
     _updateOnlineStatus();
     const items = await _dbGetQueued().catch(() => []);
     if (!items.length) return;
 
+    // Prefer the service worker background sync (handles token refresh & retry)
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        await reg.sync.register('sync-pending-requests');
+        return;
+      } catch { /* fall through to main-thread replay */ }
+    }
+
+    // Fallback for browsers without Background Sync API
     const token = localStorage.getItem('access_token');
-    try {
-      const res = await fetch(`${API_BASE}/api/v1/pwa/sync`, {
-        method:  'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ requests: items }),
-      });
-      if (res.ok) {
-        await Promise.all(items.map(item => _dbDeleteQueued(item.id)));
-        _showToast(`${items.length} offline change${items.length !== 1 ? 's' : ''} synced.`, 'success');
-      }
-    } catch (err) {
-      console.warn('[WandaPWA] Online sync failed:', err);
+    let synced = 0;
+    for (const item of items) {
+      try {
+        const headers = { ...item.headers };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const res = await fetch(item.url, { method: item.method, headers, body: item.body });
+        if (res.ok) { await _dbDeleteQueued(item.id); synced++; }
+      } catch { /* network still down — leave in queue */ }
+    }
+    if (synced > 0) {
+      _showToast(`${synced} offline change${synced !== 1 ? 's' : ''} synced.`, 'success');
     }
   }
 
