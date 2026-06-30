@@ -163,8 +163,8 @@
     document.getElementById('pwa-update-later').addEventListener('click', () => banner.remove());
   }
 
-  // ─── Offline status bar ───────────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', () => {
+  // ─── Offline status bar + PWA-install PIN gate ───────────────────────────────
+  document.addEventListener('DOMContentLoaded', async () => {
     const bar = document.createElement('div');
     bar.id = 'pwa-offline-bar';
     bar.setAttribute('role', 'status');
@@ -176,6 +176,19 @@
     `;
     document.body.appendChild(bar);
     _updateOnlineStatus();
+
+    // When running as an installed PWA, enforce PIN setup once before the user
+    // can use the app. Runs once per session (sessionStorage guards repeat prompts
+    // within the same tab); repeats each new session until a PIN is actually saved.
+    const _isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                   ('standalone' in navigator && navigator.standalone === true);
+    if (_isPWA && !sessionStorage.getItem('pwa-pin-checked')) {
+      sessionStorage.setItem('pwa-pin-checked', '1');
+      const token = localStorage.getItem('access_token');
+      if (token && !(await _dbHasPin())) {
+        await _pinPromptSetup();
+      }
+    }
   });
 
   // ─── Push notifications ───────────────────────────────────────────────────────
@@ -197,10 +210,24 @@
       return { error: 'vapid_unavailable' };
     }
 
+    // Validate the key before trying to decode — backend may return null/garbage
+    if (!vapidPublicKey || typeof vapidPublicKey !== 'string' || vapidPublicKey.length < 10) {
+      console.warn('[WandaPWA] VAPID key missing or invalid — push disabled');
+      return { error: 'vapid_unavailable' };
+    }
+
+    let applicationServerKey;
+    try {
+      applicationServerKey = _urlBase64ToUint8Array(vapidPublicKey);
+    } catch (err) {
+      console.warn('[WandaPWA] VAPID key could not be decoded:', err.message);
+      return { error: 'vapid_unavailable' };
+    }
+
     const reg          = await navigator.serviceWorker.ready;
     const subscription = await reg.pushManager.subscribe({
       userVisibleOnly:      true,
-      applicationServerKey: _urlBase64ToUint8Array(vapidPublicKey),
+      applicationServerKey,
     });
 
     const token = localStorage.getItem('access_token');
@@ -221,8 +248,10 @@
   }
 
   function _urlBase64ToUint8Array(base64) {
-    const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
-    const raw    = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
+    // Strip whitespace, convert URL-safe chars to standard base64, then pad
+    const cleaned = base64.trim().replace(/-/g, '+').replace(/_/g, '/');
+    const padded  = cleaned + '='.repeat((4 - (cleaned.length % 4)) % 4);
+    const raw     = atob(padded);   // throws InvalidCharacterError if still malformed
     return Uint8Array.from(Array.from(raw, (c) => c.charCodeAt(0)));
   }
 
@@ -238,9 +267,10 @@
     try {
       const reg = await navigator.serviceWorker.ready;
       const existing = await reg.pushManager.getSubscription();
+      // subscribeToPush returns {error} if VAPID key is missing/invalid — no throw
       if (!existing) await subscribeToPush();
-    } catch (err) {
-      console.warn('[WandaPWA] Could not verify push subscription:', err);
+    } catch {
+      // Push not available or not configured on this backend — ignore silently
     }
   }
 
