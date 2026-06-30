@@ -1,6 +1,6 @@
-/* WandaTools Service Worker — PWA offline support, caching, push & background sync */
+/* WandaTools Service Worker — offline caching, push, background sync */
 
-const CACHE_VERSION = 'v1.0';
+const CACHE_VERSION = 'v2.0';
 const STATIC_CACHE  = `wanda-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `wanda-dynamic-${CACHE_VERSION}`;
 const API_CACHE     = `wanda-api-${CACHE_VERSION}`;
@@ -8,12 +8,14 @@ const FONT_CACHE    = `wanda-fonts-${CACHE_VERSION}`;
 
 const API_ORIGIN = 'https://wandatools.up.railway.app';
 
+// All app shell assets — precached on install so the app works 100% offline
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/styles.css',
   '/nav.js',
   '/pwa.js',
+  '/manifest.json',
   '/offline.html',
   '/signup.html',
   '/tools.html',
@@ -27,28 +29,22 @@ const STATIC_ASSETS = [
   '/icons/icon.svg',
 ];
 
-// ─── Install — precache static shell ─────────────────────────────────────────
+// ─── Install — precache app shell ─────────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => cache.addAll(STATIC_ASSETS))
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting())   // activate immediately, no waiting
   );
 });
 
-// ─── Activate — prune old caches ──────────────────────────────────────────────
+// ─── Activate — prune old caches, claim clients ───────────────────────────────
 self.addEventListener('activate', (event) => {
-  const currentCaches = [STATIC_CACHE, DYNAMIC_CACHE, API_CACHE, FONT_CACHE];
+  const current = [STATIC_CACHE, DYNAMIC_CACHE, API_CACHE, FONT_CACHE];
   event.waitUntil(
     caches.keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => !currentCaches.includes(key))
-            .map((key) => caches.delete(key))
-        )
-      )
-      .then(() => self.clients.claim())
+      .then((keys) => Promise.all(keys.filter(k => !current.includes(k)).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())  // take control of open pages immediately
   );
 });
 
@@ -57,41 +53,40 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Only handle http/https
   if (!url.protocol.startsWith('http')) return;
-
-  // Skip non-GET (mutations are queued in IndexedDB by pwa.js)
   if (request.method !== 'GET') return;
 
-  // API calls — Network First (10 s timeout), fall back to cache
+  // API calls — Network First (10 s timeout), cached fallback
   if (url.origin === API_ORIGIN) {
     event.respondWith(networkFirst(request, API_CACHE, 10_000));
     return;
   }
 
   // Google Fonts — Cache First (long TTL)
-  if (
-    url.origin === 'https://fonts.googleapis.com' ||
-    url.origin === 'https://fonts.gstatic.com'
-  ) {
+  if (url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com') {
     event.respondWith(cacheFirst(request, FONT_CACHE));
     return;
   }
 
-  // Navigation — Network First, offline.html fallback
+  // Navigation — Cache First (serve app shell instantly), update in background
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
-        .catch(() => caches.match('/offline.html'))
+      caches.match(request).then((cached) => {
+        const networkFetch = fetch(request).then((res) => {
+          if (res.ok) caches.open(STATIC_CACHE).then(c => c.put(request, res.clone()));
+          return res;
+        }).catch(() => null);
+        return cached || networkFetch || caches.match('/offline.html');
+      })
     );
     return;
   }
 
-  // Static assets (CSS, JS, images, SVG) — Cache First
+  // Static assets (CSS, JS, images, fonts) — Cache First
   if (
-    request.destination === 'style'   ||
-    request.destination === 'script'  ||
-    request.destination === 'image'   ||
+    request.destination === 'style'  ||
+    request.destination === 'script' ||
+    request.destination === 'image'  ||
     request.destination === 'font'
   ) {
     event.respondWith(cacheFirst(request, STATIC_CACHE));
@@ -109,10 +104,7 @@ async function cacheFirst(request, cacheName) {
   if (cached) return cached;
   try {
     const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
-    }
+    if (response.ok) (await caches.open(cacheName)).put(request, response.clone());
     return response;
   } catch {
     return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
@@ -121,14 +113,11 @@ async function cacheFirst(request, cacheName) {
 
 async function networkFirst(request, cacheName, timeoutMs) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const timer      = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(request, { signal: controller.signal });
     clearTimeout(timer);
-    if (response.ok) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
-    }
+    if (response.ok) (await caches.open(cacheName)).put(request, response.clone());
     return response;
   } catch {
     clearTimeout(timer);
@@ -142,11 +131,11 @@ async function networkFirst(request, cacheName, timeoutMs) {
 }
 
 async function staleWhileRevalidate(request, cacheName) {
-  const cache    = await caches.open(cacheName);
-  const cached   = await cache.match(request);
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) cache.put(request, response.clone());
-    return response;
+  const cache        = await caches.open(cacheName);
+  const cached       = await cache.match(request);
+  const fetchPromise = fetch(request).then((res) => {
+    if (res.ok) cache.put(request, res.clone());
+    return res;
   }).catch(() => null);
   return cached || fetchPromise || new Response('Offline', { status: 503 });
 }
@@ -156,13 +145,13 @@ self.addEventListener('push', (event) => {
   if (!event.data) return;
 
   let data;
-  try { data = event.data.json(); }
+  try   { data = event.data.json(); }
   catch { data = { title: 'WandaTools', body: event.data.text() }; }
 
   const options = {
     body:     data.body    || 'You have a new notification from WandaTools.',
-    icon:     '/icons/icon-192.png',
-    badge:    '/icons/icon-192.png',
+    icon:     '/icons/icon.svg',
+    badge:    '/icons/icon.svg',
     vibrate:  [200, 100, 200],
     data:     { url: data.url || '/' },
     tag:      data.tag     || 'wandatools-notification',
@@ -188,144 +177,53 @@ self.addEventListener('notificationclick', (event) => {
       .matchAll({ type: 'window', includeUncontrolled: true })
       .then((clientList) => {
         for (const client of clientList) {
-          if (client.url.includes(targetUrl) && 'focus' in client) {
-            return client.focus();
-          }
+          if (client.url.includes(targetUrl) && 'focus' in client) return client.focus();
         }
         if (clients.openWindow) return clients.openWindow(targetUrl);
       })
   );
 });
 
-// ─── Background sync — replay queued offline requests ─────────────────────────
+// ─── Background sync — replay queued offline requests via wandatools-db ──────
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-pending-requests') {
     event.waitUntil(replayPendingRequests());
   }
 });
 
-// Promise-based IndexedDB helpers used only inside the service worker.
-// Must use v2 to match the schema opened by pwa.js (auth-tokens store).
-function _swOpenDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open('wanda-offline-db', 2);
-    req.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains('pending-requests')) {
-        const s = db.createObjectStore('pending-requests', { keyPath: 'id', autoIncrement: true });
-        s.createIndex('timestamp', 'timestamp');
-      }
-      if (!db.objectStoreNames.contains('auth-tokens')) {
-        db.createObjectStore('auth-tokens', { keyPath: 'key' });
-      }
-    };
-    req.onsuccess = (e) => resolve(e.target.result);
-    req.onerror   = ()  => reject(req.error);
-  });
-}
-
-function _swIdbGet(db, storeName, key) {
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(storeName, 'readonly').objectStore(storeName).get(key);
-    req.onsuccess = () => resolve(req.result?.value ?? null);
-    req.onerror   = () => reject(req.error);
-  });
-}
-
-function _swIdbPut(db, storeName, key, value) {
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(storeName, 'readwrite').objectStore(storeName).put({ key, value });
-    req.onsuccess = () => resolve();
-    req.onerror   = () => reject(req.error);
-  });
-}
-
-function _swIdbGetAll(db, storeName) {
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(storeName, 'readonly').objectStore(storeName).getAll();
-    req.onsuccess = () => resolve(req.result);
-    req.onerror   = () => reject(req.error);
-  });
-}
-
-function _swIdbDelete(db, storeName, id) {
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(storeName, 'readwrite').objectStore(storeName).delete(id);
-    req.onsuccess = () => resolve();
-    req.onerror   = () => reject(req.error);
-  });
-}
-
-async function _swRefreshToken(db) {
-  const refreshToken = await _swIdbGet(db, 'auth-tokens', 'refresh_token');
-  if (!refreshToken) return null;
-
-  try {
-    const res = await fetch(`${API_ORIGIN}/api/v1/auth/refresh`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ refresh_token: refreshToken }),
-    });
-    if (!res.ok) return null;
-
-    const data = await res.json();
-    await _swIdbPut(db, 'auth-tokens', 'access_token',  data.access_token);
-    await _swIdbPut(db, 'auth-tokens', 'refresh_token', data.refresh_token);
-
-    // Tell every open window to update localStorage so the UI stays in sync
-    const windowClients = await clients.matchAll({ type: 'window' });
-    windowClients.forEach((c) => c.postMessage({
-      type:          'TOKEN_REFRESHED',
-      access_token:  data.access_token,
-      refresh_token: data.refresh_token,
-    }));
-
-    return data.access_token;
-  } catch {
-    return null;
-  }
-}
-
 async function replayPendingRequests() {
-  let db;
-  try {
-    db = await _swOpenDB();
-  } catch {
-    return;
-  }
+  return new Promise((resolve) => {
+    const dbReq = indexedDB.open('wandatools-db', 1);
 
-  const items = await _swIdbGetAll(db, 'pending-requests').catch(() => []);
-  if (!items.length) return;
+    dbReq.onsuccess = async (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('offline_queue')) { resolve(); return; }
 
-  // Get the current access token once; update it if we refresh mid-batch.
-  let accessToken = await _swIdbGet(db, 'auth-tokens', 'access_token').catch(() => null);
+      const tx    = db.transaction('offline_queue', 'readwrite');
+      const store = tx.objectStore('offline_queue');
+      const all   = store.getAll();
 
-  for (const item of items) {
-    const headers = { ...item.headers };
-    if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
-
-    try {
-      let res = await fetch(item.url, { method: item.method, headers, body: item.body });
-
-      if (res.status === 401) {
-        // Access token expired — try a silent refresh, then retry once
-        const newToken = await _swRefreshToken(db);
-        if (newToken) {
-          accessToken = newToken;
-          const retryHeaders = { ...item.headers, 'Authorization': `Bearer ${newToken}` };
-          res = await fetch(item.url, { method: item.method, headers: retryHeaders, body: item.body });
+      all.onsuccess = async () => {
+        for (const item of all.result) {
+          try {
+            const res = await fetch(item.url, {
+              method:  item.method,
+              headers: item.headers,
+              body:    item.body,
+            });
+            if (res.ok) store.delete(item.id);
+          } catch {
+            // Will retry on next sync event
+          }
         }
-      }
+        const clientList = await clients.matchAll({ type: 'window' });
+        clientList.forEach(c => c.postMessage({ type: 'SYNC_COMPLETE' }));
+        resolve();
+      };
 
-      if (res.ok) {
-        await _swIdbDelete(db, 'pending-requests', item.id);
-      }
-      // Non-OK (non-401) errors are left in the queue and retried next sync
-    } catch {
-      // Network failure — leave in queue
-    }
-  }
+      all.onerror = () => resolve();
+    };
 
-  const windowClients = await clients.matchAll({ type: 'window' });
-  windowClients.forEach((c) => c.postMessage({ type: 'SYNC_COMPLETE' }));
+    dbReq.onerror = () => resolve();
+  });
 }

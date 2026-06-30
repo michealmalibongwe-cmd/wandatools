@@ -692,14 +692,21 @@
 <script src="nav.js"></script>
 <script src="/pwa.js" defer></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
 
     // ── Auth gate ──────────────────────────────────────────
     if (!auth.token) {
-      location.href = '/signup.html';
-      return;
+      // Offline with cached credentials → show PIN prompt before redirecting
+      if (!navigator.onLine && window.WandaPIN) {
+        const ok = await WandaPIN.checkOfflineAccess();
+        if (!ok) { location.href = '/signup.html'; return; }
+        auth._load(); // re-sync in-memory state after PIN unlock
+      } else {
+        location.href = '/signup.html';
+        return;
+      }
     }
-    try { protectPage(); } catch(e) { console.warn('protectPage:', e); }
+    try { await protectPage(); } catch(e) { console.warn('protectPage:', e); }
 
     // ── Greet + date ───────────────────────────────────────
     const greetEl = document.getElementById('dashGreetName');

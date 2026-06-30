@@ -45,11 +45,14 @@ class AuthState {
     localStorage.setItem(KEYS.USER_NAME,     data.user.name || data.user.email.split('@')[0]);
     localStorage.setItem(KEYS.USER_CURRENCY, data.user.currency || 'E');
     this._load();
+    // Mirror to IndexedDB for offline recovery (best-effort, non-blocking)
+    if (window.WandaDB) WandaDB.saveAuthData(data).catch(() => {});
   }
 
   logout() {
     Object.values(KEYS).forEach(k => localStorage.removeItem(k));
     this._load();
+    if (window.WandaDB) WandaDB.clearAuthData().catch(() => {});
   }
 
   updateTokens(accessToken, refreshToken) {
@@ -57,6 +60,7 @@ class AuthState {
     localStorage.setItem(KEYS.REFRESH_TOKEN, refreshToken);
     this.token        = accessToken;
     this.refreshToken = refreshToken;
+    if (window.WandaDB) WandaDB.updateTokens(accessToken, refreshToken).catch(() => {});
   }
 
   getUserName()     { return this.name  || (this.email ? this.email.split('@')[0] : 'User'); }
@@ -315,15 +319,20 @@ async function handleLogout() {
 // PAGE PROTECTION
 // ═══════════════════════════════════════════════════════════
 
-function protectPage() {
-  if (!auth.isLoggedIn) {
-    showAlert('⚠️ Please sign in to access this page', 'error');
-    setTimeout(() => {
-      location.href = '/signup.html?redirect=' + encodeURIComponent(window.location.pathname);
-    }, 1500);
-    return false;
+async function protectPage() {
+  if (auth.isLoggedIn) return true;
+
+  // Offline: try to restore a cached session via PIN
+  if (!navigator.onLine && window.WandaPIN) {
+    const ok = await WandaPIN.checkOfflineAccess();
+    if (ok) { auth._load(); return auth.isLoggedIn; }
   }
-  return true;
+
+  showAlert('⚠️ Please sign in to access this page', 'error');
+  setTimeout(() => {
+    location.href = '/signup.html?redirect=' + encodeURIComponent(window.location.pathname);
+  }, 1500);
+  return false;
 }
 
 function protectFromAuth() {

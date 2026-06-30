@@ -458,8 +458,9 @@
 
   const welcomeMsg = `Hello! 👋 I'm **WandaAI**, your personal financial assistant.\n\nI can help you understand your cash flow, find areas to save, plan for growth, and prepare for funding applications.\n\nWhat would you like to explore today?`;
 
-  function initWandaAI() {
-    protectPage();
+  async function initWandaAI() {
+    const ok = await protectPage();
+    if (!ok) return;
     chatMessages = document.getElementById('chatMessages');
     chatInput    = document.getElementById('chatInput');
     sendBtn      = document.getElementById('sendBtn');

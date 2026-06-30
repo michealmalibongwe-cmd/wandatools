@@ -458,6 +458,7 @@
       if (response.ok) {
         WandaAuth.auth.login(result);
         showAlert('✅ Account created! Redirecting...', 'success');
+        if (window.WandaPIN) setTimeout(() => WandaPIN.promptSetup(), 600);
         setTimeout(() => { location.href = 'tools.html'; }, 1500);
       } else {
         showAlert(extractError(result, 'Signup failed'), 'error');
@@ -516,6 +517,7 @@
       if (response.ok) {
         WandaAuth.auth.login(result);
         showAlert('✅ Business account created! Redirecting...', 'success');
+        if (window.WandaPIN) setTimeout(() => WandaPIN.promptSetup(), 600);
         setTimeout(() => { location.href = 'tools.html'; }, 1500);
       } else {
         showAlert(extractError(result, 'Signup failed'), 'error');
@@ -553,6 +555,7 @@
       if (response.ok) {
         WandaAuth.auth.login(result);
         showAlert('✅ Login successful! Redirecting...', 'success');
+        if (window.WandaPIN) setTimeout(() => WandaPIN.promptSetup(), 600);
         setTimeout(() => { location.href = 'tools.html'; }, 1500);
       } else {
         showAlert(extractError(result, 'Login failed — please check your credentials'), 'error');

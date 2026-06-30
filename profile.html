@@ -364,8 +364,8 @@
     const profilePage = document.getElementById('profilePage');
 
     if (!WandaAuth.isLoggedIn()) {
-      protectPage();
-      return;
+      const ok = await protectPage();
+      if (!ok) return;
     }
 
     if (authPage)    authPage.style.display    = 'none';
