@@ -204,45 +204,128 @@ self.addEventListener('sync', (event) => {
   }
 });
 
-async function replayPendingRequests() {
-  return new Promise((resolve) => {
-    const dbReq = indexedDB.open('wanda-offline-db', 1);
-
-    dbReq.onsuccess = async (e) => {
+// Promise-based IndexedDB helpers used only inside the service worker.
+// Must use v2 to match the schema opened by pwa.js (auth-tokens store).
+function _swOpenDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('wanda-offline-db', 2);
+    req.onupgradeneeded = (e) => {
       const db = e.target.result;
-      if (!db.objectStoreNames.contains('pending-requests')) { resolve(); return; }
-
-      const tx    = db.transaction('pending-requests', 'readwrite');
-      const store = tx.objectStore('pending-requests');
-      const all   = store.getAll();
-
-      all.onsuccess = async () => {
-        for (const item of all.result) {
-          try {
-            const res = await fetch(item.url, {
-              method:  item.method,
-              headers: item.headers,
-              body:    item.body,
-            });
-            if (res.ok) {
-              // Remove successfully replayed request
-              store.delete(item.id);
-            }
-          } catch {
-            // Will retry on next sync event
-          }
-        }
-        // Notify all open windows that sync is complete
-        const clientList = await clients.matchAll({ type: 'window' });
-        clientList.forEach((c) =>
-          c.postMessage({ type: 'SYNC_COMPLETE' })
-        );
-        resolve();
-      };
-
-      all.onerror = () => resolve();
+      if (!db.objectStoreNames.contains('pending-requests')) {
+        const s = db.createObjectStore('pending-requests', { keyPath: 'id', autoIncrement: true });
+        s.createIndex('timestamp', 'timestamp');
+      }
+      if (!db.objectStoreNames.contains('auth-tokens')) {
+        db.createObjectStore('auth-tokens', { keyPath: 'key' });
+      }
     };
-
-    dbReq.onerror = () => resolve();
+    req.onsuccess = (e) => resolve(e.target.result);
+    req.onerror   = ()  => reject(req.error);
   });
+}
+
+function _swIdbGet(db, storeName, key) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(storeName, 'readonly').objectStore(storeName).get(key);
+    req.onsuccess = () => resolve(req.result?.value ?? null);
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+function _swIdbPut(db, storeName, key, value) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(storeName, 'readwrite').objectStore(storeName).put({ key, value });
+    req.onsuccess = () => resolve();
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+function _swIdbGetAll(db, storeName) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(storeName, 'readonly').objectStore(storeName).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+function _swIdbDelete(db, storeName, id) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(storeName, 'readwrite').objectStore(storeName).delete(id);
+    req.onsuccess = () => resolve();
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+async function _swRefreshToken(db) {
+  const refreshToken = await _swIdbGet(db, 'auth-tokens', 'refresh_token');
+  if (!refreshToken) return null;
+
+  try {
+    const res = await fetch(`${API_ORIGIN}/api/v1/auth/refresh`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    await _swIdbPut(db, 'auth-tokens', 'access_token',  data.access_token);
+    await _swIdbPut(db, 'auth-tokens', 'refresh_token', data.refresh_token);
+
+    // Tell every open window to update localStorage so the UI stays in sync
+    const windowClients = await clients.matchAll({ type: 'window' });
+    windowClients.forEach((c) => c.postMessage({
+      type:          'TOKEN_REFRESHED',
+      access_token:  data.access_token,
+      refresh_token: data.refresh_token,
+    }));
+
+    return data.access_token;
+  } catch {
+    return null;
+  }
+}
+
+async function replayPendingRequests() {
+  let db;
+  try {
+    db = await _swOpenDB();
+  } catch {
+    return;
+  }
+
+  const items = await _swIdbGetAll(db, 'pending-requests').catch(() => []);
+  if (!items.length) return;
+
+  // Get the current access token once; update it if we refresh mid-batch.
+  let accessToken = await _swIdbGet(db, 'auth-tokens', 'access_token').catch(() => null);
+
+  for (const item of items) {
+    const headers = { ...item.headers };
+    if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+
+    try {
+      let res = await fetch(item.url, { method: item.method, headers, body: item.body });
+
+      if (res.status === 401) {
+        // Access token expired — try a silent refresh, then retry once
+        const newToken = await _swRefreshToken(db);
+        if (newToken) {
+          accessToken = newToken;
+          const retryHeaders = { ...item.headers, 'Authorization': `Bearer ${newToken}` };
+          res = await fetch(item.url, { method: item.method, headers: retryHeaders, body: item.body });
+        }
+      }
+
+      if (res.ok) {
+        await _swIdbDelete(db, 'pending-requests', item.id);
+      }
+      // Non-OK (non-401) errors are left in the queue and retried next sync
+    } catch {
+      // Network failure — leave in queue
+    }
+  }
+
+  const windowClients = await clients.matchAll({ type: 'window' });
+  windowClients.forEach((c) => c.postMessage({ type: 'SYNC_COMPLETE' }));
 }

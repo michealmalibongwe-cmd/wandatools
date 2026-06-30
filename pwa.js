@@ -313,24 +313,62 @@
     setTimeout(() => banner.remove(), 400);
   }
 
-  // ─── Background Sync — IndexedDB queue for offline mutations ─────────────────
+  // ─── IndexedDB — offline queue + auth token store ────────────────────────────
+  // DB version 2 adds the 'auth-tokens' store so the service worker (which has
+  // no access to localStorage) can read/write the refresh token independently.
   let _idb = null;
 
   async function _openDB() {
     if (_idb) return _idb;
     return new Promise((resolve, reject) => {
-      const req = indexedDB.open('wanda-offline-db', 1);
+      const req = indexedDB.open('wanda-offline-db', 2);
       req.onupgradeneeded = (e) => {
         const db = e.target.result;
         if (!db.objectStoreNames.contains('pending-requests')) {
           const store = db.createObjectStore('pending-requests', { keyPath: 'id', autoIncrement: true });
           store.createIndex('timestamp', 'timestamp');
         }
+        if (!db.objectStoreNames.contains('auth-tokens')) {
+          db.createObjectStore('auth-tokens', { keyPath: 'key' });
+        }
       };
       req.onsuccess = (e) => { _idb = e.target.result; resolve(_idb); };
       req.onerror   = () => reject(req.error);
     });
   }
+
+  // Write access + refresh tokens to both localStorage and IDB.
+  // Call this after every login, register, and token refresh.
+  async function saveAuthTokens(accessToken, refreshToken) {
+    if (accessToken)  localStorage.setItem('access_token',  accessToken);
+    if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
+    try {
+      const db = await _openDB();
+      const tx = db.transaction('auth-tokens', 'readwrite');
+      const st = tx.objectStore('auth-tokens');
+      if (accessToken)  st.put({ key: 'access_token',  value: accessToken });
+      if (refreshToken) st.put({ key: 'refresh_token', value: refreshToken });
+    } catch (err) {
+      console.warn('[WandaPWA] Could not mirror tokens to IDB:', err);
+    }
+  }
+
+  // Mirror whatever is in localStorage into IDB (runs once on page load).
+  async function _mirrorLocalStorageToIDB() {
+    const a = localStorage.getItem('access_token');
+    const r = localStorage.getItem('refresh_token');
+    if (a || r) await saveAuthTokens(a, r);
+  }
+
+  // Listen for token updates from the service worker (triggered after SW refresh).
+  navigator.serviceWorker?.addEventListener('message', (e) => {
+    if (e.data?.type === 'TOKEN_REFRESHED') {
+      saveAuthTokens(e.data.access_token, e.data.refresh_token);
+    }
+  });
+
+  // Mirror on load so IDB is up to date before the first sync attempt.
+  _mirrorLocalStorageToIDB();
 
   async function queueOfflineRequest(url, method, headers, body) {
     const db = await _openDB();
@@ -374,6 +412,7 @@
   // ─── Public API ───────────────────────────────────────────────────────────────
   window.WandaPWA = {
     subscribeToPush,
+    saveAuthTokens,
     queueOfflineRequest,
     triggerInstall:      _triggerInstall,
     enableNotifications: _showNotificationBanner,
