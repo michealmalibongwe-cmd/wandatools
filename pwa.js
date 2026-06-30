@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE';
+  const VAPID_PUBLIC_KEY = 'Public key: <cryptography.hazmat.bindings._rust.openssl.ec.ECPublicKey object at 0x00000278CE639A50>';
   let deferredInstallPrompt = null;
 
   // ─── Service Worker ──────────────────────────────────────────────────────────
