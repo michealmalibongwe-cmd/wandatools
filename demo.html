@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#007BFF" />
+  <title>Demo – WandaTools</title>
+  <meta name="description" content="See how a sale flows from wandaPOS's till into wandaACC's ledger, invoices, and reports." />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #007BFF, #28A745);
+      padding: 80px 24px 60px;
+      text-align: center;
+      color: #ffffff;
+    }
+    .page-hero h1 { font-size: 2.2rem; margin-bottom: 12px; color: #ffffff; }
+    .page-hero p  { font-size: 1.05rem; opacity: 0.9; max-width: 560px; margin: 0 auto; color: #ffffff; }
+
+    .demo-steps { max-width: 900px; margin: 0 auto; }
+    .demo-step {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 28px;
+      align-items: flex-start;
+      margin-bottom: 56px;
+    }
+    .demo-step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+    .demo-step-frame {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--grey-bg);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--light);
+      margin-bottom: 20px;
+    }
+    .demo-step-frame i { font-size: 2.5rem; }
+    .demo-step-frame span { font-size: 0.8rem; font-weight: 600; }
+    .demo-step h3 { font-size: 1.2rem; margin-bottom: 8px; }
+    .demo-step p  { color: var(--mid); font-size: 0.95rem; }
+
+    @media (max-width: 600px) {
+      .demo-step { grid-template-columns: 1fr; }
+      .demo-step-num { margin-bottom: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
+    <ul class="nav-links" role="list"></ul>
+    <div id="navAuth"></div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileNav" aria-hidden="true"></div>
+</nav>
+
+<div class="page-content">
+
+<section class="page-hero">
+  <h1>See it in action</h1>
+  <p>From a sale at the till to a VAT-ready report — here's the whole path, start to finish.</p>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="demo-steps">
+
+      <div class="demo-step fade-up">
+        <div class="demo-step-num">1</div>
+        <div>
+          <div class="demo-step-frame">
+            <i class="material-icons">point_of_sale</i>
+            <span>Screenshot coming soon</span>
+          </div>
+          <h3>Ring up a sale in wandaPOS</h3>
+          <p>Scan or search a product, take payment by cash, card, or on account — works exactly the same with or without a connection.</p>
+        </div>
+      </div>
+
+      <div class="demo-step fade-up">
+        <div class="demo-step-num">2</div>
+        <div>
+          <div class="demo-step-frame">
+            <i class="material-icons">sync_alt</i>
+            <span>Screenshot coming soon</span>
+          </div>
+          <h3>The sale posts straight into wandaACC's ledger</h3>
+          <p>No exporting, no re-typing — the revenue and any VAT land in the right accounts automatically.</p>
+        </div>
+      </div>
+
+      <div class="demo-step fade-up">
+        <div class="demo-step-num">3</div>
+        <div>
+          <div class="demo-step-frame">
+            <i class="material-icons">receipt_long</i>
+            <span>Screenshot coming soon</span>
+          </div>
+          <h3>Send an invoice — VAT calculated automatically</h3>
+          <p>Add line items, pick a client, and wandaACC works out the VAT at your business's rate before it goes out.</p>
+        </div>
+      </div>
+
+      <div class="demo-step fade-up">
+        <div class="demo-step-num">4</div>
+        <div>
+          <div class="demo-step-frame">
+            <i class="material-icons">dashboard</i>
+            <span>Screenshot coming soon</span>
+          </div>
+          <h3>Check the dashboard, or export a report</h3>
+          <p>See cash balance, revenue, expenses, and VAT payable at a glance — or generate a Loan Readiness, Investment Readiness, or Tax Compliance PDF in one click.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section section-grey">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-label">Want to see this live?</span>
+      <h2 class="section-title">Book a demo</h2>
+      <p class="section-sub">Tell us a bit about your business and we'll walk you through wandaPOS and wandaACC together.</p>
+    </div>
+    <div style="text-align:center;">
+      <a href="contact.html#contactFormWrap" class="btn btn-primary btn-pulse">
+        <i class="material-icons">event</i> Book a Demo
+      </a>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">WandaTools</div>
+        <p>Point-of-sale and accounting software for South African small businesses 🇿🇦.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon" aria-label="Facebook"><i class="material-icons">facebook</i></a>
+          <a href="#" class="social-icon" aria-label="Twitter/X"><i class="material-icons">tag</i></a>
+          <a href="#" class="social-icon" aria-label="LinkedIn"><i class="material-icons">work</i></a>
+          <a href="#" class="social-icon" aria-label="Instagram"><i class="material-icons">photo_camera</i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="products.html">Products</a>
+        <a href="services.html">Services</a>
+        <a href="demo.html">Demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About Us</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">POPIA Compliance</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 WandaTools. All rights reserved.</span>
+      <span>Made for South African businesses 🇿🇦</span>
+      <div style="display:flex;gap:16px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+</body>
+</html>

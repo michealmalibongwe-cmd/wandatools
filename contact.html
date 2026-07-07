@@ -3,14 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- PWA Manifest & cross-platform meta -->
-  <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#007BFF" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="WandaTools" />
-  <link rel="apple-touch-icon" href="/icons/icon.svg" />
   <title>Contact & Support – WandaTools</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -186,7 +179,7 @@
 <!-- ══════════════════ NAVBAR ══════════════════ -->
 <nav class="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">wandatools<span>Tools</span></a>
+    <a href="index.html" class="nav-logo">Wanda<span>Tools</span></a>
     <ul class="nav-links" role="list"></ul>
     <div id="navAuth"></div>
     <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -238,17 +231,17 @@
       </div>
 
       <div class="info-card">
-        <div class="icon-circle"><i class="material-icons">school</i></div>
-        <h3>Learn</h3>
-        <p>Explore tutorials, guides, and best practices.</p>
-        <a href="#">View resource hub</a>
+        <div class="icon-circle"><i class="material-icons">apps</i></div>
+        <h3>Products</h3>
+        <p>See the hardware that pairs with wandaPOS.</p>
+        <a href="products.html">View products</a>
       </div>
 
       <div class="info-card">
-        <div class="icon-circle"><i class="material-icons">groups</i></div>
-        <h3>Community</h3>
-        <p>Connect with other WandaTools users and share tips.</p>
-        <a href="community.html">Join community</a>
+        <div class="icon-circle"><i class="material-icons">play_circle</i></div>
+        <h3>See a Demo</h3>
+        <p>Walk through how a sale flows from till to ledger.</p>
+        <a href="demo.html">View demo</a>
       </div>
 
     </div>
@@ -331,101 +324,101 @@
     <div class="faq-wrap">
       <div class="faq-intro">
         <h2>Frequently Asked Questions</h2>
-        <p>Find quick answers to common questions about WandaTools.</p>
+        <p>Find quick answers to common questions about wandaPOS and wandaACC.</p>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>Is my financial data secure?</h3>
+          <h3>Is my business data secure?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            Yes. WandaTools uses <strong>bank-level encryption (AES-256)</strong> to protect all your data. We comply with POPIA, South Africa's privacy law, and never share your information with third parties. Your data is yours alone.
+            Yes. Your sales and accounting data is protected in transit and at rest, and we comply with POPIA, South Africa's privacy law. Your data is never sold or shared with third parties — it's yours alone.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>How much does WandaTools cost?</h3>
+          <h3>Does wandaPOS work offline?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            WandaTools is <strong>free to start</strong>. You get access to Transactions, Dashboard, Documents, and WandaAI at no cost. Premium features and advanced analytics are coming soon — we'll offer flexible pricing for growing businesses.
+            Yes — offline is a core part of how wandaPOS works, not an afterthought. Sales ring up normally even without a connection (load-shedding included), and everything syncs automatically the moment you're back online.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>Can I export my data?</h3>
+          <h3>How does VAT get calculated?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            Absolutely. You can export your transaction history as CSV, and generate professional PDF reports (Audit, Loan, Investment) at any time. Your data is never locked in.
+            Automatically. You set your business's VAT rate once in wandaACC, and every invoice and expense splits out the VAT portion for you — no manual calculation, no spreadsheets.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>Is WandaAI trained on my personal data?</h3>
+          <h3>Can I export a report for a bank loan or a tax filing?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            No. WandaAI uses <strong>your data only to give you personalised insights</strong>. We don't use your financial information to train our AI model. Your privacy is protected.
+            Yes. wandaACC generates one-click Loan Readiness, Investment Readiness, and Tax Compliance PDF reports, alongside a full Income Statement, Balance Sheet, Cash Flow, and Trial Balance.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>Can I integrate WandaTools with my accounting software?</h3>
+          <h3>How does wandaPOS connect to wandaACC?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            We're building integrations with popular SA accounting tools. For now, you can export CSV files and import into QuickBooks, Xero, or Pastel. Integration APIs are coming in Q3 2025.
+            Every sale rung up in wandaPOS posts straight into wandaACC's ledger — no re-typing, no CSV exports to reconcile by hand.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>How do I delete my account?</h3>
+          <h3>What happens if my device loses internet mid-sale?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            You can delete your account anytime from your Profile settings. All your data will be permanently removed within 30 days, in compliance with POPIA. No questions asked.
+            Nothing is lost. The sale is recorded on the device and queued for sync — as soon as connectivity returns, it's sent through automatically.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>What payment methods do you accept?</h3>
+          <h3>Can wandaPOS support more than one store?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            When premium features launch, we'll accept all major credit cards, EFT transfers, and mobile payment methods. We'll also offer monthly and annual billing options with discounts for annual subscriptions.
+            Yes — wandaPOS supports multiple stores under one business, each with its own staff and till, with an owner able to see across all of them.
           </div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>Can I use WandaTools for my non-profit or NGO?</h3>
+          <h3>How much does it cost?</h3>
           <div class="faq-toggle"><i class="material-icons">expand_more</i></div>
         </div>
         <div class="faq-body">
           <div class="faq-content">
-            Yes! We offer <strong>discounted pricing for registered NGOs and non-profits</strong>. Email us at <a href="mailto:support@wandatools.com">support@wandatools.com</a> with your registration details to discuss options.
+            Pricing depends on your business size and how many stores you run. Get in touch and we'll work out what makes sense for you.
           </div>
         </div>
       </div>
@@ -442,7 +435,7 @@
     <div class="footer-top">
       <div class="footer-brand">
         <div class="logo">WandaTools</div>
-        <p>AI-powered financial insights for businesses and individuals across Eswatini.</p>
+        <p>Point-of-sale and accounting software for South African small businesses 🇿🇦.</p>
         <div class="footer-socials">
           <a href="#" class="social-icon"><i class="material-icons">facebook</i></a>
           <a href="#" class="social-icon"><i class="material-icons">tag</i></a>
@@ -452,17 +445,15 @@
       </div>
       <div class="footer-col">
         <h4>Product</h4>
-        <a href="tools.html">Transactions</a>
-        <a href="tools.html">Dashboard</a>
-        <a href="tools.html">Documents</a>
-        <a href="wandaAI.html">WandaAI</a>
+        <a href="products.html">Products</a>
+        <a href="services.html">Services</a>
+        <a href="demo.html">Demo</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="index.html">About Us</a>
+        <a href="index.html#about">About Us</a>
+        <a href="services.html">Services</a>
         <a href="contact.html">Contact</a>
-        <a href="#">Careers</a>
-        <a href="#">Blog</a>
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
@@ -473,8 +464,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 WandaTools. All rights reserved.</span>
-      <span>Made with <span style="color:#E53935;">♥</span> in Eswatini 🇸🇿</span>
+      <span>© 2026 WandaTools. All rights reserved.</span>
+      <span>Made for South African businesses 🇿🇦</span>
       <div style="display:flex;gap:16px;">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Service</a>
@@ -484,7 +475,6 @@
 </footer>
 
 <script src="nav.js"></script>
-<script src="/pwa.js" defer></script>
 <script>
   /* ── FAQ Toggle ── */
   function toggleFaq(header) {
