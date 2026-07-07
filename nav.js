@@ -1,48 +1,16 @@
 /**
  * WandaTools — nav.js
  * Foundation file loaded by every page.
- * Provides: API_BASE, apiCall(), renderNavigation(), showAlert()/showToast()
+ * Provides: renderNavigation(), showAlert()/showToast()
+ *
+ * Fully static — no backend, no database, no API calls of any kind.
+ * The contact form hands off to the visitor's own email client (mailto:)
+ * instead of posting anywhere.
  *
  * NO hamburger / mobile drawer — nav is always fully visible.
  * No login/signup — this is a marketing site for wandaPOS + wandaACC.
  * Load this FIRST on every page: <script src="nav.js"></script>
  */
-
-// ═══════════════════════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════════════════════
-
-const API_BASE = "https://wandatools.up.railway.app/api/v1";
-
-// ═══════════════════════════════════════════════════════════
-// API CALL HELPER (used by the contact form)
-// ═══════════════════════════════════════════════════════════
-
-async function apiCall(path, options = {}) {
-  const url = `${API_BASE}${path}`;
-  const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
-
-  const response = await fetch(url, { ...options, headers });
-
-  let data;
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error(`Server error (${response.status})`);
-  }
-
-  if (!response.ok) {
-    const msg =
-      typeof data.detail === "string"
-        ? data.detail
-        : Array.isArray(data.detail)
-          ? data.detail.map((e) => e.msg).join(", ")
-          : `Request failed (${response.status})`;
-    throw new Error(msg);
-  }
-
-  return data;
-}
 
 // ═══════════════════════════════════════════════════════════
 // NAVIGATION RENDERING
@@ -199,6 +167,5 @@ if (document.readyState === "loading") {
 // GLOBAL EXPORTS
 // ═══════════════════════════════════════════════════════════
 
-window.apiCall = apiCall;
 window.showAlert = showAlert;
 window.showToast = showToast;
