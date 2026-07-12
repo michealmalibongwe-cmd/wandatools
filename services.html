@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#007BFF" />
   <title>Services – WandaTools</title>
   <meta name="description" content="wandaPOS and wandaACC: offline-capable point of sale and VAT-ready accounting, working together." />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <style>
     .page-hero {
@@ -78,6 +78,24 @@
   </style>
 </head>
 <body>
+
+<!-- ══════════════════ LOADER ══════════════════ -->
+<div id="siteLoader" class="site-loader">
+  <div class="loader-word" aria-label="WandaTools">
+    <span>W</span><span>a</span><span>n</span><span>d</span><span>a</span><span>T</span><span>o</span><span>o</span><span>l</span><span>s</span>
+  </div>
+</div>
+<script>
+  (function () {
+    if (sessionStorage.getItem('wtLoaderSeen')) {
+      var l = document.getElementById('siteLoader');
+      if (l) l.style.display = 'none';
+    } else {
+      document.documentElement.classList.add('wt-loading');
+      sessionStorage.setItem('wtLoaderSeen', '1');
+    }
+  })();
+</script>
 
 <nav class="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
@@ -220,6 +238,6 @@
   </div>
 </footer>
 
-<script src="nav.js?v=2"></script>
+<script src="nav.js?v=3"></script>
 </body>
 </html>

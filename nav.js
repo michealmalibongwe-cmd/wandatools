@@ -1,7 +1,7 @@
 /**
  * WandaTools — nav.js
  * Foundation file loaded by every page.
- * Provides: renderNavigation(), showAlert()/showToast()
+ * Provides: renderNavigation(), showAlert()/showToast(), initSiteLoader()
  *
  * Fully static — no backend, no database, no API calls of any kind.
  * The contact form hands off to the visitor's own email client (mailto:)
@@ -107,6 +107,33 @@ function _buildNavRows(navLinks, navAuth) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// SITE LOADER
+// The overlay markup and the sessionStorage skip-check live in an
+// inline snippet at the top of <body> (runs before paint). This just
+// handles the "letters have finished typing, fade out" reveal for
+// the first page of the session — a no-op / cleanup on every other page.
+// ═══════════════════════════════════════════════════════════
+
+function initSiteLoader() {
+  const loader = document.getElementById("siteLoader");
+  if (!loader) return;
+
+  if (!document.documentElement.classList.contains("wt-loading")) {
+    loader.remove(); // already-seen-this-session: inline snippet hid it, just clean up
+    return;
+  }
+
+  const reveal = () => {
+    loader.classList.add("loader-hide");
+    document.documentElement.classList.remove("wt-loading");
+    loader.addEventListener("transitionend", () => loader.remove(), { once: true });
+  };
+
+  const holdMs = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 300 : 1400;
+  setTimeout(reveal, holdMs);
+}
+
+// ═══════════════════════════════════════════════════════════
 // ALERTS / TOASTS
 // ═══════════════════════════════════════════════════════════
 
@@ -162,6 +189,8 @@ if (document.readyState === "loading") {
 } else {
   renderNavigation();
 }
+
+initSiteLoader();
 
 // ═══════════════════════════════════════════════════════════
 // GLOBAL EXPORTS

@@ -598,3 +598,60 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 
 /* ── Nav auth wrap ── */
 .nav-auth-wrap { display: flex; gap: clamp(0.25rem, 1vw, 0.625rem); align-items: center; flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════════
+   SITE LOADER — letter-by-letter intro, once per session
+   ══════════════════════════════════════════════════════════ */
+html.wt-loading, html.wt-loading body { overflow: hidden; height: 100%; }
+
+.site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.site-loader.loader-hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-word {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  letter-spacing: -0.5px;
+  display: flex;
+}
+.loader-word span {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: loaderLetter 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.loader-word span:nth-child(1)  { animation-delay: 0.05s; }
+.loader-word span:nth-child(2)  { animation-delay: 0.13s; }
+.loader-word span:nth-child(3)  { animation-delay: 0.21s; }
+.loader-word span:nth-child(4)  { animation-delay: 0.29s; }
+.loader-word span:nth-child(5)  { animation-delay: 0.37s; }
+.loader-word span:nth-child(6)  { animation-delay: 0.45s; }
+.loader-word span:nth-child(7)  { animation-delay: 0.53s; }
+.loader-word span:nth-child(8)  { animation-delay: 0.61s; }
+.loader-word span:nth-child(9)  { animation-delay: 0.69s; }
+.loader-word span:nth-child(10) { animation-delay: 0.77s; }
+
+@keyframes loaderLetter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-word span { animation: none; opacity: 1; transform: none; }
+  .site-loader { transition: opacity 0.2s ease; }
+}
